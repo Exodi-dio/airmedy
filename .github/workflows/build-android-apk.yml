@@ -108,6 +108,7 @@ jobs:
       - name: Create / update release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: android-prod-release-latest
           name: android-prod-release
           generate_release_notes: true
           files: ${{ steps.locate.outputs.apk_path }}
