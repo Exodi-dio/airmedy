@@ -85,15 +85,17 @@ jobs:
         working-directory: mobile
         run: |
           set -euo pipefail
-          APK=$(find androidApp/build/outputs/apk -type f -name 'androidApp-prod-release.apk' | head -n1)
-          if [[ -z "$APK" ]]; then
+          APK_REL=$(find androidApp/build/outputs/apk -type f -name 'androidApp-prod-release.apk' | head -n1)
+          if [[ -z "$APK_REL" ]]; then
             echo "APK not found under androidApp/build/outputs/apk"
             find androidApp/build -type f -name '*.apk' || true
             exit 1
           fi
-          echo "apk_path=$APK" >> "$GITHUB_OUTPUT"
-          echo "APK: $APK"
-          ls -la "$APK"
+          APK_ABS="$PWD/${APK_REL}"
+          cp "$APK_REL" "$RUNNER_TEMP/androidApp-prod-release.apk"
+          echo "apk_path=$RUNNER_TEMP/androidApp-prod-release.apk" >> "$GITHUB_OUTPUT"
+          echo "APK: $APK_REL -> $RUNNER_TEMP/androidApp-prod-release.apk"
+          ls -la "$RUNNER_TEMP/androidApp-prod-release.apk"
 
       - name: Upload APK to workflow artifact
         uses: actions/upload-artifact@v4
