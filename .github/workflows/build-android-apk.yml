@@ -85,7 +85,7 @@ jobs:
         working-directory: mobile
         run: |
           set -euo pipefail
-          APK=$(find androidApp/build/outputs/apk -type f -name 'app-prod-release.apk' | head -n1)
+          APK=$(find androidApp/build/outputs/apk -type f -name 'androidApp-prod-release.apk' | head -n1)
           if [[ -z "$APK" ]]; then
             echo "APK not found under androidApp/build/outputs/apk"
             find androidApp/build -type f -name '*.apk' || true
