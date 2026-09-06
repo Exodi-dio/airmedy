@@ -14,7 +14,7 @@ ANDROID_DIR="${REPO_ROOT}/mobile/androidApp"
 SDK_DIR="$(awk -F= '/^sdk.dir=/{print $2}' "${REPO_ROOT}/mobile/local.properties")"
 NDK_VERSION="30.0.15729638"
 NDK="${SDK_DIR}/ndk/${NDK_VERSION}"
-TOOLCHAIN="$(find "${NDK}/toolchains/llvm/prebuilt" -maxdepth 1 -type d -name 'darwin-*' -print -quit)"
+TOOLCHAIN="$(find "${NDK}/toolchains/llvm/prebuilt" -maxdepth 1 -type d \( -name 'darwin-*' -o -name 'linux-*' \) -print -quit)"
 BUILD_DIR="${TMPDIR:-/tmp}/ffmpeg-build-airmedy-android-${FFMPEG_VERSION}"
 JNI_OUT="${ANDROID_DIR}/src/main/jniLibs"
 INCLUDE_OUT="${ANDROID_DIR}/build/ffmpeg/include"
@@ -60,7 +60,7 @@ build_arch() {
         --disable-avdevice --disable-avfilter --disable-swscale \
         --extra-cflags="-Oz -ffunction-sections -fdata-sections" \
         --extra-ldflags="-Wl,--gc-sections -Wl,-z,max-page-size=16384"
-    make -j"$(sysctl -n hw.ncpu)"
+    make -j"$(nproc)"
     make install
     popd >/dev/null
     mkdir -p "${JNI_OUT}/${ABI}"
