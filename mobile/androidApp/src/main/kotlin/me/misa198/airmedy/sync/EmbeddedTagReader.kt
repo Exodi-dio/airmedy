@@ -78,19 +78,27 @@ internal object EmbeddedTagReader {
     private fun flacPicture(bytes: ByteArray): ByteArray? {
         var offset = 4
         var block = 0
+        var firstPicture: ByteArray? = null
         while (offset + 4 <= bytes.size && block < 256) {
             val type = bytes[offset].toInt() and 0x7F
             val last = bytes[offset].toInt() and 0x80 != 0
             val length = bytes.readUInt24BE(offset + 1)
             val payloadStart = offset + 4
             val payloadEnd = payloadStart + length
-            if (payloadEnd > bytes.size) return null
-            if (type == 6) bytes.copyOfRange(payloadStart, payloadEnd).flacPicturePayload()?.let { return it }
-            if (last) return null
+            if (payloadEnd > bytes.size) break
+            if (type == 6) {
+                val picture = bytes.copyOfRange(payloadStart, payloadEnd).flacPicturePayload()
+                if (picture != null) {
+                    // Prefer the front-cover block; remember any other picture as a fallback.
+                    if (bytes[payloadStart + 3].toInt() and 0xFF == 3) return picture
+                    if (firstPicture == null) firstPicture = picture
+                }
+            }
+            if (last) break
             offset = payloadEnd
             block++
         }
-        return null
+        return firstPicture
     }
 
     /** METADATA_BLOCK_PICTURE layout (all lengths big-endian). */
@@ -157,13 +165,17 @@ internal object EmbeddedTagReader {
                 pos = size
                 return@repeat
             }
-            val raw = String(copyOfRange(pos, pos + length), Charsets.ISO_8859_1)
+            val entry = copyOfRange(pos, pos + length)
             pos += length
-            val equals = raw.indexOf('=')
+            val equals = entry.indexOf('='.code.toByte())
             if (equals > 0) {
-                when (raw.substring(0, equals).trim().uppercase()) {
-                    "LYRICS" -> if (lyrics == null) lyrics = raw.substring(equals + 1)
-                    "UNSYNCEDLYRICS" -> if (unsynced == null) unsynced = raw.substring(equals + 1)
+                val key = String(entry, 0, equals, Charsets.ISO_8859_1).trim().uppercase()
+                // Values are UTF-8 in the Vorbis-comment spec; decode separately so
+                // non-Latin lyrics (e.g. Korean) survive past the ASCII key scan.
+                val entryValue = String(entry, equals + 1, entry.size - equals - 1, Charsets.UTF_8)
+                when (key) {
+                    "LYRICS" -> if (lyrics == null) lyrics = entryValue
+                    "UNSYNCEDLYRICS" -> if (unsynced == null) unsynced = entryValue
                 }
             }
         }

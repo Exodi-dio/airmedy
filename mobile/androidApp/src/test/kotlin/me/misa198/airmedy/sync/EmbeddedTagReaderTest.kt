@@ -26,6 +26,12 @@ class EmbeddedTagReaderTest {
         assertEquals(lrc, EmbeddedTagReader.embeddedLyricsText(file.path))
     }
 
+    @Test fun `flac vorbis lyrics decode as utf8`() {
+        val korean = "[00:01.00]안녕하세요\n[00:02.00]세계"
+        val file = flac(picture = null, comments = listOf("LYRICS=$korean"))
+        assertEquals(korean, EmbeddedTagReader.embeddedLyricsText(file.path))
+    }
+
     @Test fun `flac picture block artwork`() {
         val file = flac(picture = image, comments = emptyList())
         val bytes = EmbeddedTagReader.embeddedArtworkBytes(file.path)

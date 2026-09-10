@@ -189,11 +189,11 @@ internal class MediaStoreLibraryScanner(
     }
 
     private fun copyArtwork(albumKey: String, mediaUri: Uri, absolutePath: String): LocalScanArtwork? {
-        // Prefer MediaStore's embedded picture, then the file's own tag bytes (some
-        // MediaStore providers do not index FLAC/ID3 artwork), then a representative
-        // generated thumbnail for files without embedded art.
-        val bitmap = embeddedArtwork(mediaUri)
-            ?: embeddedArtworkFromFile(absolutePath)
+        // Prefer the file's own tag bytes (some MediaStore providers return a
+        // generic generated thumbnail instead of FLAC/ID3 embedded art), then
+        // MediaStore's embedded picture, then a generated representative.
+        val bitmap = embeddedArtworkFromFile(absolutePath)
+            ?: embeddedArtwork(mediaUri)
             ?: generatedArtwork(mediaUri)
             ?: return null
         val file = File(artworkDir, "$albumKey.jpg")
