@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.compose.ui.graphics.Color
 import me.misa198.airmedy.lastfm.LastFmStatus
 import me.misa198.airmedy.lyrics.LyricsSettings
-import me.misa198.airmedy.lyrics.LyricsSource
 import me.misa198.airmedy.lyrics.LyricsSearchResult
 import me.misa198.airmedy.player.ArtworkCrossfadeTransition
 import me.misa198.airmedy.player.EqualizerSettings
@@ -150,16 +149,10 @@ internal data class LibraryDestinationModel(
 )
 
 internal data class SettingsDestinationModel(
-    val syncState: SyncUiState = SyncUiState(),
-    val onPairingQrScanned: (String) -> Boolean = { false },
-    val onUnpair: () -> Unit = {},
-    val onSyncScreenVisible: () -> Unit = {},
-    val onSyncScreenHidden: () -> Unit = {},
     val lastFmStatus: LastFmStatus = LastFmStatus(),
     val onLastFmConnect: () -> Unit = {},
     val onLastFmDisconnect: () -> Unit = {},
     val lyricsSettings: LyricsSettings = LyricsSettings(),
-    val onLyricsSourceChanged: (LyricsSource) -> Unit = {},
     val onLrclibChanged: (Boolean) -> Unit = {},
     val onKugouChanged: (Boolean) -> Unit = {},
     val crossfadeSeconds: Int = 0,

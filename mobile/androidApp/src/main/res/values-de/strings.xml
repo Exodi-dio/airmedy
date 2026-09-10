@@ -18,8 +18,7 @@
     <string name="insight_range_all">Alle</string>
     <string name="insight_all_devices">Alle Geräte</string>
     <string name="insight_this_phone">Dieses Smartphone</string>
-    <string name="insight_desktop">Desktop</string>
-    <string name="insight_other_devices">Andere synchronisierte Geräte</string>
+    <string name="insight_other_devices">Andere Geräte</string>
     <string name="insight_library_growth">Mediathek-Wachstum</string>
     <string name="insight_audio_quality">Audioqualität</string>
     <string name="insight_library_size">Mediathek-Größe</string>
@@ -27,7 +26,6 @@
     <string name="insight_total_albums">Alben</string>
     <string name="insight_total_artists">Künstler</string>
     <string name="insight_total_playlists">Playlists</string>
-    <string name="sync_library_analysis">Bibliotheksanalyse</string>
     <string name="insight_total_time">Gesamtzeit</string>
     <string name="insight_streak">Serie</string>
     <string name="insight_average_session">Durchschnittliche Sitzung</string>
@@ -68,45 +66,6 @@
     <string name="appearance_theme_title">Thema</string>
     <string name="appearance_reduce_transparency">Transparenz reduzieren</string>
     <string name="settings_appearance">Erscheinungsbild</string>
-    <string name="settings_sync">Synchronisierung</string>
-    <string name="sync_title">Synchronisierung</string>
-    <string name="sync_scan_title">Desktop-Code scannen</string>
-    <string name="sync_add_device">Gerät hinzufügen</string>
-    <string name="sync_empty_title">Keine verbundenen Geräte</string>
-    <string name="sync_empty_description">Verbinden Sie ein Gerät, um Ihr Hörerlebnis synchron zu halten.</string>
-    <string name="sync_device_type_desktop">Desktop</string>
-    <string name="sync_status_connected">Verbunden</string>
-    <string name="sync_status_online">Online</string>
-    <string name="sync_status_offline">Offline</string>
-    <string name="sync_last_synced">Zuletzt synchronisiert: %1$s</string>
-    <string name="sync_never_synced">Noch nie synchronisiert</string>
-    <string name="sync_paired_device_description">Dieses Smartphone kann jeweils nur mit einem Desktop-Gerät verbunden sein. Trennen Sie es, bevor Sie ein neues koppeln.</string>
-    <string name="sync_ready_to_connect_description">Bereit zum Verbinden. Starten Sie das Senden in Airmedy auf Ihrem Desktop; dieser Bildschirm verbindet sich automatisch.</string>
-    <string name="sync_revoke">Trennen</string>
-    <string name="sync_help">Erfahren Sie, wie Sie sich verbinden</string>
-    <string name="sync_waiting_title">Warten auf Desktop-Genehmigung</string>
-    <string name="sync_waiting_description">Bestätigen Sie dieses Smartphone in der Airmedy Desktop-App.</string>
-    <string name="sync_camera_required">Kamerazugriff ist erforderlich, um den Desktop-QR-Code zu scannen.</string>
-    <string name="sync_scan_description">Richten Sie Ihre Kamera auf den in Airmedy Desktop angezeigten Kopplungs-QR-Code.</string>
-    <string name="sync_scan_hint">Halten Sie den QR-Code innerhalb des Rahmens.</string>
-    <string name="sync_select_qr_image">QR-Bild auswählen</string>
-    <string name="sync_revoke_confirm_title">Diesen Desktop trennen?</string>
-    <string name="sync_revoke_confirm_description">Dadurch wird die Verbindung von diesem Smartphone entfernt. Der Desktop bleibt autorisiert, bis er dort getrennt wird.</string>
-    <string name="sync_error_already_paired">Trennen Sie den aktuellen Desktop, bevor Sie einen anderen koppeln.</string>
-    <string name="sync_error_invalid_qr">Dieser QR-Code ist kein Kopplungscode von Airmedy Desktop.</string>
-    <string name="sync_error_transport">Desktop konnte nicht erreicht werden. Stellen Sie sicher, dass sich beide Geräte im selben Netzwerk befinden.</string>
-    <string name="sync_error_timeout">Der Desktop hat nicht rechtzeitig geantwortet. Scannen Sie den QR-Code erneut.</string>
-    <string name="sync_error_rejected">Der Desktop hat diese Kopplungsanfrage abgelehnt.</string>
-    <string name="sync_error_expired">Die Kopplungsanfrage ist abgelaufen. Scannen Sie den QR-Code erneut.</string>
-    <string name="sync_error_invalid_response">Die Antwort des Desktops konnte nicht überprüft werden.</string>
-    <string name="sync_notification_channel">Mediathek-Synchronisierung</string>
-    <string name="sync_notification_title">Airmedy-Mediathek wird synchronisiert</string>
-    <string name="sync_notification_connecting">Verbindung zum Desktop wird hergestellt…</string>
-    <string name="sync_notification_progress">Synchronisierung %1$d%%</string>
-    <string name="sync_notification_complete">Mediathek-Synchronisierung abgeschlossen</string>
-    <string name="sync_notification_failed">Mediathek-Synchronisierung erfordert Aufmerksamkeit</string>
-    <string name="sync_insufficient_storage_title">Nicht genügend Speicherplatz</string>
-    <string name="sync_insufficient_storage_description">Nicht genügend Speicherplatz zum Synchronisieren. Benötigt: %1$s; verfügbar: %2$s.</string>
     <string name="close">Schließen</string>
     <string name="ok">OK</string>
     <string name="playback_notification_channel">Musikwiedergabe</string>
@@ -135,9 +94,6 @@
     <string name="playlist_reorder_done">Neuordnung beenden</string>
     <string name="player_queue_current">Aktuelle Wiedergabe</string>
     <string name="player_queue_unknown_track">Nicht verfügbarer Titel</string>
-    <string name="sync_error_background_timeout">Synchronisierung pausiert, da das Hintergrundzeitlimit von Android erreicht wurde.</string>
-    <string name="sync_progress_connecting">Mediathek-Synchronisierung wird vorbereitet…</string>
-    <string name="sync_progress_syncing">Synchronisierung läuft</string>
     <string name="library_artists">Künstler</string>
     <string name="library_albums">Alben</string>
     <string name="library_tracks">Titel</string>
@@ -155,7 +111,7 @@
     <string name="library_playlists">Playlists</string>
     <string name="library_favorites">Favoriten</string>
     <string name="playlists_empty_title">Keine Playlists in der Mediathek</string>
-    <string name="playlists_empty_description">Synchronisieren Sie Playlists von Ihrem verbundenen Desktop, um sie hier zu sehen.</string>
+    <string name="playlists_empty_description">Erstellen Sie eine Playlist, um Ihre Musik zu organisieren.</string>
     <string name="playlist_row_open">Playlist öffnen</string>
     <string name="playlist_create">Playlist erstellen</string>
     <string name="playlist_create_title">Playlist erstellen</string>
@@ -163,7 +119,7 @@
     <string name="playlist_edit_title">Playlist bearbeiten</string>
     <string name="playlist_delete">Playlist löschen</string>
     <string name="playlist_delete_confirm_title">Playlist löschen?</string>
-    <string name="playlist_delete_confirm_description">Diese Playlist wird bei der nächsten Synchronisierung von Ihrem Desktop gelöscht.</string>
+    <string name="playlist_delete_confirm_description">Diese Playlist wird dauerhaft gelöscht.</string>
     <string name="playlist_name">Playlist-Name</string>
     <string name="playlist_choose_artwork">Cover auswählen</string>
     <string name="playlist_clear_artwork">Cover entfernen</string>
@@ -171,10 +127,10 @@
     <string name="bottom_sheet_back">Zurück</string>
     <string name="create">Erstellen</string>
     <string name="save">Speichern</string>
-    <string name="playlist_sync_failed">Diese Playlist konnte nicht mit dem Desktop synchronisiert werden</string>
+    <string name="playlist_sync_failed">Änderungen an dieser Playlist konnten nicht gespeichert werden</string>
     <string name="playlist_details_title">Playlist</string>
     <string name="playlist_details_empty_title">Playlist nicht verfügbar</string>
-    <string name="playlist_details_empty_description">Diese Playlist befindet sich nicht mehr in der synchronisierten Mediathek.</string>
+    <string name="playlist_details_empty_description">Keine Titel dieser Playlist sind in Ihrer Mediathek verfügbar.</string>
     <string name="playlist_details_metadata">%1$s · %2$s</string>
     <string name="playlist_duration_day">%1$d T.</string>
     <string name="playlist_duration_hour">%1$d Std.</string>
@@ -185,8 +141,8 @@
         <item quantity="other">%d Titel</item>
     </plurals>
     <string name="library_recently_added">Zuletzt hinzugefügt</string>
-    <string name="library_empty_title">Noch keine synchronisierte Musik</string>
-    <string name="library_empty_description">Starten Sie die Synchronisierung auf Ihrem verbundenen Desktop, um Ihre Mediathek hierher zu übertragen.</string>
+    <string name="library_empty_title">Noch keine Musik</string>
+    <string name="library_empty_description">Scannen Sie die Musik dieses Geräts, um Ihre Mediathek hier aufzubauen.</string>
     <string name="cancel">Abbrechen</string>
     <string name="settings_playback">Wiedergabe</string>
     <string name="playback_settings_title">Wiedergabe</string>
@@ -334,7 +290,7 @@
     <string name="albums_no_match_title">Keine passenden Alben</string>
     <string name="album_details_title">Album</string>
     <string name="album_details_empty_title">Album nicht verfügbar</string>
-    <string name="album_details_empty_description">Dieses Album befindet sich nicht mehr in der synchronisierten Mediathek.</string>
+    <string name="album_details_empty_description">Dieses Album befindet sich nicht mehr in Ihrer Mediathek.</string>
     <string name="album_details_metadata">%1$s · %2$s</string>
     <string name="album_details_metadata_with_year">%1$d · %2$s · %3$s</string>
     <plurals name="album_details_track_count">
@@ -343,7 +299,7 @@
     </plurals>
     <string name="artist_details_title">Künstler</string>
     <string name="artist_details_empty_title">Künstler nicht verfügbar</string>
-    <string name="artist_details_empty_description">Dieser Künstler befindet sich nicht mehr in der synchronisierten Mediathek.</string>
+    <string name="artist_details_empty_description">Dieser Künstler befindet sich nicht mehr in Ihrer Mediathek.</string>
     <string name="artist_details_summary">%1$s · %2$s</string>
     <plurals name="artist_details_album_count">
         <item quantity="one">%d Album</item>
@@ -358,7 +314,7 @@
     <string name="genre_row_open">Genre öffnen</string>
     <string name="genre_details_title">Genre</string>
     <string name="genre_details_empty_title">Genre nicht verfügbar</string>
-    <string name="genre_details_empty_description">Dieses Genre befindet sich nicht mehr in der synchronisierten Mediathek.</string>
+    <string name="genre_details_empty_description">Dieses Genre befindet sich nicht mehr in Ihrer Mediathek.</string>
     <string name="genre_details_summary">%1$s · %2$s</string>
     <plurals name="genre_details_album_count">
         <item quantity="one">%d Album</item>
@@ -375,7 +331,7 @@
     <string name="composer_row_open">Komponist öffnen</string>
     <string name="composer_details_title">Komponist</string>
     <string name="composer_details_empty_title">Komponist nicht verfügbar</string>
-    <string name="composer_details_empty_description">Dieser Komponist befindet sich nicht mehr in der synchronisierten Mediathek.</string>
+    <string name="composer_details_empty_description">Dieser Komponist befindet sich nicht mehr in Ihrer Mediathek.</string>
     <string name="composer_details_summary">%1$s · %2$s</string>
     <plurals name="composer_details_album_count">
         <item quantity="one">%d Album</item>
@@ -390,10 +346,7 @@
     <string name="composers_no_match_title">Keine passenden Komponisten</string>
     <string name="lyrics_title">Songtexte</string>
     <string name="lyrics_data_sources">Datenquellen</string>
-    <string name="lyrics_preferred_source">Bevorzugte Quelle</string>
-    <string name="lyrics_source_desktop">Desktop-Synchronisierung</string>
-    <string name="lyrics_source_auto_fetch">Automatisch abrufen</string>
     <string name="lyrics_info_action">Songtextinformationen</string>
     <string name="lyrics_info_title">Songtextquellen</string>
-    <string name="lyrics_info_description">Du kannst wählen, ob Songtexte vom Desktop bevorzugt oder automatisch abgerufen werden sollen. Auf dem Mobilgerät automatisch abgerufene Songtexte werden nicht zurück zum Desktop synchronisiert.</string>
+    <string name="lyrics_info_description">Songtexte werden automatisch von den aktivierten Anbietern (LRCLIB, KuGou) abgerufen und auf dem Gerät zwischengespeichert.</string>
 </resources>

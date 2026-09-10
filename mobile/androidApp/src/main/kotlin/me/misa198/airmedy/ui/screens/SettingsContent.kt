@@ -13,7 +13,7 @@ import me.misa198.airmedy.ui.components.MaterialSymbols
 internal fun SettingsContent(
     onAppearanceSelected: () -> Unit,
     onPlaybackSelected: () -> Unit,
-    onSyncSelected: () -> Unit,
+    onScanSelected: () -> Unit,
     onIntegrationSelected: () -> Unit,
     onAboutSelected: () -> Unit,
     modifier: Modifier = Modifier,
@@ -27,9 +27,9 @@ internal fun SettingsContent(
                     onClick = onAppearanceSelected,
                 ),
                 ActionListItem(
-                    R.string.settings_sync,
+                    R.string.settings_scan_library,
                     leadingSymbol = MaterialSymbols.Refresh,
-                    onClick = onSyncSelected,
+                    onClick = onScanSelected,
                 ),
                 ActionListItem(
                     R.string.settings_playback,

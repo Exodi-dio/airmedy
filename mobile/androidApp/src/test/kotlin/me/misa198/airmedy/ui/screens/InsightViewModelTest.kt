@@ -1,9 +1,6 @@
 package me.misa198.airmedy.ui.screens
 
 import java.time.LocalDate
-import me.misa198.airmedy.pairing.MobileIdentity
-import me.misa198.airmedy.pairing.MobilePlatform
-import me.misa198.airmedy.pairing.PairedDesktop
 import me.misa198.airmedy.player.DailyPlaybackAttemptStat
 import me.misa198.airmedy.player.DailyTrackListeningStat
 import me.misa198.airmedy.sync.LibraryAlbum
@@ -39,12 +36,11 @@ class InsightViewModelTest {
             DailyPlaybackAttemptStat("phone", "2026-01-10", 2, 1, 1, 0, 500),
             DailyPlaybackAttemptStat("desktop", "2026-01-09", 1, 0, 0, 1, 200),
         ),
-        identity = MobileIdentity("phone", "Phone", MobilePlatform.Android, byteArrayOf()),
-        desktop = PairedDesktop("desktop", "Studio Mac", byteArrayOf()),
+        deviceId = "phone",
     )
 
     @Test
-    fun mirrorsDesktopListeningCalculationsAndRankings() {
+    fun mirrorsListeningCalculationsAndRankingsAcrossAllDevices() {
         val state = buildInsightUiState(raw, InsightPeriod.SevenDays, InsightPeriod.SevenDays, InsightSourceFilter.All, LocalDate.parse("2026-01-10"))
 
         assertEquals(960, state.listening.listenedSeconds)
@@ -59,13 +55,11 @@ class InsightViewModelTest {
     }
 
     @Test
-    fun sourceFilterAndLibraryProjectionUseTheMirroredSnapshot() {
+    fun sourceFilterAndLibraryProjectionFilterByDevice() {
         val state = buildInsightUiState(raw, InsightPeriod.SevenDays, InsightPeriod.SevenDays, InsightSourceFilter.ThisPhone, LocalDate.parse("2026-01-10"))
 
         assertEquals(600, state.listening.listenedSeconds)
         assertEquals(1, state.listening.streakDays)
-        assertEquals("Studio Mac", state.desktopName)
-        assertTrue(state.hasDesktopSource)
         assertTrue(state.hasOtherSources)
         assertEquals(3, state.library.tracks)
         assertEquals(2, state.library.albums)
@@ -74,6 +68,9 @@ class InsightViewModelTest {
         assertEquals(3, state.library.growth.last().value)
         assertEquals(1, state.library.quality.first { it.quality == TrackAudioQuality.HiRes }.count)
         assertEquals(1, state.library.quality.first { it.quality == TrackAudioQuality.Lossy }.count)
+
+        val other = buildInsightUiState(raw, InsightPeriod.SevenDays, InsightPeriod.SevenDays, InsightSourceFilter.Other, LocalDate.parse("2026-01-10"))
+        assertEquals(360, other.listening.listenedSeconds)
     }
 
     @Test

@@ -18,8 +18,7 @@
     <string name="insight_range_all">Tutto</string>
     <string name="insight_all_devices">Tutti i dispositivi</string>
     <string name="insight_this_phone">Questo telefono</string>
-    <string name="insight_desktop">Desktop</string>
-    <string name="insight_other_devices">Altri dispositivi sincronizzati</string>
+    <string name="insight_other_devices">Altri dispositivi</string>
     <string name="insight_library_growth">Crescita libreria</string>
     <string name="insight_audio_quality">Qualità audio</string>
     <string name="insight_library_size">Dimensioni libreria</string>
@@ -27,7 +26,6 @@
     <string name="insight_total_albums">Album</string>
     <string name="insight_total_artists">Artisti</string>
     <string name="insight_total_playlists">Playlist</string>
-    <string name="sync_library_analysis">Analisi della libreria</string>
     <string name="insight_total_time">Tempo totale</string>
     <string name="insight_streak">Serie</string>
     <string name="insight_average_session">Sessione media</string>
@@ -68,45 +66,6 @@
     <string name="appearance_theme_title">Tema</string>
     <string name="appearance_reduce_transparency">Riduci trasparenza</string>
     <string name="settings_appearance">Aspetto</string>
-    <string name="settings_sync">Sincronizzazione</string>
-    <string name="sync_title">Sincronizzazione</string>
-    <string name="sync_scan_title">Scansiona codice desktop</string>
-    <string name="sync_add_device">Aggiungi dispositivo</string>
-    <string name="sync_empty_title">Nessun dispositivo connesso</string>
-    <string name="sync_empty_description">Connetti un dispositivo per mantenere sincronizzato l\'ascolto.</string>
-    <string name="sync_device_type_desktop">Desktop</string>
-    <string name="sync_status_connected">Connesso</string>
-    <string name="sync_status_online">Online</string>
-    <string name="sync_status_offline">Offline</string>
-    <string name="sync_last_synced">Ultima sincronizzazione: %1$s</string>
-    <string name="sync_never_synced">Mai sincronizzato</string>
-    <string name="sync_paired_device_description">Questo telefono può connettersi a un desktop alla volta. Revocalo prima di associarne uno nuovo.</string>
-    <string name="sync_ready_to_connect_description">Pronto per la connessione. Avvia la trasmissione in Airmedy sul desktop; questa schermata si connetterà automaticamente.</string>
-    <string name="sync_revoke">Revoca</string>
-    <string name="sync_help">Scopri come connetterti</string>
-    <string name="sync_waiting_title">In attesa dell\'approvazione del desktop</string>
-    <string name="sync_waiting_description">Approva questo telefono nell\'app desktop di Airmedy.</string>
-    <string name="sync_camera_required">L\'accesso alla fotocamera è necessario per scansionare il codice QR.</string>
-    <string name="sync_scan_description">Inquadra con la fotocamera il codice QR visualizzato in Airmedy Desktop.</string>
-    <string name="sync_scan_hint">Mantieni il codice QR all\'interno della cornice.</string>
-    <string name="sync_select_qr_image">Scegli immagine QR</string>
-    <string name="sync_revoke_confirm_title">Disconnettere questo desktop?</string>
-    <string name="sync_revoke_confirm_description">Questo rimuoverà la connessione da questo telefono. Il desktop rimarrà autorizzato finché non verrà revocato da lì.</string>
-    <string name="sync_error_already_paired">Disconnetti il desktop attuale prima di associarne un altro.</string>
-    <string name="sync_error_invalid_qr">Questo codice QR non è un codice di associazione di Airmedy Desktop.</string>
-    <string name="sync_error_transport">Impossibile raggiungere il desktop. Assicurati che entrambi i dispositivi siano sulla stessa rete.</string>
-    <string name="sync_error_timeout">Il desktop non ha risposto in tempo. Scansiona nuovamente il codice QR.</string>
-    <string name="sync_error_rejected">Il desktop ha rifiutato questa richiesta di associazione.</string>
-    <string name="sync_error_expired">La richiesta di associazione è scaduta. Scansiona nuovamente il codice QR.</string>
-    <string name="sync_error_invalid_response">La risposta del desktop non può essere verificata.</string>
-    <string name="sync_notification_channel">Sincronizzazione libreria</string>
-    <string name="sync_notification_title">Sincronizzazione libreria Airmedy</string>
-    <string name="sync_notification_connecting">Connessione al desktop in corso…</string>
-    <string name="sync_notification_progress">Sincronizzazione in corso %1$d%%</string>
-    <string name="sync_notification_complete">Sincronizzazione libreria completata</string>
-    <string name="sync_notification_failed">La sincronizzazione della libreria richiede attenzione</string>
-    <string name="sync_insufficient_storage_title">Spazio insufficiente</string>
-    <string name="sync_insufficient_storage_description">Spazio insufficiente per la sincronizzazione. Servono %1$s; sono disponibili %2$s.</string>
     <string name="close">Chiudi</string>
     <string name="ok">OK</string>
     <string name="playback_notification_channel">Riproduzione musicale</string>
@@ -135,9 +94,6 @@
     <string name="playlist_reorder_done">Termina riordino</string>
     <string name="player_queue_current">In riproduzione</string>
     <string name="player_queue_unknown_track">Brano non disponibile</string>
-    <string name="sync_error_background_timeout">Sincronizzazione in pausa per raggiungimento del limite in background di Android.</string>
-    <string name="sync_progress_connecting">Preparazione sincronizzazione libreria…</string>
-    <string name="sync_progress_syncing">Sincronizzazione</string>
     <string name="library_artists">Artisti</string>
     <string name="library_albums">Album</string>
     <string name="library_tracks">Brani</string>
@@ -155,7 +111,7 @@
     <string name="library_playlists">Playlist</string>
     <string name="library_favorites">Preferiti</string>
     <string name="playlists_empty_title">Nessuna playlist nella libreria</string>
-    <string name="playlists_empty_description">Sincronizza le playlist dal tuo desktop connesso per vederle qui.</string>
+    <string name="playlists_empty_description">Crea una playlist per iniziare a organizzare la tua musica.</string>
     <string name="playlist_row_open">Apri playlist</string>
     <string name="playlist_create">Crea playlist</string>
     <string name="playlist_create_title">Crea playlist</string>
@@ -163,7 +119,7 @@
     <string name="playlist_edit_title">Modifica playlist</string>
     <string name="playlist_delete">Elimina playlist</string>
     <string name="playlist_delete_confirm_title">Eliminare la playlist?</string>
-    <string name="playlist_delete_confirm_description">Questa playlist verrà eliminata dal desktop alla prossima sincronizzazione.</string>
+    <string name="playlist_delete_confirm_description">Questa playlist verrà eliminata definitivamente.</string>
     <string name="playlist_name">Nome playlist</string>
     <string name="playlist_choose_artwork">Scegli copertina playlist</string>
     <string name="playlist_clear_artwork">Rimuovi copertina playlist</string>
@@ -171,10 +127,10 @@
     <string name="bottom_sheet_back">Indietro</string>
     <string name="create">Crea</string>
     <string name="save">Salva</string>
-    <string name="playlist_sync_failed">Impossibile sincronizzare questa playlist con il desktop</string>
+    <string name="playlist_sync_failed">Impossibile salvare le modifiche a questa playlist</string>
     <string name="playlist_details_title">Playlist</string>
     <string name="playlist_details_empty_title">Playlist non disponibile</string>
-    <string name="playlist_details_empty_description">Questa playlist non è più presente nella libreria sincronizzata.</string>
+    <string name="playlist_details_empty_description">Nessun brano di questa playlist è disponibile nella tua libreria.</string>
     <string name="playlist_details_metadata">%1$s · %2$s</string>
     <string name="playlist_duration_day">%1$d g</string>
     <string name="playlist_duration_hour">%1$d h</string>
@@ -185,8 +141,8 @@
         <item quantity="other">%d brani</item>
     </plurals>
     <string name="library_recently_added">Aggiunti di recente</string>
-    <string name="library_empty_title">Nessuna musica sincronizzata</string>
-    <string name="library_empty_description">Avvia la sincronizzazione sul desktop connesso per trasferire qui la libreria.</string>
+    <string name="library_empty_title">Ancora nessuna musica</string>
+    <string name="library_empty_description">Analizza la musica di questo telefono per creare la tua libreria qui.</string>
     <string name="cancel">Annulla</string>
     <string name="settings_playback">Riproduzione</string>
     <string name="playback_settings_title">Riproduzione</string>
@@ -334,7 +290,7 @@
     <string name="albums_no_match_title">Nessun album corrispondente</string>
     <string name="album_details_title">Album</string>
     <string name="album_details_empty_title">Album non disponibile</string>
-    <string name="album_details_empty_description">Questo album non è più presente nella libreria sincronizzata.</string>
+    <string name="album_details_empty_description">Questo album non è più nella tua libreria.</string>
     <string name="album_details_metadata">%1$s · %2$s</string>
     <string name="album_details_metadata_with_year">%1$d · %2$s · %3$s</string>
     <plurals name="album_details_track_count">
@@ -343,7 +299,7 @@
     </plurals>
     <string name="artist_details_title">Artista</string>
     <string name="artist_details_empty_title">Artista non disponibile</string>
-    <string name="artist_details_empty_description">Questo artista non è più presente nella libreria sincronizzata.</string>
+    <string name="artist_details_empty_description">Questo artista non è più nella tua libreria.</string>
     <string name="artist_details_summary">%1$s · %2$s</string>
     <plurals name="artist_details_album_count">
         <item quantity="one">%d album</item>
@@ -358,7 +314,7 @@
     <string name="genre_row_open">Apri genere</string>
     <string name="genre_details_title">Genere</string>
     <string name="genre_details_empty_title">Genere non disponibile</string>
-    <string name="genre_details_empty_description">Questo genere non è più presente nella libreria sincronizzata.</string>
+    <string name="genre_details_empty_description">Questo genere non è più nella tua libreria.</string>
     <string name="genre_details_summary">%1$s · %2$s</string>
     <plurals name="genre_details_album_count">
         <item quantity="one">%d album</item>
@@ -375,7 +331,7 @@
     <string name="composer_row_open">Apri compositore</string>
     <string name="composer_details_title">Compositore</string>
     <string name="composer_details_empty_title">Compositore non disponibile</string>
-    <string name="composer_details_empty_description">Questo compositore non è più presente nella libreria sincronizzata.</string>
+    <string name="composer_details_empty_description">Questo compositore non è più nella tua libreria.</string>
     <string name="composer_details_summary">%1$s · %2$s</string>
     <plurals name="composer_details_album_count">
         <item quantity="one">%d album</item>
@@ -390,10 +346,7 @@
     <string name="composers_no_match_title">Nessun compositore corrispondente</string>
     <string name="lyrics_title">Testi</string>
     <string name="lyrics_data_sources">Fonti dati</string>
-    <string name="lyrics_preferred_source">Fonte preferita</string>
-    <string name="lyrics_source_desktop">Sincronizzazione desktop</string>
-    <string name="lyrics_source_auto_fetch">Recupero automatico</string>
     <string name="lyrics_info_action">Informazioni sui testi</string>
     <string name="lyrics_info_title">Fonti dei testi</string>
-    <string name="lyrics_info_description">Puoi scegliere se dare priorità ai testi dal desktop o recuperarli automaticamente. I testi recuperati automaticamente sul mobile non vengono sincronizzati con il desktop.</string>
+    <string name="lyrics_info_description">I testi vengono recuperati automaticamente dai provider abilitati (LRCLIB, KuGou) e salvati nella cache del dispositivo.</string>
 </resources>

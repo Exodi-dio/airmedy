@@ -18,8 +18,7 @@
     <string name="insight_range_all">Все</string>
     <string name="insight_all_devices">Все устройства</string>
     <string name="insight_this_phone">Этот телефон</string>
-    <string name="insight_desktop">Компьютер</string>
-    <string name="insight_other_devices">Другие синхронизированные устройства</string>
+    <string name="insight_other_devices">Другие устройства</string>
     <string name="insight_library_growth">Рост медиатеки</string>
     <string name="insight_audio_quality">Качество звука</string>
     <string name="insight_library_size">Размер медиатеки</string>
@@ -27,7 +26,6 @@
     <string name="insight_total_albums">Альбомы</string>
     <string name="insight_total_artists">Исполнители</string>
     <string name="insight_total_playlists">Плейлисты</string>
-    <string name="sync_library_analysis">Анализ библиотеки</string>
     <string name="insight_total_time">Общее время</string>
     <string name="insight_streak">Серия</string>
     <string name="insight_average_session">Средняя сессия</string>
@@ -68,45 +66,6 @@
     <string name="appearance_theme_title">Тема</string>
     <string name="appearance_reduce_transparency">Уменьшить прозрачность</string>
     <string name="settings_appearance">Внешний вид</string>
-    <string name="settings_sync">Синхронизация</string>
-    <string name="sync_title">Синхронизация</string>
-    <string name="sync_scan_title">Сканировать код с компьютера</string>
-    <string name="sync_add_device">Добавить устройство</string>
-    <string name="sync_empty_title">Нет подключенных устройств</string>
-    <string name="sync_empty_description">Подключите устройство, чтобы синхронизировать прослушивание.</string>
-    <string name="sync_device_type_desktop">Компьютер</string>
-    <string name="sync_status_connected">Подключено</string>
-    <string name="sync_status_online">В сети</string>
-    <string name="sync_status_offline">Не в сети</string>
-    <string name="sync_last_synced">Последняя синхронизация: %1$s</string>
-    <string name="sync_never_synced">Еще не синхронизировано</string>
-    <string name="sync_paired_device_description">Этот телефон может быть подключен только к одному компьютеру. Отключите его перед привязкой нового.</string>
-    <string name="sync_ready_to_connect_description">Готово к подключению. Запустите трансляцию в Airmedy на компьютере, и экран подключится автоматически.</string>
-    <string name="sync_revoke">Отозвать</string>
-    <string name="sync_help">Узнайте, как подключиться</string>
-    <string name="sync_waiting_title">Ожидание подтверждения на компьютере</string>
-    <string name="sync_waiting_description">Подтвердите подключение телефона в приложении Airmedy на компьютере.</string>
-    <string name="sync_camera_required">Для сканирования QR-кода необходим доступ к камере.</string>
-    <string name="sync_scan_description">Наведите камеру на QR-код сопряжения в приложении Airmedy на компьютере.</string>
-    <string name="sync_scan_hint">Поместите QR-код в рамку.</string>
-    <string name="sync_select_qr_image">Выбрать изображение QR</string>
-    <string name="sync_revoke_confirm_title">Отключить этот компьютер?</string>
-    <string name="sync_revoke_confirm_description">Это удалит подключение с телефона. Компьютер останется авторизованным, пока вы не отмените это на нем.</string>
-    <string name="sync_error_already_paired">Отключите текущий компьютер перед привязкой другого.</string>
-    <string name="sync_error_invalid_qr">Этот QR-код не является кодом сопряжения Airmedy Desktop.</string>
-    <string name="sync_error_transport">Не удалось связаться с компьютером. Убедитесь, что оба устройства находятся в одной сети.</string>
-    <string name="sync_error_timeout">Компьютер не ответил вовремя. Отсканируйте QR-код заново.</string>
-    <string name="sync_error_rejected">Компьютер отклонил запрос на сопряжение.</string>
-    <string name="sync_error_expired">Срок действия запроса на сопряжение истек. Отсканируйте QR-код заново.</string>
-    <string name="sync_error_invalid_response">Не удалось проверить ответ компьютера.</string>
-    <string name="sync_notification_channel">Синхронизация медиатеки</string>
-    <string name="sync_notification_title">Синхронизация медиатеки Airmedy</string>
-    <string name="sync_notification_connecting">Подключение к компьютеру…</string>
-    <string name="sync_notification_progress">Синхронизация: %1$d%%</string>
-    <string name="sync_notification_complete">Синхронизация медиатеки завершена</string>
-    <string name="sync_notification_failed">Синхронизация медиатеки требует внимания</string>
-    <string name="sync_insufficient_storage_title">Недостаточно места</string>
-    <string name="sync_insufficient_storage_description">Недостаточно места для синхронизации. Требуется %1$s, доступно %2$s.</string>
     <string name="close">Закрыть</string>
     <string name="ok">ОК</string>
     <string name="playback_notification_channel">Воспроизведение музыки</string>
@@ -135,9 +94,6 @@
     <string name="playlist_reorder_done">Завершить изменение порядка</string>
     <string name="player_queue_current">Сейчас играет</string>
     <string name="player_queue_unknown_track">Недоступный трек</string>
-    <string name="sync_error_background_timeout">Синхронизация приостановлена из-за фонового лимита времени Android.</string>
-    <string name="sync_progress_connecting">Подготовка к синхронизации медиатеки…</string>
-    <string name="sync_progress_syncing">Синхронизация</string>
     <string name="library_artists">Исполнители</string>
     <string name="library_albums">Альбомы</string>
     <string name="library_tracks">Треки</string>
@@ -155,7 +111,7 @@
     <string name="library_playlists">Плейлисты</string>
     <string name="library_favorites">Избранное</string>
     <string name="playlists_empty_title">В медиатеке нет плейлистов</string>
-    <string name="playlists_empty_description">Синхронизируйте плейлисты с компьютера, чтобы они появились здесь.</string>
+    <string name="playlists_empty_description">Создайте плейлист, чтобы начать организовывать свою музыку.</string>
     <string name="playlist_row_open">Открыть плейлист</string>
     <string name="playlist_create">Создать плейлист</string>
     <string name="playlist_create_title">Создать плейлист</string>
@@ -163,7 +119,7 @@
     <string name="playlist_edit_title">Изменить плейлист</string>
     <string name="playlist_delete">Удалить плейлист</string>
     <string name="playlist_delete_confirm_title">Удалить плейлист?</string>
-    <string name="playlist_delete_confirm_description">Этот плейлист будет удален с вашего компьютера при следующей синхронизации.</string>
+    <string name="playlist_delete_confirm_description">Этот плейлист будет удалён безвозвратно.</string>
     <string name="playlist_name">Название плейлиста</string>
     <string name="playlist_choose_artwork">Выбрать обложку</string>
     <string name="playlist_clear_artwork">Удалить обложку</string>
@@ -171,10 +127,10 @@
     <string name="bottom_sheet_back">Назад</string>
     <string name="create">Создать</string>
     <string name="save">Сохранить</string>
-    <string name="playlist_sync_failed">Не удалось синхронизировать этот плейлист с компьютером</string>
+    <string name="playlist_sync_failed">Не удалось сохранить изменения в этом плейлисте</string>
     <string name="playlist_details_title">Плейлист</string>
     <string name="playlist_details_empty_title">Плейлист недоступен</string>
-    <string name="playlist_details_empty_description">Этого плейлиста больше нет в синхронизированной медиатеке.</string>
+    <string name="playlist_details_empty_description">Ни один трек из этого плейлиста не доступен в вашей библиотеке.</string>
     <string name="playlist_details_metadata">%1$s · %2$s</string>
     <string name="playlist_duration_day">%1$d д</string>
     <string name="playlist_duration_hour">%1$d ч</string>
@@ -187,8 +143,8 @@
         <item quantity="other">%d треков</item>
     </plurals>
     <string name="library_recently_added">Недавно добавленные</string>
-    <string name="library_empty_title">Музыка пока не синхронизирована</string>
-    <string name="library_empty_description">Запустите синхронизацию на компьютере, чтобы перенести медиатеку сюда.</string>
+    <string name="library_empty_title">Музыки пока нет</string>
+    <string name="library_empty_description">Просканируйте музыку на этом устройстве, чтобы собрать здесь свою библиотеку.</string>
     <string name="cancel">Отмена</string>
     <string name="settings_playback">Воспроизведение</string>
     <string name="playback_settings_title">Воспроизведение</string>
@@ -336,7 +292,7 @@
     <string name="albums_no_match_title">Нет подходящих альбомов</string>
     <string name="album_details_title">Альбом</string>
     <string name="album_details_empty_title">Альбом недоступен</string>
-    <string name="album_details_empty_description">Этого альбома больше нет в синхронизированной медиатеке.</string>
+    <string name="album_details_empty_description">Этот альбом больше не в вашей библиотеке.</string>
     <string name="album_details_metadata">%1$s · %2$s</string>
     <string name="album_details_metadata_with_year">%1$d · %2$s · %3$s</string>
     <plurals name="album_details_track_count">
@@ -347,7 +303,7 @@
     </plurals>
     <string name="artist_details_title">Исполнитель</string>
     <string name="artist_details_empty_title">Исполнитель недоступен</string>
-    <string name="artist_details_empty_description">Этого исполнителя больше нет в синхронизированной медиатеке.</string>
+    <string name="artist_details_empty_description">Этот исполнитель больше не в вашей библиотеке.</string>
     <string name="artist_details_summary">%1$s · %2$s</string>
     <plurals name="artist_details_album_count">
         <item quantity="one">%d альбом</item>
@@ -366,7 +322,7 @@
     <string name="genre_row_open">Открыть жанр</string>
     <string name="genre_details_title">Жанр</string>
     <string name="genre_details_empty_title">Жанр недоступен</string>
-    <string name="genre_details_empty_description">Этого жанра больше нет в синхронизированной медиатеке.</string>
+    <string name="genre_details_empty_description">Этот жанр больше не в вашей библиотеке.</string>
     <string name="genre_details_summary">%1$s · %2$s</string>
     <plurals name="genre_details_album_count">
         <item quantity="one">%d альбом</item>
@@ -387,7 +343,7 @@
     <string name="composer_row_open">Открыть композитора</string>
     <string name="composer_details_title">Композитор</string>
     <string name="composer_details_empty_title">Композитор недоступен</string>
-    <string name="composer_details_empty_description">Этого композитора больше нет в синхронизированной медиатеке.</string>
+    <string name="composer_details_empty_description">Этот композитор больше не в вашей библиотеке.</string>
     <string name="composer_details_summary">%1$s · %2$s</string>
     <plurals name="composer_details_album_count">
         <item quantity="one">%d альбом</item>
@@ -406,10 +362,7 @@
     <string name="composers_no_match_title">Нет подходящих композиторов</string>
     <string name="lyrics_title">Тексты песен</string>
     <string name="lyrics_data_sources">Источники данных</string>
-    <string name="lyrics_preferred_source">Предпочтительный источник</string>
-    <string name="lyrics_source_desktop">Синхронизация с компьютером</string>
-    <string name="lyrics_source_auto_fetch">Загружать автоматически</string>
     <string name="lyrics_info_action">Информация о текстах</string>
     <string name="lyrics_info_title">Источники текстов</string>
-    <string name="lyrics_info_description">Можно выбрать: отдавать приоритет текстам с компьютера или получать их автоматически. Тексты, автоматически полученные на мобильном устройстве, не синхронизируются обратно с компьютером.</string>
+    <string name="lyrics_info_description">Тексты автоматически получаются от включённых поставщиков (LRCLIB, KuGou) и сохраняются на устройстве.</string>
 </resources>
