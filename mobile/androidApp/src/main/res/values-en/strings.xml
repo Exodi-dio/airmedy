@@ -142,7 +142,7 @@
     </plurals>
     <string name="library_recently_added">Recently Added</string>
     <string name="library_empty_title">No music yet</string>
-    <string name="library_empty_description">Scan this phone's music to build your library here.</string>
+    <string name="library_empty_description">Scan the music on this phone to build your library here.</string>
     <string name="cancel">Cancel</string>
     <string name="settings_playback">Playback</string>
     <string name="playback_settings_title">Playback</string>

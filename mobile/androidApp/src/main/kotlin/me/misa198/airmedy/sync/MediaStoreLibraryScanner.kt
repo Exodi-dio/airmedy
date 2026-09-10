@@ -113,7 +113,6 @@ internal class MediaStoreLibraryScanner(
                     durationMillis = number(ColumnDuration)?.coerceAtLeast(0L) ?: 0L,
                     discNumber = number(ColumnDiscNumber)?.toInt() ?: 0,
                     trackNumber = number(ColumnTrackNumber)?.toInt() ?: 0,
-                    playCount = number(ColumnPlayCount)?.toInt() ?: 0,
                     createdAt = isoDate(dateAdded),
                     updatedAt = isoDate(dateModified),
                     addedAt = isoDate(dateAdded),
@@ -213,12 +212,11 @@ internal class MediaStoreLibraryScanner(
         const val ColumnDuration = MediaStore.Audio.Media.DURATION
         const val ColumnDiscNumber = MediaStore.Audio.Media.DISC_NUMBER
         const val ColumnTrackNumber = MediaStore.Audio.Media.TRACK
-        const val ColumnPlayCount = MediaStore.Audio.Media.PLAY_COUNT
         const val ColumnDateAdded = MediaStore.Audio.Media.DATE_ADDED
         const val ColumnDateModified = MediaStore.Audio.Media.DATE_MODIFIED
         const val ColumnSize = MediaStore.Audio.Media.SIZE
         const val ColumnBitrate = MediaStore.Audio.Media.BITRATE
-        const val ColumnSampleRate = MediaStore.Audio.Media.SAMPLE_RATE
+        const val ColumnSampleRate = MediaStore.Audio.AudioColumns.SAMPLERATE
         const val ColumnBitsPerSample = MediaStore.Audio.Media.BITS_PER_SAMPLE
         const val ColumnMimeType = MediaStore.Audio.Media.MIME_TYPE
 
@@ -234,7 +232,6 @@ internal class MediaStoreLibraryScanner(
             ColumnDuration,
             ColumnDiscNumber,
             ColumnTrackNumber,
-            ColumnPlayCount,
             ColumnDateAdded,
             ColumnDateModified,
             ColumnSize,

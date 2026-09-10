@@ -97,6 +97,8 @@ internal data class SyncTrackEntity(
     val rawJson: String,
 )
 
+internal data class TrackPlayCountRow(val trackId: String, val playCount: Int)
+
 @Entity(tableName = "sync_playlists", primaryKeys = ["planId", "playlistId"])
 internal data class SyncPlaylistEntity(
     val planId: String,
@@ -333,6 +335,8 @@ internal interface SyncDao {
         ORDER BY t.syncOrder
     """)
     fun observeTracks(): Flow<List<LibraryTrackRow>>
+
+    @Query("SELECT trackId, playCount FROM sync_tracks") suspend fun trackPlayCounts(): List<TrackPlayCountRow>
 
     @Query("SELECT entityType, entityId FROM library_search_fts WHERE library_search_fts MATCH :match AND planId IN (SELECT planId FROM sync_plans WHERE active = 1)")
     fun observeSearchCandidates(match: String): Flow<List<LibrarySearchCandidate>>
@@ -867,6 +871,7 @@ internal class AndroidLibrarySyncStore(
         val artworkKeys = artworkRows.mapTo(mutableSetOf(), LocalScanArtwork::artworkKey)
         val (stale, activePaths) = database.withTransaction {
             dao.insertPlan(SyncPlanEntity(planId, LocalDesktopId, localLibraryManifest(planId), "staging", false))
+            val playCounts = dao.trackPlayCounts().associate { it.trackId to it.playCount }
             dao.insertAssets(buildList {
                 audioRows.forEach { (trackId, row) ->
                     add(SyncAssetEntity(planId, "audio:$trackId", "audio", row.sha256, row.size, row.absolutePath))
@@ -876,6 +881,10 @@ internal class AndroidLibrarySyncStore(
                 }
             })
             val trackEntities = snapshot.tracks.mapIndexed { index, track ->
+                // MediaStore has no per-track play count column; keep the
+                // count accumulated on this device across rescans.
+                val playCount = maxOf(track.playCount, playCounts[track.id] ?: 0)
+                val effectiveTrack = if (playCount == track.playCount) track else track.copy(playCount = playCount)
                 SyncTrackEntity(
                     planId = planId,
                     trackId = track.id,
@@ -884,12 +893,12 @@ internal class AndroidLibrarySyncStore(
                     album = track.album.title,
                     albumId = track.album.id,
                     artworkKey = track.artworkKey?.takeIf { it in artworkKeys },
-                    playCount = track.playCount,
+                    playCount = playCount,
                     createdAt = track.createdAt,
                     discNumber = track.discNumber,
                     trackNumber = track.trackNumber,
                     syncOrder = index,
-                    rawJson = LocalLibraryJson.trackDocumentJson(track),
+                    rawJson = LocalLibraryJson.trackDocumentJson(effectiveTrack),
                 )
             }
             dao.insertTracks(trackEntities)
