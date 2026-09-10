@@ -111,7 +111,10 @@ jobs:
           tag_name: android-prod-release-latest
           name: android-prod-release
           generate_release_notes: true
-          files: ${{ steps.locate.outputs.apk_path }}
-          overwrite: true
           draft: false
           prerelease: false
+
+      - name: Replace APK asset
+        run: gh release upload android-prod-release-latest "${{ steps.locate.outputs.apk_path }}" --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
