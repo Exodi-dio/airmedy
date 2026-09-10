@@ -21,8 +21,8 @@ interface LocalNamedRef {
 }
 
 data class LocalArtistRef(
-    val id: String,
-    val name: String,
+    override val id: String,
+    override val name: String,
     val sortName: String = "",
 ) : LocalNamedRef
 
@@ -36,13 +36,13 @@ data class LocalAlbumRef(
 )
 
 data class LocalComposer(
-    val id: String,
-    val name: String,
+    override val id: String,
+    override val name: String,
 ) : LocalNamedRef
 
 data class LocalGenre(
-    val id: String,
-    val name: String,
+    override val id: String,
+    override val name: String,
 ) : LocalNamedRef
 
 data class LocalTrack(
