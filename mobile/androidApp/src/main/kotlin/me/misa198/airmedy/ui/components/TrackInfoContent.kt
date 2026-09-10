@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
@@ -117,12 +118,16 @@ internal fun trackInfoValues(track: LibraryTrack): List<TrackInfoValue> {
     val sampleRate = number("sample_rate")
     val bitDepth = number("bit_depth")
     val fileSize = number("file_size")
+    // Manifest-embedded fallbacks: the composer/genre tags MediaStore tracked may be a
+    // combined string or absent entirely; the per-track arrays are always present.
+    val composer = text("raw_composer_names").ifBlank { joinedNames("composers") }
+    val genre = text("raw_genre_names").ifBlank { joinedNames("genres") }
 
     return listOf(
         TrackInfoValue(R.string.track_info_artist, text("raw_artist_names").ifBlank { track.artists }),
-        TrackInfoValue(R.string.track_info_genre, text("raw_genre_names")),
+        TrackInfoValue(R.string.track_info_genre, genre),
         TrackInfoValue(R.string.track_info_year, numericText("year")),
-        TrackInfoValue(R.string.track_info_composer, text("raw_composer_names")),
+        TrackInfoValue(R.string.track_info_composer, composer),
         TrackInfoValue(R.string.track_info_disc, trackNumberText(discNumber, totalDiscs)),
         TrackInfoValue(R.string.track_info_track, trackNumberText(trackNumber, totalTracks)),
         TrackInfoValue(R.string.track_info_play_count, (number("play_count") ?: track.playCount.toLong()).takeIf { it > 0 }?.toString().orEmpty()),
@@ -143,6 +148,12 @@ internal fun trackInfoValues(track: LibraryTrack): List<TrackInfoValue> {
 private fun JsonObject?.string(name: String): String = (this?.get(name) as? JsonPrimitive)?.contentOrNull?.trim().orEmpty()
 private fun JsonObject?.long(name: String): Long? = (this?.get(name) as? JsonPrimitive)?.contentOrNull?.toDoubleOrNull()?.toLong()
 private fun JsonObject?.int(name: String): Int = long(name)?.toInt() ?: 0
+
+private fun JsonObject?.joinedNames(name: String): String = (this?.get(name) as? JsonArray)
+    .orEmpty()
+    .mapNotNull { value -> (value as? JsonObject)?.string("name")?.takeIf(String::isNotEmpty) }
+    .distinct()
+    .joinToString(", ")
 
 private fun trackNumberText(number: Long?, total: Long?): String = when {
     number == null || number <= 0 -> ""
@@ -180,7 +191,9 @@ internal fun TrackInfoContent(track: LibraryTrack, modifier: Modifier = Modifier
     val quality = remember(track) { trackAudioQuality(track) }
     val artwork = rememberArtworkThumbnail(track.artworkPath, targetPx = 480)
     val metadata = track.metadataObject()
-    val albumArtist = metadata.string("raw_album_artist_names").ifBlank { track.artists }
+    val albumArtist = metadata.string("raw_album_artist_names")
+        .ifBlank { metadata.joinedNames("album_artists") }
+        .ifBlank { track.artists }
     val subtitle = listOf(albumArtist, track.album).filter(String::isNotBlank).joinToString(" · ")
     val density = LocalDensity.current
     val topSafeInset = with(density) { WindowInsets.statusBars.getTop(this).toDp() }

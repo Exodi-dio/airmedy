@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import java.io.File
 import java.security.MessageDigest
+import me.misa198.airmedy.sync.StagedArtistArtwork
 import me.misa198.airmedy.sync.StagedPlaylistArtwork
 
 /** Converts picker content into the one format accepted by playlist reconciliation. */
@@ -34,4 +35,32 @@ internal fun stagePlaylistArtwork(contentResolver: ContentResolver, filesDir: Fi
         check(temporary.renameTo(target)) { "Unable to save playlist artwork" }
     }
     return StagedPlaylistArtwork(hash, "image/jpeg", bytes.size.toLong(), relativePath)
+}
+
+/** Converts picker content into a locally staged artist image (never synced). */
+internal fun stageArtistArtwork(contentResolver: ContentResolver, filesDir: File, artistId: String, uri: Uri): StagedArtistArtwork {
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    val boundsStream = contentResolver.openInputStream(uri) ?: error("Unable to open artist artwork")
+    boundsStream.use { BitmapFactory.decodeStream(it, null, bounds) }
+    require(bounds.outWidth > 0 && bounds.outHeight > 0) { "Selected file is not an image" }
+    var sample = 1
+    while (bounds.outWidth / sample > 2048 || bounds.outHeight / sample > 2048) sample *= 2
+    val bitmap = contentResolver.openInputStream(uri)?.use {
+        BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inSampleSize = sample })
+    } ?: error("Unable to decode artist artwork")
+    val bytes = java.io.ByteArrayOutputStream().use { output ->
+        check(bitmap.compress(Bitmap.CompressFormat.JPEG, 90, output)) { "Unable to encode artist artwork" }
+        output.toByteArray()
+    }
+    bitmap.recycle()
+    val hash = MessageDigest.getInstance("SHA-256").digest(bytes).joinToString("") { "%02x".format(it) }
+    val relativePath = "artist-artwork/$hash.jpg"
+    val target = File(filesDir, relativePath)
+    if (!target.isFile) {
+        target.parentFile?.mkdirs()
+        val temporary = File(target.parentFile, "$hash.tmp")
+        temporary.outputStream().use { it.write(bytes) }
+        check(temporary.renameTo(target)) { "Unable to save artist artwork" }
+    }
+    return StagedArtistArtwork(artistId, hash, "image/jpeg", bytes.size.toLong(), relativePath)
 }

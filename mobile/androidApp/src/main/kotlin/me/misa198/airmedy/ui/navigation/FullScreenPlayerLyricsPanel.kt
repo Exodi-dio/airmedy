@@ -70,7 +70,9 @@ internal data class PlayerLyricLine(
     val timestampSeconds: Float? = null,
 )
 
-private val TimestampedLyricLine = Regex("^\\[(\\d+):(\\d+(?:\\.\\d+)?)\\](.*)$")
+private val LyricTimestamp = Regex("\\[(\\d{1,3}):(\\d{1,2}(?:[.:]\\d{1,3})?)]")
+private val LrcMetadataLine = Regex("^\\s*\\[([a-zA-Z]+)\\s*:\\s*([^]]*)]\\s*$")
+private val EnhancedLyricTimestamp = Regex("<\\d{1,3}:\\d{1,2}(?:[.:]\\d{1,3})?>")
 private val BilingualSeparator = Regex("\\s*\\^\\s*|\\s*/\\s*")
 private const val ForwardSeekAnimatedApproachRows = 3
 
@@ -79,14 +81,32 @@ internal enum class LyricsSeekDirection { Backward, Forward }
 internal fun lyricsSeekDirection(targetIndex: Int, firstVisibleIndex: Int): LyricsSeekDirection =
     if (targetIndex < firstVisibleIndex) LyricsSeekDirection.Backward else LyricsSeekDirection.Forward
 
-internal fun parsePlayerLyrics(content: String): List<PlayerLyricLine> = content.lineSequence()
-    .mapNotNull { rawLine ->
-        val match = TimestampedLyricLine.matchEntire(rawLine)
-        val timestamp = match?.let { it.groupValues[1].toFloat() * 60f + it.groupValues[2].toFloat() }
-        val text = match?.groupValues?.get(3) ?: rawLine
-        text.trim().takeIf(String::isNotEmpty)?.let { parsePlayerLyricText(it, timestamp) }
+internal fun parsePlayerLyrics(content: String): List<PlayerLyricLine> {
+    var offsetMillis = 0f
+    val lines = mutableListOf<PlayerLyricLine>()
+    content.lineSequence().forEach { rawLine ->
+        val metadata = LrcMetadataLine.matchEntire(rawLine)
+        if (metadata != null) {
+            if (metadata.groupValues[1].lowercase() == "offset") {
+                offsetMillis = metadata.groupValues[2].trim().toFloatOrNull() ?: 0f
+            }
+            return@forEach
+        }
+        val timestamps = LyricTimestamp.findAll(rawLine).map { it.groupValues }.toList()
+        // Remove [mm:ss.ms] tags (including inline enhanced-LRC markers) before reading the text.
+        val text = LyricTimestamp.replace(EnhancedLyricTimestamp.replace(rawLine, ""), "").trim()
+        if (text.isEmpty()) return@forEach
+        if (timestamps.isEmpty()) {
+            lines += parsePlayerLyricText(text, null)
+        } else {
+            timestamps.forEach { groups ->
+                val seconds = groups[1].toFloat() * 60f + groups[2].replace(':', '.').toFloat() + offsetMillis / 1_000f
+                lines += parsePlayerLyricText(text, seconds.coerceAtLeast(0f))
+            }
+        }
     }
-    .toList()
+    return lines
+}
 
 internal fun hasSyncedPlayerLyrics(content: String?): Boolean = content != null && parsePlayerLyrics(content).any { it.timestampSeconds != null }
 

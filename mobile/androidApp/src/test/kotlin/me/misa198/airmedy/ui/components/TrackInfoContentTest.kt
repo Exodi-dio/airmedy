@@ -96,6 +96,26 @@ class TrackInfoContentTest {
     }
 
     @Test
+    fun arrayOnlyComposerAndGenresFallBackToTheirManifestArrays() {
+        val details = trackInfoValues(track("""{
+            "composers":[{"name":"Beta"}],
+            "genres":[{"name":"Ambient"}]
+        }"""))
+
+        assertTrue(details.contains(TrackInfoValue(R.string.track_info_composer, "Beta")))
+        assertTrue(details.contains(TrackInfoValue(R.string.track_info_genre, "Ambient")))
+    }
+
+    @Test
+    fun excludedWhenComposerGenreAndFileSizeAreAbsent() {
+        val details = trackInfoValues(track("""{}"""))
+
+        assertFalse(details.any { it.labelRes == R.string.track_info_composer })
+        assertFalse(details.any { it.labelRes == R.string.track_info_genre })
+        assertFalse(details.any { it.labelRes == R.string.track_info_file_size })
+    }
+
+    @Test
     fun formattersMatchDesktopDisplay() {
         assertEquals("1:05", formatTrackDuration(65))
         assertEquals("0 B", formatFileSize(0))

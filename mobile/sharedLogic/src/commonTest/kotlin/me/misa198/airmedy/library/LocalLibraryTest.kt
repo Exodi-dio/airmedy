@@ -41,6 +41,7 @@ class LocalLibraryTest {
         sampleRate = 44100,
         bitDepth = 16,
         codec = "mpeg",
+        fileSize = 8_200_000L,
         archived = false,
     )
 
@@ -61,6 +62,7 @@ class LocalLibraryTest {
         assertEquals(320, document.int("bitrate"))
         assertEquals(44100, document.int("sample_rate"))
         assertEquals(16, document.int("bit_depth"))
+        assertEquals(8_200_000L, document.long("file_size"))
         assertEquals("2024-02-02T00:00:00Z", document.string("updated_at"))
 
         val artists = document.array("artists")

@@ -142,6 +142,10 @@ internal data class LocalPlaylistEntity(
 @Entity(tableName = "playlist_artwork_staging", primaryKeys = ["sha256"])
 internal data class PlaylistArtworkStagingEntity(val sha256: String, val mime: String, val size: Long, val relativePath: String)
 
+/** Local-only artist artwork staged by the user; never synced to the desktop. */
+@Entity(tableName = "artist_artwork_staging", primaryKeys = ["artistId"])
+internal data class ArtistArtworkStagingEntity(val artistId: String, val sha256: String, val mime: String, val size: Long, val relativePath: String)
+
 @Entity(tableName = "sync_documents", primaryKeys = ["planId", "kind", "documentKey"])
 internal data class SyncDocumentEntity(
     val planId: String,
@@ -216,6 +220,7 @@ internal interface SyncDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE) suspend fun insertPlaylistMutation(value: PlaylistMutationEntity)
     @Insert(onConflict = OnConflictStrategy.REPLACE) suspend fun insertLocalPlaylist(value: LocalPlaylistEntity)
     @Insert(onConflict = OnConflictStrategy.REPLACE) suspend fun insertPlaylistArtwork(value: PlaylistArtworkStagingEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE) suspend fun insertArtistArtwork(value: ArtistArtworkStagingEntity)
     @Insert(onConflict = OnConflictStrategy.REPLACE) suspend fun insertDocuments(values: List<SyncDocumentEntity>)
     @Insert(onConflict = OnConflictStrategy.REPLACE) suspend fun insertProviderLyric(value: ProviderLyricEntity)
     @Insert(onConflict = OnConflictStrategy.IGNORE) suspend fun insertListeningSession(value: ListeningSessionEntity): Long
@@ -312,6 +317,8 @@ internal interface SyncDao {
     @Query("SELECT * FROM playlist_artwork_staging WHERE sha256 = :sha256 LIMIT 1") suspend fun playlistArtwork(sha256: String): PlaylistArtworkStagingEntity?
     @Query("SELECT * FROM playlist_artwork_staging") fun observePlaylistArtwork(): Flow<List<PlaylistArtworkStagingEntity>>
     @Query("DELETE FROM playlist_artwork_staging WHERE sha256 IN (:hashes)") suspend fun deletePlaylistArtwork(hashes: List<String>)
+    @Query("SELECT * FROM artist_artwork_staging") fun observeArtistArtwork(): Flow<List<ArtistArtworkStagingEntity>>
+    @Query("DELETE FROM artist_artwork_staging WHERE artistId IN (:artistIds)") suspend fun deleteArtistArtwork(artistIds: List<String>)
     @Query("""
         SELECT t.trackId AS id,
                t.title AS title,
@@ -367,8 +374,8 @@ internal interface SyncDao {
 }
 
 @Database(
-    entities = [SyncPlanEntity::class, SyncAssetEntity::class, SyncTrackEntity::class, SyncPlaylistEntity::class, LibrarySearchDocumentEntity::class, PlaylistMutationEntity::class, LocalPlaylistEntity::class, PlaylistArtworkStagingEntity::class, SyncDocumentEntity::class, ProviderLyricEntity::class, ListeningSessionEntity::class, PlaybackAttemptEntity::class, DailyTrackListeningStatEntity::class, DailyPlaybackAttemptStatEntity::class],
-    version = 12,
+    entities = [SyncPlanEntity::class, SyncAssetEntity::class, SyncTrackEntity::class, SyncPlaylistEntity::class, LibrarySearchDocumentEntity::class, PlaylistMutationEntity::class, LocalPlaylistEntity::class, PlaylistArtworkStagingEntity::class, ArtistArtworkStagingEntity::class, SyncDocumentEntity::class, ProviderLyricEntity::class, ListeningSessionEntity::class, PlaybackAttemptEntity::class, DailyTrackListeningStatEntity::class, DailyPlaybackAttemptStatEntity::class],
+    version = 13,
     exportSchema = false,
 )
 internal abstract class SyncDatabase : RoomDatabase() {
@@ -376,7 +383,7 @@ internal abstract class SyncDatabase : RoomDatabase() {
 
     companion object {
         fun create(context: Context): SyncDatabase = Room.databaseBuilder(context, SyncDatabase::class.java, "library-sync.db")
-            .addMigrations(Migration2To3, Migration3To4, Migration4To5, Migration5To6, Migration6To7, Migration7To8, Migration8To9, Migration9To10, Migration10To11, Migration11To12)
+            .addMigrations(Migration2To3, Migration3To4, Migration4To5, Migration5To6, Migration6To7, Migration7To8, Migration8To9, Migration9To10, Migration10To11, Migration11To12, Migration12To13)
             .fallbackToDestructiveMigration()
             .build()
 
@@ -431,6 +438,11 @@ internal abstract class SyncDatabase : RoomDatabase() {
         }
         private val Migration11To12 = object : Migration(11, 12) {
             override fun migrate(database: SupportSQLiteDatabase) { database.execSQL("CREATE TABLE IF NOT EXISTS provider_lyrics (trackId TEXT NOT NULL PRIMARY KEY, content TEXT NOT NULL, source TEXT NOT NULL)") }
+        }
+        private val Migration12To13 = object : Migration(12, 13) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE TABLE IF NOT EXISTS artist_artwork_staging (artistId TEXT NOT NULL PRIMARY KEY, sha256 TEXT NOT NULL, mime TEXT NOT NULL, size INTEGER NOT NULL, relativePath TEXT NOT NULL)")
+            }
         }
     }
 }
@@ -594,10 +606,11 @@ internal class AndroidLibrarySyncStore(
     val artists: Flow<List<LibraryArtist>> = combine(
         activeTrackRows,
         artworkAssets,
-    ) { rows, artworkAssets ->
+        dao.observeArtistArtwork(),
+    ) { rows, artworkAssets, stagedArtwork ->
         libraryArtistsFrom(rows, artworkAssets.associate { asset ->
             asset.assetId.removePrefix("artwork:") to asset.relativePath
-        })
+        } + stagedArtwork.associate { staging -> staging.artistId to staging.relativePath })
     }.shareIn(snapshotScope, SharingStarted.WhileSubscribed(5_000), replay = 1)
     val albums: Flow<List<LibraryAlbum>> = combine(
         activeTrackRows,
@@ -738,6 +751,14 @@ internal class AndroidLibrarySyncStore(
     }
 
     override suspend fun stagedPlaylistArtwork(sha256: String): StagedPlaylistArtwork? = dao.playlistArtwork(sha256)?.let { StagedPlaylistArtwork(it.sha256, it.mime, it.size, it.relativePath) }
+
+    suspend fun stageArtistArtwork(value: StagedArtistArtwork) {
+        require(value.sha256.matches(Regex("^[0-9a-f]{64}$")) && value.mime in setOf("image/jpeg", "image/png", "image/webp"))
+        require(!value.relativePath.startsWith('/') && ".." !in value.relativePath.split('/'))
+        dao.insertArtistArtwork(ArtistArtworkStagingEntity(value.artistId, value.sha256, value.mime, value.size, value.relativePath))
+    }
+
+    suspend fun clearArtistArtwork(artistId: String) = dao.deleteArtistArtwork(listOf(artistId))
 
     override suspend fun pendingPlaylistMutations(): List<PlaylistMutation> = dao.pendingPlaylistMutations().mapNotNull(PlaylistMutationEntity::toPlaylistMutation)
 
@@ -1223,7 +1244,11 @@ internal fun libraryArtistsFrom(
             } ?: candidate
         }
     }
-    return artists.values.toList()
+    // Manually staged artist artwork (set locally by the user) wins as a fallback
+    // when no per-track artwork key resolved; it is keyed by the artist id.
+    return artists.map { artist ->
+        artist.artworkPath?.let { artist } ?: artworkPaths[artist.id]?.let { artist.copy(artworkPath = it) } ?: artist
+    }.toList()
 }
 
 internal fun libraryAlbumsFrom(

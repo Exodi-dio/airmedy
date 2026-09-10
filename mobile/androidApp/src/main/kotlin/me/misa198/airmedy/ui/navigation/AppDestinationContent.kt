@@ -22,7 +22,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -64,6 +66,8 @@ import me.misa198.airmedy.ui.screens.VolumeNormalizationContent
 import me.misa198.airmedy.ui.screens.SongTransitionContent
 import me.misa198.airmedy.ui.screens.EqualizerContent
 import me.misa198.airmedy.lastfm.LastFmStatus
+import me.misa198.airmedy.sync.AndroidSyncRuntime
+import me.misa198.airmedy.sync.stageArtistArtwork
 import me.misa198.airmedy.ui.theme.LocalAirmedyColors
 
 import me.misa198.airmedy.ui.screens.LibraryTracksContent
@@ -179,6 +183,19 @@ internal fun AppDestinationContent(
     }
     val selectedArtistDetails = remember(artistDetailsUiState, selectedArtistId) {
         selectedArtistId?.let { artistDetailsUiStateFor(artistDetailsUiState, it) } ?: ArtistDetailsUiState()
+    }
+    val artistImagePickerScope = rememberCoroutineScope()
+    val artistImagePickerContext = LocalContext.current.applicationContext
+    val artistImagePicker = androidx.activity.compose.rememberLauncherForActivityResult(androidx.activity.result.contract.ActivityResultContracts.GetContent()) { uri ->
+        val artistId = selectedArtistId ?: return@rememberLauncherForActivityResult
+        if (uri == null) return@rememberLauncherForActivityResult
+        artistImagePickerScope.launch {
+            runCatching {
+                AndroidSyncRuntime.syncStore().stageArtistArtwork(
+                    me.misa198.airmedy.sync.stageArtistArtwork(artistImagePickerContext.contentResolver, artistImagePickerContext.filesDir, artistId, uri),
+                )
+            }
+        }
     }
     val selectedGenreDetails = remember(genreDetailsUiState, selectedGenreId) {
         selectedGenreId?.let { genreDetailsUiStateFor(genreDetailsUiState, it) } ?: GenreDetailsUiState()
@@ -510,6 +527,7 @@ internal fun AppDestinationContent(
                                 onPlayNext = onArtistPlayNext,
                                 onAddToQueue = onArtistAddToQueue,
                                 onTrackContextBottomSheet = onArtistTrackContextBottomSheet,
+                                onAddArtistImage = { artistImagePicker.launch("image/*") },
                                 onAlbumClick = { album -> onIntent(AppIntent.OpenAlbumDetails(album.id)) },
                                 playbackQueue = playbackQueue,
                             )
