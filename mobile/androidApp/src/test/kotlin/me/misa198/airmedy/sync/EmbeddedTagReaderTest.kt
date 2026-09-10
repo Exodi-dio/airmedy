@@ -1,0 +1,203 @@
+package me.misa198.airmedy.sync
+
+import java.io.ByteArrayOutputStream
+import java.io.File
+import kotlin.test.Test
+import kotlin.test.assertContains
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+
+class EmbeddedTagReaderTest {
+
+    private val lrc = "[00:01.00]Hello world\n[00:02.50]Second line"
+    private val image = byteArrayOf(
+        0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A,
+        0x00, 0x01, 0x02, 0x03, 0x04, 0x05,
+    )
+
+    @Test fun `flac vorbis comment lyrics`() {
+        val file = flac(picture = null, comments = listOf("LYRICS=$lrc"))
+        assertEquals(lrc, EmbeddedTagReader.embeddedLyricsText(file.path))
+    }
+
+    @Test fun `flac prefers lyrics over unsynced`() {
+        val file = flac(picture = null, comments = listOf("UNSYNCEDLYRICS=plain", "LYRICS=$lrc"))
+        assertEquals(lrc, EmbeddedTagReader.embeddedLyricsText(file.path))
+    }
+
+    @Test fun `flac picture block artwork`() {
+        val file = flac(picture = image, comments = emptyList())
+        val bytes = EmbeddedTagReader.embeddedArtworkBytes(file.path)
+        assertNotNull(bytes)
+        assertEquals(image.toList(), bytes.toList())
+    }
+
+    @Test fun `flac without picture returns null artwork`() {
+        val file = flac(picture = null, comments = listOf("LYRICS=$lrc"))
+        assertNull(EmbeddedTagReader.embeddedArtworkBytes(file.path))
+    }
+
+    @Test fun `id3 v2_3 uslt lyrics`() {
+        val file = temp("id3-uslt", id3v23(frames = listOf(uslt("eng", lrc))))
+        assertContains(EmbeddedTagReader.embeddedLyricsText(file.path)!!, "Second line")
+    }
+
+    @Test fun `id3 v2_3 apic artwork`() {
+        val file = temp("id3-apic", id3v23(frames = listOf(apic(image))))
+        val bytes = EmbeddedTagReader.embeddedArtworkBytes(file.path)
+        assertNotNull(bytes)
+        assertEquals(image.toList(), bytes.toList())
+    }
+
+    @Test fun `id3 v2_2 ult and pic`() {
+        val file = temp("id3-v22", id3v22(frames = listOf(ult("eng", lrc), pic(image))))
+        assertContains(EmbeddedTagReader.embeddedLyricsText(file.path)!!, "Hello world")
+        assertEquals(image.toList(), EmbeddedTagReader.embeddedArtworkBytes(file.path)!!.toList())
+    }
+
+    @Test fun `id3 without tags returns null`() {
+        val file = temp("no-tags", byteArrayOf(0x52, 0x49, 0x46, 0x46, 0x00))
+        assertNull(EmbeddedTagReader.embeddedLyricsText(file.path))
+        assertNull(EmbeddedTagReader.embeddedArtworkBytes(file.path))
+    }
+
+    @Test fun `ogg vorbis lyrics`() {
+        val comment = vorbisComment(comments = listOf("LYRICS=$lrc"))
+        val bytes = ByteArrayOutputStream().apply {
+            write("OggS".toByteArray(Charsets.ISO_8859_1))
+            write(byteArrayOf(0x00, 0x00, 0x00))
+            write(0x03)
+            write("vorbis".toByteArray(Charsets.ISO_8859_1))
+            write(comment)
+        }.toByteArray()
+        val file = temp("ogg", bytes)
+        assertEquals(lrc, EmbeddedTagReader.embeddedLyricsText(file.path))
+    }
+
+    private fun temp(name: String, bytes: ByteArray): File =
+        File.createTempFile(name, ".test").apply { writeBytes(bytes) }
+
+    private fun flac(picture: ByteArray?, comments: List<String>): File {
+        val blocks = mutableListOf<Pair<Int, ByteArray>>()
+        picture?.let { blocks += FLAC_PICTURE to pictureBlock(it) }
+        blocks += FLAC_VORBIS_COMMENT to vorbisComment(comments)
+        val out = ByteArrayOutputStream()
+        out.write("fLaC".toByteArray(Charsets.ISO_8859_1))
+        blocks.forEachIndexed { index, (type, payload) ->
+            out.write((if (index == blocks.lastIndex) 0x80 else 0x00) or type)
+            out.write(byteArrayOf((payload.size shr 16 and 0xFF).toByte(), (payload.size shr 8 and 0xFF).toByte(), (payload.size and 0xFF).toByte()))
+            out.write(payload)
+        }
+        return temp("flac", out.toByteArray())
+    }
+
+    private fun pictureBlock(imageBytes: ByteArray): ByteArray {
+        val mime = "image/png".toByteArray(Charsets.ISO_8859_1)
+        val out = ByteArrayOutputStream()
+        out.writeIntBE(3)
+        out.writeIntBE(mime.size); out.write(mime)
+        out.writeIntBE(0)
+        out.writeIntBE(0); out.writeIntBE(0); out.writeIntBE(24); out.writeIntBE(0)
+        out.writeIntBE(imageBytes.size); out.write(imageBytes)
+        return out.toByteArray()
+    }
+
+    private fun vorbisComment(comments: List<String>): ByteArray {
+        val out = ByteArrayOutputStream()
+        out.writeIntLE(0)
+        out.writeIntLE(comments.size)
+        comments.forEach { entry ->
+            val bytes = entry.toByteArray(Charsets.UTF_8)
+            out.writeIntLE(bytes.size)
+            out.write(bytes)
+        }
+        return out.toByteArray()
+    }
+
+    private fun id3v23(frames: List<ByteArray>): ByteArray = id3(3, 0, frames)
+    private fun id3v22(frames: List<ByteArray>): ByteArray = id3(2, 0, frames)
+
+    private fun id3(major: Int, revision: Int, frames: List<ByteArray>): ByteArray {
+        val body = ByteArrayOutputStream().apply { frames.forEach { write(it) } }.toByteArray()
+        val out = ByteArrayOutputStream()
+        out.write("ID3".toByteArray(Charsets.ISO_8859_1))
+        out.write(major); out.write(revision); out.write(0)
+        out.writeSyncSafe(body.size)
+        out.write(body)
+        return out.toByteArray()
+    }
+
+    private fun uslt(lang: String, text: String): ByteArray {
+        val content = ByteArrayOutputStream()
+        content.write(3)
+        content.write(lang.toByteArray(Charsets.ISO_8859_1))
+        content.write(0)
+        content.write(text.toByteArray(Charsets.UTF_8))
+        return frame32(code = "USLT", content.toByteArray(), syncsafe = true)
+    }
+
+    private fun apic(imageBytes: ByteArray): ByteArray {
+        val content = ByteArrayOutputStream()
+        content.write(0)
+        content.write("image/png".toByteArray(Charsets.ISO_8859_1)); content.write(0)
+        content.write(3)
+        content.write(0)
+        content.write(imageBytes)
+        return frame32(code = "APIC", content.toByteArray(), syncsafe = true)
+    }
+
+    private fun ult(lang: String, text: String): ByteArray {
+        val content = ByteArrayOutputStream()
+        content.write(3)
+        content.write(lang.toByteArray(Charsets.ISO_8859_1))
+        content.write(0)
+        content.write(text.toByteArray(Charsets.UTF_8))
+        return frame32(code = "ULT", content.toByteArray(), syncsafe = false)
+    }
+
+    private fun pic(imageBytes: ByteArray): ByteArray {
+        val content = ByteArrayOutputStream()
+        content.write(0)
+        content.write("PNG".toByteArray(Charsets.ISO_8859_1))
+        content.write(3)
+        content.write(0)
+        content.write(imageBytes)
+        return frame32(code = "PIC", content.toByteArray(), syncsafe = false)
+    }
+
+    private fun frame32(code: String, data: ByteArray, syncsafe: Boolean): ByteArray {
+        val out = ByteArrayOutputStream()
+        out.write(code.toByteArray(Charsets.ISO_8859_1))
+        if (syncsafe) out.writeSyncSafe(data.size) else out.writeIntBE(data.size)
+        out.write(0); out.write(0)
+        out.write(data)
+        return out.toByteArray()
+    }
+
+    private fun ByteArrayOutputStream.writeIntBE(value: Int) {
+        write(value shr 24 and 0xFF)
+        write(value shr 16 and 0xFF)
+        write(value shr 8 and 0xFF)
+        write(value and 0xFF)
+    }
+
+    private fun ByteArrayOutputStream.writeIntLE(value: Int) {
+        write(value and 0xFF)
+        write(value shr 8 and 0xFF)
+        write(value shr 16 and 0xFF)
+        write(value shr 24 and 0xFF)
+    }
+
+    private fun ByteArrayOutputStream.writeSyncSafe(value: Int) {
+        write(value shr 21 and 0x7F)
+        write(value shr 14 and 0x7F)
+        write(value shr 7 and 0x7F)
+        write(value and 0x7F)
+    }
+
+    private companion object {
+        const val FLAC_PICTURE = 6
+        const val FLAC_VORBIS_COMMENT = 4
+    }
+}

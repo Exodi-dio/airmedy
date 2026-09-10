@@ -3,6 +3,7 @@ package me.misa198.airmedy.sync
 import android.content.ContentResolver
 import android.content.ContentUris
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Size
@@ -54,7 +55,7 @@ internal class MediaStoreLibraryScanner(
         val genresByTrack = genresByTrackId()
         val audio = linkedMapOf<String, LocalScanAudio>()
         val tracks = mutableListOf<LocalTrack>()
-        val albumRepresentatives = linkedMapOf<String, Uri>()
+        val albumRepresentatives = linkedMapOf<String, Pair<Uri, String>>()
 
         contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -90,7 +91,7 @@ internal class MediaStoreLibraryScanner(
                 }
                 albumRepresentatives.putIfAbsent(
                     key,
-                    ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, mediaId),
+                    ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, mediaId) to data,
                 )
                 tracks += LocalTrack(
                     id = trackId,
@@ -128,7 +129,7 @@ internal class MediaStoreLibraryScanner(
             }
         }
 
-        val artwork = albumRepresentatives.mapNotNull { (key, uri) -> copyArtwork(key, uri) }
+        val artwork = albumRepresentatives.mapNotNull { (key, candidate) -> copyArtwork(key, candidate.first, candidate.second) }
         val sorted = tracks.sortedWith(
             compareBy<LocalTrack> { it.album.title.lowercase() }
                 .thenBy { it.discNumber }
@@ -187,10 +188,14 @@ internal class MediaStoreLibraryScanner(
         return members
     }
 
-    private fun copyArtwork(albumKey: String, mediaUri: Uri): LocalScanArtwork? {
-        // Prefer the embedded picture (album art); fall back to a representative
+    private fun copyArtwork(albumKey: String, mediaUri: Uri, absolutePath: String): LocalScanArtwork? {
+        // Prefer MediaStore's embedded picture, then the file's own tag bytes (some
+        // MediaStore providers do not index FLAC/ID3 artwork), then a representative
         // generated thumbnail for files without embedded art.
-        val bitmap = embeddedArtwork(mediaUri) ?: generatedArtwork(mediaUri) ?: return null
+        val bitmap = embeddedArtwork(mediaUri)
+            ?: embeddedArtworkFromFile(absolutePath)
+            ?: generatedArtwork(mediaUri)
+            ?: return null
         val file = File(artworkDir, "$albumKey.jpg")
         file.parentFile?.mkdirs()
         val wrote = file.outputStream().use { stream -> bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream) }
@@ -208,6 +213,19 @@ internal class MediaStoreLibraryScanner(
     private fun embeddedArtwork(mediaUri: Uri): Bitmap? = runCatching {
         contentResolver.loadThumbnail(mediaUri, EmbeddedThumbnailRequestSize, null)
     }.getOrNull()?.takeIf { it.width > 1 && it.height > 1 }
+
+    /** Reads FLAC METADATA_BLOCK_PICTURE / ID3 APIC bytes directly from the audio file. */
+    private fun embeddedArtworkFromFile(path: String): Bitmap? =
+        EmbeddedTagReader.embeddedArtworkBytes(path)?.let { decodeSampled(it, ArtworkTargetPx) }
+
+    private fun decodeSampled(bytes: ByteArray, targetPx: Int): Bitmap? {
+        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bounds)
+        if (bounds.outWidth <= 0 || bounds.outHeight <= 0) return null
+        var sample = 1
+        while (bounds.outWidth / (sample * 2) >= targetPx && bounds.outHeight / (sample * 2) >= targetPx) sample *= 2
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size, BitmapFactory.Options().apply { inSampleSize = sample })
+    }
 
     private fun generatedArtwork(mediaUri: Uri): Bitmap? = runCatching {
         contentResolver.loadThumbnail(mediaUri, ArtworkTargetSize, null)
@@ -289,3 +307,5 @@ internal fun fileSha256(file: File): String = file.inputStream().use { input ->
     }
     digest.digest().joinToString("") { byte -> "%02x".format(byte) }
 }
+
+private val ArtworkTargetPx = 2048

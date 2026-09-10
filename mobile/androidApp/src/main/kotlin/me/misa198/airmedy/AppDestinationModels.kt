@@ -155,6 +155,7 @@ internal data class SettingsDestinationModel(
     val lyricsSettings: LyricsSettings = LyricsSettings(),
     val onLrclibChanged: (Boolean) -> Unit = {},
     val onKugouChanged: (Boolean) -> Unit = {},
+    val onEmbeddedChanged: (Boolean) -> Unit = {},
     val crossfadeSeconds: Int = 0,
     val lastEnabledCrossfadeSeconds: Int = 4,
     val onCrossfadeSecondsChanged: (Int) -> Unit = {},
