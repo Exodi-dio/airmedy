@@ -85,4 +85,39 @@ class PlayerLyricsParserTest {
         assertEquals("Translation", lines[0].secondary)
         assertEquals(null, lines[0].timestampSeconds)
     }
+
+    @Test
+    fun skipsLrcMetadataTagsAndAppliesOffset() {
+        val lines = parsePlayerLyrics(
+            "[ti:Track title]\n[ar:Artist]\n[al:Album]\n[by:Someone]\n[offset:500]\n[00:01.00]Intro\n[00:10.00]Chorus",
+        )
+
+        assertEquals(2, lines.size)
+        assertEquals("Chorus", lines[1].primary)
+        assertEquals(10.5f, lines[1].timestampSeconds)
+        assertEquals(1.5f, lines[0].timestampSeconds)
+        assertTrue(hasSyncedPlayerLyrics("[offset:500]\n[00:01.00]Intro"))
+    }
+
+    @Test
+    fun duplicatesLinesWithMultipleTimestamps() {
+        val lines = parsePlayerLyrics("[00:12.34][00:56.78]Chorus\n[01:00.00]Bridge")
+
+        assertEquals(3, lines.size)
+        assertEquals("Chorus", lines[0].primary)
+        assertEquals(12.34f, lines[0].timestampSeconds)
+        assertEquals("Chorus", lines[1].primary)
+        assertEquals(56.78f, lines[1].timestampSeconds)
+        assertEquals("Bridge", lines[2].primary)
+    }
+
+    @Test
+    fun stripsEnhancedLrcInlineTags() {
+        val lines = parsePlayerLyrics("<01:02.00>[00:12.34]Line <01:05.00>primary^translation")
+
+        assertEquals(1, lines.size)
+        assertEquals("Line primary", lines[0].primary.trim())
+        assertEquals("translation", lines[0].secondary)
+        assertEquals(12.34f, lines[0].timestampSeconds)
+    }
 }

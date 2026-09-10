@@ -33,6 +33,26 @@ class LibraryArtistMapperTest {
     }
 
     @Test
+    fun fallsBackToStagedArtworkByArtistIdWhenNoManifestKeyResolves() {
+        val artists = libraryArtistsFrom(
+            tracks = listOf(row("""{"artists":[{"id":"a","name":"Artist A"}]}""")),
+            artworkPaths = mapOf("a" to "artist-artwork/staged.jpg"),
+        )
+
+        assertEquals("artist-artwork/staged.jpg", artists.single().artworkPath)
+    }
+
+    @Test
+    fun keepsManifestArtworkOverStagedArtistFallback() {
+        val artists = libraryArtistsFrom(
+            tracks = listOf(row("""{"artists":[{"id":"a","name":"Artist A","artwork_key":"artist-a"}]}""")),
+            artworkPaths = mapOf("a" to "artist-artwork/staged.jpg", "artist-a" to "artwork/a.jpg"),
+        )
+
+        assertEquals("artwork/a.jpg", artists.single().artworkPath)
+    }
+
+    @Test
     fun groupsAlbumsByManifestIdAndResolvesAlbumArtwork() {
         val albums = libraryAlbumsFrom(
             tracks = listOf(

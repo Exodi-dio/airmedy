@@ -68,6 +68,7 @@ data class LocalTrack(
     val sampleRate: Int = 0,
     val bitDepth: Int = 0,
     val codec: String = "",
+    val fileSize: Long = 0L,
 )
 
 data class LocalLibrarySnapshot(
@@ -96,6 +97,7 @@ object LocalLibraryJson {
         if (track.sampleRate > 0) put("sample_rate", track.sampleRate)
         if (track.bitDepth > 0) put("bit_depth", track.bitDepth)
         if (track.codec.isNotBlank()) put("codec", track.codec)
+        if (track.fileSize > 0L) put("file_size", track.fileSize)
         put("artists", buildJsonArray {
             track.artists.forEachValid { add(it.toJson()) }
         })

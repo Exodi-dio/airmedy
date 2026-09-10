@@ -123,6 +123,7 @@ internal class MediaStoreLibraryScanner(
                     sampleRate = number(ColumnSampleRate)?.toInt() ?: 0,
                     bitDepth = number(ColumnBitsPerSample)?.toInt() ?: 0,
                     codec = mime.substringAfter("audio/", mime),
+                    fileSize = size,
                 )
             }
         }
@@ -187,10 +188,13 @@ internal class MediaStoreLibraryScanner(
     }
 
     private fun copyArtwork(albumKey: String, mediaUri: Uri): LocalScanArtwork? {
-        val bitmap = runCatching { contentResolver.loadThumbnail(mediaUri, ArtworkTargetSize, null) }.getOrNull() ?: return null
+        // Prefer the embedded picture (album art); fall back to a representative
+        // generated thumbnail for files without embedded art.
+        val bitmap = embeddedArtwork(mediaUri) ?: generatedArtwork(mediaUri) ?: return null
         val file = File(artworkDir, "$albumKey.jpg")
         file.parentFile?.mkdirs()
         val wrote = file.outputStream().use { stream -> bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream) }
+        bitmap.recycle()
         if (!wrote || !file.isFile || file.length() <= 0L) return null
         return LocalScanArtwork(
             artworkKey = albumKey,
@@ -199,6 +203,15 @@ internal class MediaStoreLibraryScanner(
             size = file.length(),
         )
     }
+
+    /** A 1x1 request returns the file's embedded artwork without scaling, or fails when absent. */
+    private fun embeddedArtwork(mediaUri: Uri): Bitmap? = runCatching {
+        contentResolver.loadThumbnail(mediaUri, EmbeddedThumbnailRequestSize, null)
+    }.getOrNull()?.takeIf { it.width > 1 && it.height > 1 }
+
+    private fun generatedArtwork(mediaUri: Uri): Bitmap? = runCatching {
+        contentResolver.loadThumbnail(mediaUri, ArtworkTargetSize, null)
+    }.getOrNull()
 
     companion object {
         const val ColumnId = MediaStore.Audio.Media._ID
@@ -243,6 +256,7 @@ internal class MediaStoreLibraryScanner(
 
         const val Selection = "${MediaStore.Audio.Media.IS_MUSIC} != 0"
         const val SortOrder = "${MediaStore.Audio.Media.ALBUM} COLLATE NOCASE, ${MediaStore.Audio.Media.DISC_NUMBER}, ${MediaStore.Audio.Media.TRACK}, ${MediaStore.Audio.Media.TITLE} COLLATE NOCASE"
+        val EmbeddedThumbnailRequestSize = Size(1, 1)
         val ArtworkTargetSize = Size(1024, 1024)
     }
 }
