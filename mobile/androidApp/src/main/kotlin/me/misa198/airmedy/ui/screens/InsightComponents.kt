@@ -79,7 +79,6 @@ internal fun SourceControl(state: InsightUiState, onSelected: (InsightSourceFilt
     val options = buildList<SelectionOption<InsightSourceFilter>> {
         add(SelectionOption(InsightSourceFilter.All, R.string.insight_all_devices))
         add(SelectionOption(InsightSourceFilter.ThisPhone, R.string.insight_this_phone))
-        if (state.hasDesktopSource) add(SelectionOption(InsightSourceFilter.Desktop, R.string.insight_desktop, state.desktopName))
         if (state.hasOtherSources) add(SelectionOption(InsightSourceFilter.Other, R.string.insight_other_devices))
     }
     Selection(

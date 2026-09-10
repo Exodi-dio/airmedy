@@ -58,6 +58,8 @@ import me.misa198.airmedy.sync.ListeningSyncSnapshot
 import me.misa198.airmedy.sync.ListeningSyncStore
 import me.misa198.airmedy.lyrics.LyricsTrack
 import me.misa198.airmedy.mood.MoodRadioTrack
+import me.misa198.airmedy.library.LocalLibraryJson
+import me.misa198.airmedy.library.LocalLibrarySnapshot
 
 @Entity(tableName = "sync_plans", primaryKeys = ["planId"])
 internal data class SyncPlanEntity(
@@ -346,14 +348,6 @@ internal interface SyncDao {
     """)
     fun observeArtworkAssets(): Flow<List<ArtworkAssetRow>>
 
-    @Query("""
-        SELECT d.rawJson
-        FROM sync_documents d
-        INNER JOIN sync_plans p ON p.planId = d.planId
-        WHERE p.active = 1 AND d.kind = 'lyric' AND d.documentKey = :trackId
-        LIMIT 1
-    """)
-    fun observeLyrics(trackId: String): Flow<String?>
     @Query("SELECT content FROM provider_lyrics WHERE trackId = :trackId LIMIT 1") fun observeProviderLyrics(trackId: String): Flow<String?>
 
     @Query("SELECT d.documentKey, d.rawJson FROM sync_documents d INNER JOIN sync_plans p ON p.planId = d.planId WHERE p.active = 1 AND d.kind = 'analysis'")
@@ -755,13 +749,6 @@ internal class AndroidLibrarySyncStore(
         }
     }
 
-    fun desktopLyrics(trackId: String): Flow<String?> = dao.observeLyrics(trackId).map { rawJson ->
-        rawJson?.let { value ->
-            runCatching {
-                LibrarySyncProtocol.json.parseToJsonElement(value).jsonObject["content"]?.jsonPrimitive?.contentOrNull
-            }.getOrNull()
-        }
-    }
     fun providerLyrics(trackId: String): Flow<String?> = dao.observeProviderLyrics(trackId)
     suspend fun saveProviderLyrics(trackId: String, content: String, source: String) = dao.insertProviderLyric(ProviderLyricEntity(trackId, content, source))
     suspend fun lyricsTrack(trackId: String): LyricsTrack? = tracks.first().firstOrNull { it.id == trackId }?.let { track ->
@@ -860,6 +847,73 @@ internal class AndroidLibrarySyncStore(
             asset.relativePath
                 ?.takeUnless { it in referencedPaths }
                 ?.let { File(filesDir, it).delete() }
+        }
+    }
+
+    /**
+     * Replaces the active library with a locally scanned [snapshot] in one transaction:
+     * a fresh `local-<uuid>` plan is written (assets, tracks, search index), activated,
+     * then stale plans/assets/tracks/playlists/search docs plus provider lyrics for
+     * removed tracks are reaped. Desktop activate() side effects are skipped: locally
+     * created playlists and pending favorite mutations survive a rescan because track
+     * ids are MediaStore-stable. Only artwork files owned by this app are deleted.
+     */
+    suspend fun writeLocalLibrary(
+        snapshot: LocalLibrarySnapshot,
+        audioRows: Map<String, LocalScanAudio>,
+        artworkRows: List<LocalScanArtwork>,
+    ) {
+        val planId = "local-${UUID.randomUUID()}"
+        val artworkKeys = artworkRows.mapTo(mutableSetOf(), LocalScanArtwork::artworkKey)
+        val (stale, activePaths) = database.withTransaction {
+            dao.insertPlan(SyncPlanEntity(planId, LocalDesktopId, localLibraryManifest(planId), "staging", false))
+            dao.insertAssets(buildList {
+                audioRows.forEach { (trackId, row) ->
+                    add(SyncAssetEntity(planId, "audio:$trackId", "audio", row.sha256, row.size, row.absolutePath))
+                }
+                artworkRows.forEach { row ->
+                    add(SyncAssetEntity(planId, "artwork:${row.artworkKey}", "artwork", row.sha256, row.size, row.relativePath))
+                }
+            })
+            val trackEntities = snapshot.tracks.mapIndexed { index, track ->
+                SyncTrackEntity(
+                    planId = planId,
+                    trackId = track.id,
+                    title = trackDisplayTitle(track.title),
+                    artists = trackDisplayArtists(track.artists.mapNotNull { it.name.trim().takeIf(String::isNotEmpty) }.joinToString(", ")),
+                    album = track.album.title,
+                    albumId = track.album.id,
+                    artworkKey = track.artworkKey?.takeIf { it in artworkKeys },
+                    playCount = track.playCount,
+                    createdAt = track.createdAt,
+                    discNumber = track.discNumber,
+                    trackNumber = track.trackNumber,
+                    syncOrder = index,
+                    rawJson = LocalLibraryJson.trackDocumentJson(track),
+                )
+            }
+            dao.insertTracks(trackEntities)
+            dao.deleteSearchDocuments(planId)
+            dao.insertSearchDocuments(searchDocumentsFor(planId, trackEntities, emptyList()))
+            dao.deactivatePlans()
+            dao.activatePlan(planId)
+            val active = dao.assetPaths(planId).toSet()
+            dao.staleAssets(planId).also {
+                dao.deleteStaleAssets(planId)
+                dao.deleteStaleTracks(planId)
+                dao.deleteStalePlaylists(planId)
+                dao.deleteStaleSearchDocuments(planId)
+                dao.deleteStaleDocuments(planId)
+                dao.deleteProviderLyricsNotInPlan(planId)
+                dao.deleteStalePlans(planId)
+            } to active
+        }
+        stale.forEach { asset ->
+            if (asset.kind == "artwork") {
+                asset.relativePath
+                    ?.takeUnless { it in activePaths }
+                    ?.let { File(filesDir, it).delete() }
+            }
         }
     }
 
@@ -1379,3 +1433,23 @@ internal fun searchFtsMatch(query: String): String? = SearchIndexTokens.findAll(
     .map { "${it.value}*" }
     .joinToString(" AND ")
     .takeIf(String::isNotEmpty)
+
+private const val LocalDesktopId = "local"
+
+/** Minimal canonical manifest for a locally scanned plan; only the analysis flag is read. */
+private fun localLibraryManifest(planId: String): String {
+    val revision = sha256Hex("local-library:$planId")
+    val manifest = LibrarySyncManifest(
+        version = 1,
+        planId = planId,
+        revision = revision,
+        scope = JsonObject(emptyMap()),
+        tracks = null,
+        playlists = null,
+        lyrics = JsonObject(emptyMap()),
+        analysis = JsonObject(emptyMap()),
+        assets = null,
+        libraryAnalysisEnabled = false,
+    )
+    return LibrarySyncProtocol.json.encodeToString(LibrarySyncManifest.serializer(), manifest)
+}

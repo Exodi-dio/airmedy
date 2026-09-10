@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.Dispatchers
@@ -18,9 +17,6 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
-import me.misa198.airmedy.pairing.MobileIdentity
-import me.misa198.airmedy.pairing.PairedDesktop
-import me.misa198.airmedy.pairing.PairingPreferences
 import me.misa198.airmedy.player.DailyPlaybackAttemptStat
 import me.misa198.airmedy.player.DailyTrackListeningStat
 import me.misa198.airmedy.player.PlaybackController
@@ -35,7 +31,7 @@ import me.misa198.airmedy.ui.components.TrackAudioQuality
 import me.misa198.airmedy.ui.components.trackAudioQuality
 
 internal enum class InsightPeriod(val days: Long?) { SevenDays(7), ThirtyDays(30), All(null) }
-internal enum class InsightSourceFilter { All, ThisPhone, Desktop, Other }
+internal enum class InsightSourceFilter { All, ThisPhone, Other }
 
 internal data class InsightPoint(val date: String, val value: Int)
 internal data class InsightQuality(val quality: TrackAudioQuality, val count: Int)
@@ -73,8 +69,6 @@ internal data class InsightUiState(
     val libraryPeriod: InsightPeriod = InsightPeriod.SevenDays,
     val listeningPeriod: InsightPeriod = InsightPeriod.SevenDays,
     val sourceFilter: InsightSourceFilter = InsightSourceFilter.All,
-    val desktopName: String? = null,
-    val hasDesktopSource: Boolean = false,
     val hasOtherSources: Boolean = false,
     val library: LibraryInsightState = LibraryInsightState(),
     val listening: ListeningInsightState = ListeningInsightState(),
@@ -91,27 +85,24 @@ internal data class InsightRawData(
     val library: LibraryBundle,
     val dailyTracks: List<DailyTrackListeningStat>,
     val dailyAttempts: List<DailyPlaybackAttemptStat>,
-    val identity: MobileIdentity,
-    val desktop: PairedDesktop?,
+    val deviceId: String,
 )
 
 internal class InsightViewModel(
     store: AndroidLibrarySyncStore,
-    identity: Flow<MobileIdentity>,
-    desktop: Flow<PairedDesktop?>,
+    deviceId: Flow<String>,
     private val playbackController: PlaybackController,
     private val today: () -> LocalDate = LocalDate::now,
 ) : ViewModel() {
     class Factory(
         private val store: AndroidLibrarySyncStore,
-        private val preferences: PairingPreferences,
+        private val deviceId: Flow<String>,
         private val playbackController: PlaybackController,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T = InsightViewModel(
             store,
-            flow { emit(preferences.identity()) },
-            preferences.pairedDesktop,
+            deviceId,
             playbackController,
         ) as T
     }
@@ -123,8 +114,8 @@ internal class InsightViewModel(
     private val library = combine(store.tracks, store.artists, store.albums, store.playlists) { tracks, artists, albums, playlists ->
         LibraryBundle(tracks, artists, albums, playlists)
     }
-    private val raw = combine(library, store.dailyTrackListeningStats, store.dailyPlaybackAttemptStats, identity, desktop) { library, tracks, attempts, mobile, paired ->
-        InsightRawData(library, tracks, attempts, mobile, paired)
+    private val raw = combine(library, store.dailyTrackListeningStats, store.dailyPlaybackAttemptStats, deviceId) { library, tracks, attempts, id ->
+        InsightRawData(library, tracks, attempts, id)
     }
 
     val uiState = combine(raw, libraryPeriod, listeningPeriod, sourceFilter) { data, libraryRange, listeningRange, source ->
@@ -149,20 +140,14 @@ internal fun buildInsightUiState(
     source: InsightSourceFilter,
     today: LocalDate,
 ): InsightUiState {
-    val desktopId = data.desktop?.desktopId
     val sourceIds = (data.dailyTracks.map { it.sourceDeviceId } + data.dailyAttempts.map { it.sourceDeviceId }).toSet()
-    val effectiveSource = source.takeIf {
-        it != InsightSourceFilter.Desktop || desktopId != null
-    }?.takeIf {
-        it != InsightSourceFilter.Other || sourceIds.any { id -> id != data.identity.id && id != desktopId }
-    } ?: InsightSourceFilter.All
+    val hasOtherSources = sourceIds.any { it != data.deviceId }
+    val effectiveSource = if (source == InsightSourceFilter.Other && !hasOtherSources) InsightSourceFilter.All else source
     return InsightUiState(
         libraryPeriod = libraryPeriod,
         listeningPeriod = listeningPeriod,
         sourceFilter = effectiveSource,
-        desktopName = data.desktop?.displayName,
-        hasDesktopSource = desktopId != null,
-        hasOtherSources = sourceIds.any { it != data.identity.id && it != desktopId },
+        hasOtherSources = hasOtherSources,
         library = libraryInsights(data.library, libraryPeriod, today),
         listening = listeningInsights(data, listeningPeriod, effectiveSource, today),
     )
@@ -203,9 +188,8 @@ private fun listeningInsights(data: InsightRawData, period: InsightPeriod, sourc
     val start = period.days?.let { today.minusDays(it - 1) }
     val matchesSource: (String) -> Boolean = { id -> when (source) {
         InsightSourceFilter.All -> true
-        InsightSourceFilter.ThisPhone -> id == data.identity.id
-        InsightSourceFilter.Desktop -> id == data.desktop?.desktopId
-        InsightSourceFilter.Other -> id != data.identity.id && id != data.desktop?.desktopId
+        InsightSourceFilter.ThisPhone -> id == data.deviceId
+        InsightSourceFilter.Other -> id != data.deviceId
     } }
     val tracks = data.dailyTracks.filter { matchesSource(it.sourceDeviceId) && (start == null || it.localDate >= start.toString()) }
     val attempts = data.dailyAttempts.filter { matchesSource(it.sourceDeviceId) && (start == null || it.localDate >= start.toString()) }

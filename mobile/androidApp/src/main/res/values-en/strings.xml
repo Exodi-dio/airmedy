@@ -18,8 +18,7 @@
     <string name="insight_range_all">All</string>
     <string name="insight_all_devices">All devices</string>
     <string name="insight_this_phone">This phone</string>
-    <string name="insight_desktop">Desktop</string>
-    <string name="insight_other_devices">Other synced devices</string>
+    <string name="insight_other_devices">Other devices</string>
     <string name="insight_library_growth">Library growth</string>
     <string name="insight_audio_quality">Audio quality</string>
     <string name="insight_library_size">Library size</string>
@@ -27,7 +26,6 @@
     <string name="insight_total_albums">Albums</string>
     <string name="insight_total_artists">Artists</string>
     <string name="insight_total_playlists">Playlists</string>
-    <string name="sync_library_analysis">Library analysis</string>
     <string name="insight_total_time">Total time</string>
     <string name="insight_streak">Streak</string>
     <string name="insight_average_session">Average session</string>
@@ -68,45 +66,6 @@
     <string name="appearance_theme_title">Theme</string>
     <string name="appearance_reduce_transparency">Reduce transparency</string>
     <string name="settings_appearance">Appearance</string>
-    <string name="settings_sync">Sync</string>
-    <string name="sync_title">Sync</string>
-    <string name="sync_scan_title">Scan desktop code</string>
-    <string name="sync_add_device">Add device</string>
-    <string name="sync_empty_title">No connected devices</string>
-    <string name="sync_empty_description">Connect a device to keep your listening in sync.</string>
-    <string name="sync_device_type_desktop">Desktop</string>
-    <string name="sync_status_connected">Connected</string>
-    <string name="sync_status_online">Online</string>
-    <string name="sync_status_offline">Offline</string>
-    <string name="sync_last_synced">Last synced: %1$s</string>
-    <string name="sync_never_synced">Never synced</string>
-    <string name="sync_paired_device_description">This phone can connect to one desktop at a time. Revoke it before pairing a new desktop.</string>
-    <string name="sync_ready_to_connect_description">Ready to connect. Start Broadcast in Airmedy on your desktop; this screen connects automatically.</string>
-    <string name="sync_revoke">Revoke</string>
-    <string name="sync_help">Learn how to connect</string>
-    <string name="sync_waiting_title">Waiting for desktop approval</string>
-    <string name="sync_waiting_description">Approve this phone in the Airmedy desktop app.</string>
-    <string name="sync_camera_required">Camera access is required to scan the desktop QR code.</string>
-    <string name="sync_scan_description">Point your camera at the pairing QR code shown in Airmedy Desktop.</string>
-    <string name="sync_scan_hint">Keep the QR code inside the frame.</string>
-    <string name="sync_select_qr_image">Choose QR image</string>
-    <string name="sync_revoke_confirm_title">Disconnect this desktop?</string>
-    <string name="sync_revoke_confirm_description">This removes the connection from this phone. The desktop remains authorized until it is revoked there.</string>
-    <string name="sync_error_already_paired">Disconnect the current desktop before pairing another one.</string>
-    <string name="sync_error_invalid_qr">That QR code is not an Airmedy desktop pairing code.</string>
-    <string name="sync_error_transport">Unable to reach the desktop. Make sure both devices are on the same network.</string>
-    <string name="sync_error_timeout">The desktop did not respond in time. Scan its QR code again.</string>
-    <string name="sync_error_rejected">The desktop rejected this pairing request.</string>
-    <string name="sync_error_expired">The desktop pairing request expired. Scan its QR code again.</string>
-    <string name="sync_error_invalid_response">The desktop response could not be verified.</string>
-    <string name="sync_notification_channel">Library sync</string>
-    <string name="sync_notification_title">Syncing Airmedy library</string>
-    <string name="sync_notification_connecting">Connecting to desktop…</string>
-    <string name="sync_notification_progress">Syncing %1$d%%</string>
-    <string name="sync_notification_complete">Library sync complete</string>
-    <string name="sync_notification_failed">Library sync needs attention</string>
-    <string name="sync_insufficient_storage_title">Not enough storage</string>
-    <string name="sync_insufficient_storage_description">Not enough storage to sync. Needs %1$s; %2$s is currently available.</string>
     <string name="close">Close</string>
     <string name="ok">OK</string>
     <string name="playback_notification_channel">Music playback</string>
@@ -135,9 +94,6 @@
     <string name="playlist_reorder_done">Done reordering</string>
     <string name="player_queue_current">Currently playing</string>
     <string name="player_queue_unknown_track">Unavailable track</string>
-    <string name="sync_error_background_timeout">Sync paused because Android reached its background time limit.</string>
-    <string name="sync_progress_connecting">Preparing library sync…</string>
-    <string name="sync_progress_syncing">Syncing</string>
     <string name="library_artists">Artists</string>
     <string name="library_albums">Albums</string>
     <string name="library_tracks">Tracks</string>
@@ -155,7 +111,7 @@
     <string name="library_playlists">Playlists</string>
     <string name="library_favorites">Favorites</string>
     <string name="playlists_empty_title">No playlists in library</string>
-    <string name="playlists_empty_description">Sync playlists from your connected desktop to see them here.</string>
+    <string name="playlists_empty_description">Create a playlist to start organizing your music.</string>
     <string name="playlist_row_open">Open playlist</string>
     <string name="playlist_create">Create playlist</string>
     <string name="playlist_create_title">Create playlist</string>
@@ -163,7 +119,7 @@
     <string name="playlist_edit_title">Edit playlist</string>
     <string name="playlist_delete">Delete playlist</string>
     <string name="playlist_delete_confirm_title">Delete playlist?</string>
-    <string name="playlist_delete_confirm_description">This playlist will be deleted from your desktop the next time it syncs.</string>
+    <string name="playlist_delete_confirm_description">This playlist will be deleted permanently.</string>
     <string name="playlist_name">Playlist name</string>
     <string name="playlist_choose_artwork">Choose playlist artwork</string>
     <string name="playlist_clear_artwork">Clear playlist artwork</string>
@@ -171,10 +127,10 @@
     <string name="bottom_sheet_back">Back</string>
     <string name="create">Create</string>
     <string name="save">Save</string>
-    <string name="playlist_sync_failed">Could not sync this playlist to desktop</string>
+    <string name="playlist_sync_failed">Could not save changes to this playlist</string>
     <string name="playlist_details_title">Playlist</string>
     <string name="playlist_details_empty_title">Playlist unavailable</string>
-    <string name="playlist_details_empty_description">This playlist is no longer in the synced library.</string>
+    <string name="playlist_details_empty_description">No tracks from this playlist are available in your library.</string>
     <string name="playlist_details_metadata">%1$s · %2$s</string>
     <string name="playlist_duration_day">%1$d d</string>
     <string name="playlist_duration_hour">%1$d hr</string>
@@ -185,8 +141,8 @@
         <item quantity="other">%d tracks</item>
     </plurals>
     <string name="library_recently_added">Recently Added</string>
-    <string name="library_empty_title">No synced music yet</string>
-    <string name="library_empty_description">Start Sync on your connected desktop to bring your library here.</string>
+    <string name="library_empty_title">No music yet</string>
+    <string name="library_empty_description">Scan this phone's music to build your library here.</string>
     <string name="cancel">Cancel</string>
     <string name="settings_playback">Playback</string>
     <string name="playback_settings_title">Playback</string>
@@ -334,7 +290,7 @@
     <string name="albums_no_match_title">No matching albums</string>
     <string name="album_details_title">Album</string>
     <string name="album_details_empty_title">Album unavailable</string>
-    <string name="album_details_empty_description">This album is no longer in the synced library.</string>
+    <string name="album_details_empty_description">This album is no longer in your library.</string>
     <string name="album_details_metadata">%1$s · %2$s</string>
     <string name="album_details_metadata_with_year">%1$d · %2$s · %3$s</string>
     <plurals name="album_details_track_count">
@@ -343,7 +299,7 @@
     </plurals>
     <string name="artist_details_title">Artist</string>
     <string name="artist_details_empty_title">Artist unavailable</string>
-    <string name="artist_details_empty_description">This artist is no longer in the synced library.</string>
+    <string name="artist_details_empty_description">This artist is no longer in your library.</string>
     <string name="artist_details_summary">%1$s · %2$s</string>
     <plurals name="artist_details_album_count">
         <item quantity="one">%d album</item>
@@ -358,7 +314,7 @@
     <string name="genre_row_open">Open genre</string>
     <string name="genre_details_title">Genre</string>
     <string name="genre_details_empty_title">Genre unavailable</string>
-    <string name="genre_details_empty_description">This genre is no longer in the synced library.</string>
+    <string name="genre_details_empty_description">This genre is no longer in your library.</string>
     <string name="genre_details_summary">%1$s · %2$s</string>
     <plurals name="genre_details_album_count">
         <item quantity="one">%d album</item>
@@ -375,7 +331,7 @@
     <string name="composer_row_open">Open composer</string>
     <string name="composer_details_title">Composer</string>
     <string name="composer_details_empty_title">Composer unavailable</string>
-    <string name="composer_details_empty_description">This composer is no longer in the synced library.</string>
+    <string name="composer_details_empty_description">This composer is no longer in your library.</string>
     <string name="composer_details_summary">%1$s · %2$s</string>
     <plurals name="composer_details_album_count">
         <item quantity="one">%d album</item>
@@ -390,10 +346,7 @@
     <string name="composers_no_match_title">No matching composers</string>
     <string name="lyrics_title">Lyrics</string>
     <string name="lyrics_data_sources">Data sources</string>
-    <string name="lyrics_preferred_source">Preferred source</string>
-    <string name="lyrics_source_desktop">Desktop sync</string>
-    <string name="lyrics_source_auto_fetch">Auto fetch</string>
     <string name="lyrics_info_action">Lyrics information</string>
     <string name="lyrics_info_title">Lyrics sources</string>
-    <string name="lyrics_info_description">You can choose to prioritize lyrics from desktop or fetch them automatically. Lyrics fetched automatically on mobile are not synced back to desktop.</string>
+    <string name="lyrics_info_description">Lyrics are fetched automatically from the enabled providers (LRCLIB, KuGou) and cached on the device.</string>
 </resources>

@@ -42,29 +42,22 @@ content together while the floating navigation remains in place.
 inside `androidApp`. When iOS work is authorized, it will have native SwiftUI and
 its own adapters while using the same shared business contracts.
 
-The mobile pairing and library-sync protocols are implemented in `sharedLogic`:
-QR parsing, MQTT topic construction, signed request/response validation, sync
-request/receipt validation, and transfer ordering. Android supplies Room mirror
-storage, authenticated HTTP asset pulling, MQTT, notifications, and the
-`dataSync` foreground service. The service temporarily borrows the app-owned
-MQTT session during an active transfer, then returns it connected, so the
-desktop starts a plan only after Android is already online.
-Android supplies camera, encrypted identity storage, and Compose UI adapters.
-If the active playback track is absent from an activated library snapshot,
-Android stops playback and clears its queue.
-Android makes one opportunistic MQTT connection using
-the QR-verified route when the app starts, without background retries. Its
-connection state drives the desktop Online/Offline badge and provides the
-transport boundary for library sync messages. When an already trusted desktop is
-Offline, Android browses for its short-lived mDNS broadcast only while Sync
-Settings is visible; a discovered route is transient and never replaces the
-QR-verified saved endpoint. See the repository pairing catalog for the wire
-contract.
+The mobile app is standalone and never pairs with the desktop app. Its music
+library is built by a device-local MediaStore scan instead of pulling desktop
+assets. The scan reads audio and album artwork through MediaStore on
+`Dispatchers.IO`, then writes the result into the Room library in one pass
+(`writeLocalLibrary` with a `local:` sync plan) using track ids of the form
+`local:<mediaStoreId>`, album ids `local:album:<albumKey>`, and derived ids for
+artists, genres, and composers. Album artwork is cached as JPEG files below
+`filesDir/artwork/`. Scanning is a foreground, user-initiated action on the
+Settings > Scan screen. See `sync/MediaStoreLibraryScanner.kt` and
+`ui/screens/LibraryScanContent.kt`.
 
-Each activated library snapshot also carries `library_analysis_enabled`. It is
-the Android source of truth for Mood Radio: existing analysis documents never
-enable radio by themselves, and changing the desktop setting takes effect on
-the next completed sync.
+Each install has a stable `DeviceIdentity` created on first run and persisted in
+SharedPreferences. Listening sessions and daily aggregates are tagged with this
+device id (`sourceDeviceId`), which is what the Insights source filter uses to
+distinguish This phone from Other devices; the Insights screen hence offers
+three source filters: All, This phone, and Other devices.
 
 ## Prerequisites
 
@@ -154,28 +147,21 @@ directly from Android; they never depend on a paired desktop.
 
 Android independently records actual playing time, qualified plays, and
 completed/skipped/stopped attempts in Room. Raw records are retained for 180
-days and daily origin-tagged aggregates are retained for all-time totals. A
-manual Library Sync exchanges this data in both directions: Android uploads
-only rows owned by its mobile identity, while desktop returns the union from
-all synchronized devices. Repeated syncs are idempotent.
+days and daily origin-tagged aggregates (keyed by `sourceDeviceId`) are
+retained for all-time totals. Recording is local-only: there is no exchange, and
+the tag is the install's stable `DeviceIdentity`.
 
 ## Playlist reconciliation
 
-Playlist reconciliation arrives on a separate MQTT stream from Library Sync
-asset downloads. Android persists playlist deltas in Room and retains them
-until a terminal desktop result (`applied`, `duplicate`, `stale`, `rejected`,
-or `scope-conflict`) acknowledges the mutation.
-When switching away from a playlist scope, a local-only playlist that receives
-`scope-conflict` is removed with its queued mutations.
-When a playlist deletion is `applied` or `duplicate`, its local projection
-remains in effect until the replacement library snapshot activates, so a
-deleted item cannot briefly reappear while assets download. Rejected or stale
-deletions remain available to the next authoritative snapshot.
+Playlist edits are queued locally in Room as mutations (`CREATE`, `UPDATE`,
+`DELETE`, `ADD_TRACK`, `REMOVE_TRACK`, `MOVE_TRACK`, `SET_ARTWORK`,
+`REMOVE_ARTWORK`, `SET_FAVORITE`). Each pending mutation is applied to the
+projected local library immediately and tracked through `pending` /
+`awaiting_sync` states in `playlist_mutations`. A playlist whose queue still
+carries an unacknowledged mutation is marked `syncFailed` on its row; the flag
+clears once the queue is flushed. Artwork for `SET_ARTWORK` is staged in Room
+with its SHA-256, MIME type, and byte size, and cached below `filesDir`.
 
-Artwork staging is stored in Room with its SHA-256, MIME type, byte size, and
-app-private relative path. It is verified and uploaded before `SET_ARTWORK`,
-and mutations are acknowledged only after publishing the signed MQTT result.
-
-Favorites use the same reconciliation request: the fullscreen player queues an
-optimistic `SET_FAVORITE` mutation and the next desktop Sync applies it before
-returning the new scoped library snapshot.
+The former desktop upload adapter (`AndroidPlaylistReconciliationTransport`) is
+retained compilable for its host test but is not constructed at runtime: there
+is no desktop endpoint to reconcile with, so playlist mutations stay local.

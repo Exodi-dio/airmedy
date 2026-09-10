@@ -18,8 +18,7 @@
     <string name="insight_range_all">Tất cả</string>
     <string name="insight_all_devices">Tất cả thiết bị</string>
     <string name="insight_this_phone">Điện thoại này</string>
-    <string name="insight_desktop">Máy tính</string>
-    <string name="insight_other_devices">Thiết bị đồng bộ khác</string>
+    <string name="insight_other_devices">Thiết bị khác</string>
     <string name="insight_library_growth">Tăng trưởng thư viện</string>
     <string name="insight_audio_quality">Chất lượng âm thanh</string>
     <string name="insight_library_size">Dung lượng thư viện</string>
@@ -27,7 +26,6 @@
     <string name="insight_total_albums">Album</string>
     <string name="insight_total_artists">Nghệ sĩ</string>
     <string name="insight_total_playlists">Danh sách phát</string>
-    <string name="sync_library_analysis">Phân tích thư viện</string>
     <string name="insight_total_time">Tổng thời gian</string>
     <string name="insight_streak">Chuỗi nghe liên tục</string>
     <string name="insight_average_session">Phiên nghe trung bình</string>
@@ -68,45 +66,6 @@
     <string name="appearance_theme_title">Giao diện</string>
     <string name="appearance_reduce_transparency">Giảm độ trong suốt</string>
     <string name="settings_appearance">Giao diện</string>
-    <string name="settings_sync">Đồng bộ</string>
-    <string name="sync_title">Đồng bộ</string>
-    <string name="sync_scan_title">Quét mã từ máy tính</string>
-    <string name="sync_add_device">Thêm thiết bị</string>
-    <string name="sync_empty_title">Chưa có thiết bị nào kết nối</string>
-    <string name="sync_empty_description">Kết nối thiết bị để đồng bộ trải nghiệm nghe nhạc của bạn.</string>
-    <string name="sync_device_type_desktop">Máy tính</string>
-    <string name="sync_status_connected">Đã kết nối</string>
-    <string name="sync_status_online">Trực tuyến</string>
-    <string name="sync_status_offline">Ngoại tuyến</string>
-    <string name="sync_last_synced">Đồng bộ lần cuối: %1$s</string>
-    <string name="sync_never_synced">Chưa từng đồng bộ</string>
-    <string name="sync_paired_device_description">Điện thoại này chỉ có thể kết nối với một máy tính tại một thời điểm. Hủy kết nối trước khi ghép nối máy tính mới.</string>
-    <string name="sync_ready_to_connect_description">Sẵn sàng kết nối. Bật phát tín hiệu trong Airmedy trên máy tính; màn hình này sẽ tự động kết nối.</string>
-    <string name="sync_revoke">Hủy kết nối</string>
-    <string name="sync_help">Tìm hiểu cách kết nối</string>
-    <string name="sync_waiting_title">Đang chờ máy tính phê duyệt</string>
-    <string name="sync_waiting_description">Phê duyệt điện thoại này trong ứng dụng Airmedy trên máy tính.</string>
-    <string name="sync_camera_required">Cần quyền truy cập máy ảnh để quét mã QR trên máy tính.</string>
-    <string name="sync_scan_description">Hướng máy ảnh về phía mã QR ghép nối hiển thị trên Airmedy Desktop.</string>
-    <string name="sync_scan_hint">Căn chỉnh mã QR nằm trong khung hình.</string>
-    <string name="sync_select_qr_image">Chọn ảnh mã QR</string>
-    <string name="sync_revoke_confirm_title">Ngắt kết nối với máy tính này?</string>
-    <string name="sync_revoke_confirm_description">Thao tác này sẽ xóa kết nối khỏi điện thoại. Máy tính vẫn giữ ủy quyền cho đến khi bị hủy trên máy tính.</string>
-    <string name="sync_error_already_paired">Ngắt kết nối máy tính hiện tại trước khi ghép nối máy tính khác.</string>
-    <string name="sync_error_invalid_qr">Mã QR đó không phải là mã ghép nối của Airmedy Desktop.</string>
-    <string name="sync_error_transport">Không thể kết nối với máy tính. Hãy đảm bảo cả hai thiết bị ở cùng một mạng.</string>
-    <string name="sync_error_timeout">Máy tính không phản hồi kịp thời. Vui lòng quét lại mã QR.</string>
-    <string name="sync_error_rejected">Máy tính đã từ chối yêu cầu ghép nối này.</string>
-    <string name="sync_error_expired">Yêu cầu ghép nối đã hết hạn. Vui lòng quét lại mã QR.</string>
-    <string name="sync_error_invalid_response">Không thể xác minh phản hồi từ máy tính.</string>
-    <string name="sync_notification_channel">Đồng bộ thư viện</string>
-    <string name="sync_notification_title">Đang đồng bộ thư viện Airmedy</string>
-    <string name="sync_notification_connecting">Đang kết nối với máy tính…</string>
-    <string name="sync_notification_progress">Đang đồng bộ %1$d%%</string>
-    <string name="sync_notification_complete">Đồng bộ thư viện hoàn tất</string>
-    <string name="sync_notification_failed">Đồng bộ thư viện gặp sự cố cần xử lý</string>
-    <string name="sync_insufficient_storage_title">Không đủ dung lượng</string>
-    <string name="sync_insufficient_storage_description">Không đủ dung lượng để đồng bộ. Cần %1$s, hiện có thể dùng %2$s.</string>
     <string name="close">Đóng</string>
     <string name="ok">OK</string>
     <string name="playback_notification_channel">Phát nhạc</string>
@@ -135,9 +94,6 @@
     <string name="playlist_reorder_done">Hoàn tất sắp xếp</string>
     <string name="player_queue_current">Đang phát</string>
     <string name="player_queue_unknown_track">Bài hát không khả dụng</string>
-    <string name="sync_error_background_timeout">Tạm dừng đồng bộ vì đã đạt giới hạn thời gian chạy nền của Android.</string>
-    <string name="sync_progress_connecting">Đang chuẩn bị đồng bộ thư viện…</string>
-    <string name="sync_progress_syncing">Đang đồng bộ</string>
     <string name="library_artists">Nghệ sĩ</string>
     <string name="library_albums">Album</string>
     <string name="library_tracks">Bài hát</string>
@@ -155,7 +111,7 @@
     <string name="library_playlists">Danh sách phát</string>
     <string name="library_favorites">Yêu thích</string>
     <string name="playlists_empty_title">Chưa có danh sách phát trong thư viện</string>
-    <string name="playlists_empty_description">Đồng bộ danh sách phát từ máy tính đã kết nối để xem tại đây.</string>
+    <string name="playlists_empty_description">Tạo danh sách phát để bắt đầu sắp xếp nhạc của bạn.</string>
     <string name="playlist_row_open">Mở danh sách phát</string>
     <string name="playlist_create">Tạo danh sách phát</string>
     <string name="playlist_create_title">Tạo danh sách phát</string>
@@ -163,7 +119,7 @@
     <string name="playlist_edit_title">Chỉnh sửa danh sách phát</string>
     <string name="playlist_delete">Xóa danh sách phát</string>
     <string name="playlist_delete_confirm_title">Xóa danh sách phát?</string>
-    <string name="playlist_delete_confirm_description">Danh sách phát này sẽ bị xóa khỏi máy tính của bạn trong lần đồng bộ tiếp theo.</string>
+    <string name="playlist_delete_confirm_description">Danh sách phát này sẽ bị xóa vĩnh viễn.</string>
     <string name="playlist_name">Tên danh sách phát</string>
     <string name="playlist_choose_artwork">Chọn ảnh bìa danh sách phát</string>
     <string name="playlist_clear_artwork">Xóa ảnh bìa danh sách phát</string>
@@ -171,10 +127,10 @@
     <string name="bottom_sheet_back">Quay lại</string>
     <string name="create">Tạo</string>
     <string name="save">Lưu</string>
-    <string name="playlist_sync_failed">Không thể đồng bộ danh sách phát này với máy tính</string>
+    <string name="playlist_sync_failed">Không thể lưu thay đổi của danh sách phát này</string>
     <string name="playlist_details_title">Danh sách phát</string>
     <string name="playlist_details_empty_title">Danh sách phát không khả dụng</string>
-    <string name="playlist_details_empty_description">Danh sách phát này không còn trong thư viện đã đồng bộ.</string>
+    <string name="playlist_details_empty_description">Không có bài hát nào trong danh sách phát này có trong thư viện của bạn.</string>
     <string name="playlist_details_metadata">%1$s · %2$s</string>
     <string name="playlist_duration_day">%1$d ngày</string>
     <string name="playlist_duration_hour">%1$d giờ</string>
@@ -184,8 +140,8 @@
         <item quantity="other">%d bài hát</item>
     </plurals>
     <string name="library_recently_added">Thêm gần đây</string>
-    <string name="library_empty_title">Chưa có bản nhạc nào được đồng bộ</string>
-    <string name="library_empty_description">Bắt đầu đồng bộ trên máy tính đã kết nối để chuyển thư viện nhạc sang đây.</string>
+    <string name="library_empty_title">Chưa có nhạc</string>
+    <string name="library_empty_description">Quét nhạc trên thiết bị này để tạo thư viện của bạn tại đây.</string>
     <string name="cancel">Hủy</string>
     <string name="settings_playback">Phát nhạc</string>
     <string name="playback_settings_title">Phát nhạc</string>
@@ -333,7 +289,7 @@
     <string name="albums_no_match_title">Không có album phù hợp</string>
     <string name="album_details_title">Album</string>
     <string name="album_details_empty_title">Album không khả dụng</string>
-    <string name="album_details_empty_description">Album này không còn trong thư viện đã đồng bộ.</string>
+    <string name="album_details_empty_description">Album này không còn trong thư viện của bạn.</string>
     <string name="album_details_metadata">%1$s · %2$s</string>
     <string name="album_details_metadata_with_year">%1$d · %2$s · %3$s</string>
     <plurals name="album_details_track_count">
@@ -341,7 +297,7 @@
     </plurals>
     <string name="artist_details_title">Nghệ sĩ</string>
     <string name="artist_details_empty_title">Nghệ sĩ không khả dụng</string>
-    <string name="artist_details_empty_description">Nghệ sĩ này không còn trong thư viện đã đồng bộ.</string>
+    <string name="artist_details_empty_description">Nghệ sĩ này không còn trong thư viện của bạn.</string>
     <string name="artist_details_summary">%1$s · %2$s</string>
     <plurals name="artist_details_album_count">
         <item quantity="other">%d album</item>
@@ -354,7 +310,7 @@
     <string name="genre_row_open">Mở thể loại</string>
     <string name="genre_details_title">Thể loại</string>
     <string name="genre_details_empty_title">Thể loại không khả dụng</string>
-    <string name="genre_details_empty_description">Thể loại này không còn trong thư viện đã đồng bộ.</string>
+    <string name="genre_details_empty_description">Thể loại này không còn trong thư viện của bạn.</string>
     <string name="genre_details_summary">%1$s · %2$s</string>
     <plurals name="genre_details_album_count">
         <item quantity="other">%d album</item>
@@ -369,7 +325,7 @@
     <string name="composer_row_open">Mở nhà soạn nhạc</string>
     <string name="composer_details_title">Nhà soạn nhạc</string>
     <string name="composer_details_empty_title">Nhà soạn nhạc không khả dụng</string>
-    <string name="composer_details_empty_description">Nhà soạn nhạc này không còn trong thư viện đã đồng bộ.</string>
+    <string name="composer_details_empty_description">Nhà soạn nhạc này không còn trong thư viện của bạn.</string>
     <string name="composer_details_summary">%1$s · %2$s</string>
     <plurals name="composer_details_album_count">
         <item quantity="other">%d album</item>
@@ -382,10 +338,7 @@
     <string name="composers_no_match_title">Không có nhà soạn nhạc phù hợp</string>
     <string name="lyrics_title">Lời bài hát</string>
     <string name="lyrics_data_sources">Nguồn dữ liệu</string>
-    <string name="lyrics_preferred_source">Nguồn ưu tiên</string>
-    <string name="lyrics_source_desktop">Đồng bộ từ desktop</string>
-    <string name="lyrics_source_auto_fetch">Tự động tìm</string>
     <string name="lyrics_info_action">Thông tin lời bài hát</string>
     <string name="lyrics_info_title">Nguồn lời bài hát</string>
-    <string name="lyrics_info_description">Bạn có thể chọn ưu tiên lời bài hát từ desktop hoặc tự động tìm lời. Lời bài hát được tự động tìm trên mobile sẽ không đồng bộ ngược lại desktop.</string>
+    <string name="lyrics_info_description">Lời bài hát được tự động lấy từ các nhà cung cấp đã bật (LRCLIB, KuGou) và lưu trên thiết bị.</string>
 </resources>

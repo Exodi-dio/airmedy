@@ -10,21 +10,17 @@ class StackPageTransitionTest {
     @Test
     fun pushesInStackAreIdentifiedAsForwardTransitions() {
         val rootKey = PageKey(AppDestination.Settings, AppStackPage.Root, index = 0)
-        val syncKey = PageKey(AppDestination.Settings, AppStackPage.SettingsSync, index = 1)
-        val scannerKey = PageKey(AppDestination.Settings, AppStackPage.SettingsSyncScanner, index = 2)
+        val scanKey = PageKey(AppDestination.Settings, AppStackPage.SettingsScan, index = 1)
 
-        assertTrue(isForwardTransition(target = syncKey, initial = rootKey))
-        assertTrue(isForwardTransition(target = scannerKey, initial = syncKey))
+        assertTrue(isForwardTransition(target = scanKey, initial = rootKey))
     }
 
     @Test
     fun popsInStackAreIdentifiedAsBackwardTransitions() {
         val rootKey = PageKey(AppDestination.Settings, AppStackPage.Root, index = 0)
-        val syncKey = PageKey(AppDestination.Settings, AppStackPage.SettingsSync, index = 1)
-        val scannerKey = PageKey(AppDestination.Settings, AppStackPage.SettingsSyncScanner, index = 2)
+        val scanKey = PageKey(AppDestination.Settings, AppStackPage.SettingsScan, index = 1)
 
-        assertFalse(isForwardTransition(target = syncKey, initial = scannerKey))
-        assertFalse(isForwardTransition(target = rootKey, initial = syncKey))
+        assertFalse(isForwardTransition(target = scanKey, initial = rootKey))
     }
 
     @Test

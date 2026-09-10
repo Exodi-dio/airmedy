@@ -18,8 +18,7 @@
     <string name="insight_range_all">전체</string>
     <string name="insight_all_devices">모든 기기</string>
     <string name="insight_this_phone">이 휴대전화</string>
-    <string name="insight_desktop">데스크톱</string>
-    <string name="insight_other_devices">동기화된 다른 기기</string>
+    <string name="insight_other_devices">기타 기기</string>
     <string name="insight_library_growth">라이브러리 성장</string>
     <string name="insight_audio_quality">오디오 품질</string>
     <string name="insight_library_size">라이브러리 크기</string>
@@ -27,7 +26,6 @@
     <string name="insight_total_albums">앨범</string>
     <string name="insight_total_artists">아티스트</string>
     <string name="insight_total_playlists">재생 목록</string>
-    <string name="sync_library_analysis">라이브러리 분석</string>
     <string name="insight_total_time">총 시간</string>
     <string name="insight_streak">연속 청취</string>
     <string name="insight_average_session">평균 세션</string>
@@ -68,45 +66,6 @@
     <string name="appearance_theme_title">테마</string>
     <string name="appearance_reduce_transparency">투명도 줄이기</string>
     <string name="settings_appearance">화면 설정</string>
-    <string name="settings_sync">동기화</string>
-    <string name="sync_title">동기화</string>
-    <string name="sync_scan_title">데스크톱 코드 스캔</string>
-    <string name="sync_add_device">기기 추가</string>
-    <string name="sync_empty_title">연결된 기기 없음</string>
-    <string name="sync_empty_description">청취 상태를 동기화하려면 기기를 연결하세요.</string>
-    <string name="sync_device_type_desktop">데스크톱</string>
-    <string name="sync_status_connected">연결됨</string>
-    <string name="sync_status_online">온라인</string>
-    <string name="sync_status_offline">오프라인</string>
-    <string name="sync_last_synced">마지막 동기화: %1$s</string>
-    <string name="sync_never_synced">아직 동기화되지 않음</string>
-    <string name="sync_paired_device_description">이 휴대전화는 한 번에 하나의 데스크톱에만 연결할 수 있습니다. 새 데스크톱을 페어링하기 전에 먼저 연결을 해제하세요.</string>
-    <string name="sync_ready_to_connect_description">연결 준비가 완료되었습니다. 데스크톱의 Airmedy에서 브로드캐스트를 시작하면 이 화면에서 자동으로 연결됩니다.</string>
-    <string name="sync_revoke">연결 해제</string>
-    <string name="sync_help">연결 방법 알아보기</string>
-    <string name="sync_waiting_title">데스크톱 승인 대기 중</string>
-    <string name="sync_waiting_description">데스크톱의 Airmedy 앱에서 이 휴대전화를 승인하세요.</string>
-    <string name="sync_camera_required">데스크톱 QR 코드를 스캔하려면 카메라 접근 권한이 필요합니다.</string>
-    <string name="sync_scan_description">Airmedy Desktop에 표시된 페어링 QR 코드를 카메라로 비춰주세요.</string>
-    <string name="sync_scan_hint">QR 코드를 사각형 프레임 안에 맞춰주세요.</string>
-    <string name="sync_select_qr_image">QR 이미지 선택</string>
-    <string name="sync_revoke_confirm_title">이 데스크톱의 연결을 해제할까요?</string>
-    <string name="sync_revoke_confirm_description">이 휴대전화에서 연결이 삭제됩니다. 데스크톱에서 해제하기 전까지 데스크톱 권한은 유지됩니다.</string>
-    <string name="sync_error_already_paired">다른 데스크톱과 페어링하기 전에 현재 연결된 데스크톱을 해제하세요.</string>
-    <string name="sync_error_invalid_qr">해당 QR 코드는 Airmedy Desktop 페어링 코드가 아닙니다.</string>
-    <string name="sync_error_transport">데스크톱에 연결할 수 없습니다. 두 기기가 동일한 네트워크에 있는지 확인하세요.</string>
-    <string name="sync_error_timeout">데스크톱이 제때 응답하지 않았습니다. QR 코드를 다시 스캔하세요.</string>
-    <string name="sync_error_rejected">데스크톱에서 페어링 요청을 거부했습니다.</string>
-    <string name="sync_error_expired">페어링 요청이 만료되었습니다. QR 코드를 다시 스캔하세요.</string>
-    <string name="sync_error_invalid_response">데스크톱 응답을 확인할 수 없습니다.</string>
-    <string name="sync_notification_channel">라이브러리 동기화</string>
-    <string name="sync_notification_title">Airmedy 라이브러리 동기화 중</string>
-    <string name="sync_notification_connecting">데스크톱에 연결 중…</string>
-    <string name="sync_notification_progress">동기화 중 %1$d%%</string>
-    <string name="sync_notification_complete">라이브러리 동기화 완료</string>
-    <string name="sync_notification_failed">라이브러리 동기화에 확인이 필요합니다</string>
-    <string name="sync_insufficient_storage_title">저장 공간 부족</string>
-    <string name="sync_insufficient_storage_description">동기화할 저장 공간이 부족합니다. %1$s이 필요하며 현재 %2$s을 사용할 수 있습니다.</string>
     <string name="close">닫기</string>
     <string name="ok">확인</string>
     <string name="playback_notification_channel">음악 재생</string>
@@ -135,9 +94,6 @@
     <string name="playlist_reorder_done">순서 변경 완료</string>
     <string name="player_queue_current">현재 재생 중</string>
     <string name="player_queue_unknown_track">사용할 수 없는 트랙</string>
-    <string name="sync_error_background_timeout">Android 백그라운드 제한 시간에 도달하여 동기화가 일시 중지되었습니다.</string>
-    <string name="sync_progress_connecting">라이브러리 동기화 준비 중…</string>
-    <string name="sync_progress_syncing">동기화 중</string>
     <string name="library_artists">아티스트</string>
     <string name="library_albums">앨범</string>
     <string name="library_tracks">트랙</string>
@@ -155,7 +111,7 @@
     <string name="library_playlists">재생 목록</string>
     <string name="library_favorites">즐겨찾기</string>
     <string name="playlists_empty_title">라이브러리에 재생 목록이 없습니다</string>
-    <string name="playlists_empty_description">연결된 데스크톱에서 재생 목록을 동기화하여 확인하세요.</string>
+    <string name="playlists_empty_description">재생 목록을 만들어 음악을 정리해 보세요.</string>
     <string name="playlist_row_open">재생 목록 열기</string>
     <string name="playlist_create">재생 목록 생성</string>
     <string name="playlist_create_title">재생 목록 생성</string>
@@ -163,7 +119,7 @@
     <string name="playlist_edit_title">재생 목록 편집</string>
     <string name="playlist_delete">재생 목록 삭제</string>
     <string name="playlist_delete_confirm_title">재생 목록을 삭제할까요?</string>
-    <string name="playlist_delete_confirm_description">이 재생 목록은 다음 동기화 시 데스크톱에서도 삭제됩니다.</string>
+    <string name="playlist_delete_confirm_description">이 재생 목록은 영구적으로 삭제됩니다.</string>
     <string name="playlist_name">재생 목록 이름</string>
     <string name="playlist_choose_artwork">아트워크 선택</string>
     <string name="playlist_clear_artwork">아트워크 삭제</string>
@@ -171,10 +127,10 @@
     <string name="bottom_sheet_back">뒤로</string>
     <string name="create">생성</string>
     <string name="save">저장</string>
-    <string name="playlist_sync_failed">이 재생 목록을 데스크톱과 동기화할 수 없습니다</string>
+    <string name="playlist_sync_failed">이 재생 목록의 변경 사항을 저장할 수 없습니다</string>
     <string name="playlist_details_title">재생 목록</string>
     <string name="playlist_details_empty_title">재생 목록을 사용할 수 없음</string>
-    <string name="playlist_details_empty_description">이 재생 목록은 더 이상 동기화된 라이브러리에 없습니다.</string>
+    <string name="playlist_details_empty_description">이 재생 목록의 트랙이 라이브러리에 없습니다.</string>
     <string name="playlist_details_metadata">%1$s · %2$s</string>
     <string name="playlist_duration_day">%1$d일</string>
     <string name="playlist_duration_hour">%1$d시간</string>
@@ -184,8 +140,8 @@
         <item quantity="other">트랙 %d개</item>
     </plurals>
     <string name="library_recently_added">최근 추가된 항목</string>
-    <string name="library_empty_title">동기화된 음악이 없습니다</string>
-    <string name="library_empty_description">연결된 데스크톱에서 동기화를 시작하여 라이브러리를 가져오세요.</string>
+    <string name="library_empty_title">아직 음악이 없습니다</string>
+    <string name="library_empty_description">이 기기의 음악을 스캔하여 여기에 라이브러리를 만드세요.</string>
     <string name="cancel">취소</string>
     <string name="settings_playback">재생</string>
     <string name="playback_settings_title">재생</string>
@@ -333,7 +289,7 @@
     <string name="albums_no_match_title">일치하는 앨범이 없습니다</string>
     <string name="album_details_title">앨범</string>
     <string name="album_details_empty_title">앨범을 사용할 수 없음</string>
-    <string name="album_details_empty_description">이 앨범은 더 이상 동기화된 라이브러리에 없습니다.</string>
+    <string name="album_details_empty_description">이 앨범은 더 이상 라이브러리에 없습니다.</string>
     <string name="album_details_metadata">%1$s · %2$s</string>
     <string name="album_details_metadata_with_year">%1$d · %2$s · %3$s</string>
     <plurals name="album_details_track_count">
@@ -341,7 +297,7 @@
     </plurals>
     <string name="artist_details_title">아티스트</string>
     <string name="artist_details_empty_title">아티스트를 사용할 수 없음</string>
-    <string name="artist_details_empty_description">이 아티스트는 더 이상 동기화된 라이브러리에 없습니다.</string>
+    <string name="artist_details_empty_description">이 아티스트는 더 이상 라이브러리에 없습니다.</string>
     <string name="artist_details_summary">%1$s · %2$s</string>
     <plurals name="artist_details_album_count">
         <item quantity="other">앨범 %d개</item>
@@ -354,7 +310,7 @@
     <string name="genre_row_open">장르 열기</string>
     <string name="genre_details_title">장르</string>
     <string name="genre_details_empty_title">장르를 사용할 수 없음</string>
-    <string name="genre_details_empty_description">이 장르는 더 이상 동기화된 라이브러리에 없습니다.</string>
+    <string name="genre_details_empty_description">이 장르는 더 이상 라이브러리에 없습니다.</string>
     <string name="genre_details_summary">%1$s · %2$s</string>
     <plurals name="genre_details_album_count">
         <item quantity="other">앨범 %d개</item>
@@ -369,7 +325,7 @@
     <string name="composer_row_open">작곡가 열기</string>
     <string name="composer_details_title">작곡가</string>
     <string name="composer_details_empty_title">작곡가를 사용할 수 없음</string>
-    <string name="composer_details_empty_description">이 작곡가는 더 이상 동기화된 라이브러리에 없습니다.</string>
+    <string name="composer_details_empty_description">이 작곡가는 더 이상 라이브러리에 없습니다.</string>
     <string name="composer_details_summary">%1$s · %2$s</string>
     <plurals name="composer_details_album_count">
         <item quantity="other">앨범 %d개</item>
@@ -382,10 +338,7 @@
     <string name="composers_no_match_title">일치하는 작곡가가 없습니다</string>
     <string name="lyrics_title">가사</string>
     <string name="lyrics_data_sources">데이터 소스</string>
-    <string name="lyrics_preferred_source">우선 소스</string>
-    <string name="lyrics_source_desktop">데스크톱 동기화</string>
-    <string name="lyrics_source_auto_fetch">자동 가져오기</string>
     <string name="lyrics_info_action">가사 정보</string>
     <string name="lyrics_info_title">가사 데이터 소스</string>
-    <string name="lyrics_info_description">데스크톱의 가사를 우선할지 자동으로 가져올지 선택할 수 있습니다. 모바일에서 자동으로 가져온 가사는 데스크톱과 동기화되지 않습니다.</string>
+    <string name="lyrics_info_description">가사는 활성화된 제공업체(LRCLIB, KuGou)에서 자동으로 가져와 기기에 저장됩니다.</string>
 </resources>

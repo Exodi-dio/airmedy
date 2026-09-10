@@ -18,14 +18,11 @@ import androidx.compose.ui.unit.dp
 import me.misa198.airmedy.R
 import me.misa198.airmedy.lastfm.LastFmStatus
 import me.misa198.airmedy.lyrics.LyricsSettings
-import me.misa198.airmedy.lyrics.LyricsSource
 import me.misa198.airmedy.ui.components.ActionList
 import me.misa198.airmedy.ui.components.ActionListContainerStyle
 import me.misa198.airmedy.ui.components.ActionListDividerStyle
 import me.misa198.airmedy.ui.components.ActionListItem
 import me.misa198.airmedy.ui.components.LabeledCard
-import me.misa198.airmedy.ui.components.Selection
-import me.misa198.airmedy.ui.components.SelectionOption
 import me.misa198.airmedy.ui.components.AirmedyPillButton
 import me.misa198.airmedy.ui.components.AirmedyPillButtonVariant
 import me.misa198.airmedy.ui.components.HeroCard
@@ -116,22 +113,11 @@ internal fun LastFmContent(
 @Composable
 internal fun LyricsContent(
     settings: LyricsSettings,
-    onSourceChanged: (LyricsSource) -> Unit,
     onLrclibChanged: (Boolean) -> Unit,
     onKugouChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LabeledCard(label = stringResource(R.string.lyrics_data_sources), modifier = modifier) {
-        Selection(
-            labelRes = R.string.lyrics_preferred_source,
-            options = listOf(
-                SelectionOption(LyricsSource.Desktop, R.string.lyrics_source_desktop),
-                SelectionOption(LyricsSource.AutoFetch, R.string.lyrics_source_auto_fetch),
-            ),
-            selectedValue = settings.preferredSource,
-            onValueSelected = onSourceChanged,
-        )
-        me.misa198.airmedy.ui.components.ActionListDivider(style = ActionListDividerStyle.FullWidth)
         ActionList(
             items = listOf(
                 ActionListItem(R.string.lyrics_lrclib, trailingContent = { Switch(checked = settings.lrclib, onCheckedChange = onLrclibChanged) }, onClick = { onLrclibChanged(!settings.lrclib) }),

@@ -12,11 +12,11 @@ import androidx.test.platform.app.InstrumentationRegistry
 import java.io.File
 import me.misa198.airmedy.lastfm.LastFmStatus
 import me.misa198.airmedy.lyrics.LyricsSettings
-import me.misa198.airmedy.lyrics.LyricsSource
 import me.misa198.airmedy.settings.ThemeMode
 import me.misa198.airmedy.ui.theme.AirmedyTheme
 import org.junit.Assert.assertTrue
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Rule
 import org.junit.Test
 
@@ -70,21 +70,22 @@ class IntegrationContentTest {
     }
 
     @Test
-    fun lyricsSourceSelectionReportsAutoFetch() {
-        var source = LyricsSource.Desktop
+    fun lyricsProviderSwitchesReportChanges() {
+        var lrclib = true
+        var kugou = true
         composeTestRule.setContent {
             AirmedyTheme(themeMode = ThemeMode.Dark) {
                 LyricsContent(
                     settings = LyricsSettings(),
-                    onSourceChanged = { source = it },
-                    onLrclibChanged = {},
-                    onKugouChanged = {},
+                    onLrclibChanged = { lrclib = it },
+                    onKugouChanged = { kugou = it },
                 )
             }
         }
 
-        composeTestRule.onNodeWithText("Desktop sync").performClick()
-        composeTestRule.onNodeWithText("Auto fetch").performClick()
-        assertEquals(LyricsSource.AutoFetch, source)
+        composeTestRule.onNodeWithText("LRCLIB").performClick()
+        composeTestRule.onNodeWithText("KuGou").performClick()
+        assertFalse(lrclib)
+        assertFalse(kugou)
     }
 }

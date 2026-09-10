@@ -49,7 +49,7 @@ import me.misa198.airmedy.sync.AndroidSyncRuntime
 import me.misa198.airmedy.lastfm.AndroidLastFmRuntime
 import me.misa198.airmedy.lastfm.LastFmService
 import me.misa198.airmedy.lastfm.LastFmTrack
-import me.misa198.airmedy.pairing.PairingPreferences
+import me.misa198.airmedy.device.DeviceIdentity
 import me.misa198.airmedy.mood.MoodRadioBatchSize
 import me.misa198.airmedy.mood.MoodRadioRefillThreshold
 import me.misa198.airmedy.mood.selectMoodRadio
@@ -96,7 +96,7 @@ class PlaybackService : Service() {
         super.onCreate()
         AndroidPlaybackRuntime.initialize(applicationContext, AndroidSyncRuntime.syncStore())
         lastFm = AndroidLastFmRuntime.initialize(applicationContext, AndroidSyncRuntime.syncStore())
-        listeningTracker = ListeningTracker(runBlocking { PairingPreferences(applicationContext).identity().id }) { UUID.randomUUID().toString() }
+        listeningTracker = ListeningTracker(DeviceIdentity(applicationContext).id) { UUID.randomUUID().toString() }
         listeningWriter = scope.launch {
             for (write in listeningWrites) AndroidSyncRuntime.syncStore().recordListening(write)
         }

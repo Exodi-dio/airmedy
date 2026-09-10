@@ -18,8 +18,7 @@
     <string name="insight_range_all">すべて</string>
     <string name="insight_all_devices">すべてのデバイス</string>
     <string name="insight_this_phone">この端末</string>
-    <string name="insight_desktop">デスクトップ</string>
-    <string name="insight_other_devices">その他の同期済みデバイス</string>
+    <string name="insight_other_devices">その他のデバイス</string>
     <string name="insight_library_growth">ライブラリの増加</string>
     <string name="insight_audio_quality">音質</string>
     <string name="insight_library_size">ライブラリのサイズ</string>
@@ -27,7 +26,6 @@
     <string name="insight_total_albums">アルバム</string>
     <string name="insight_total_artists">アーティスト</string>
     <string name="insight_total_playlists">プレイリスト</string>
-    <string name="sync_library_analysis">ライブラリの解析</string>
     <string name="insight_total_time">合計時間</string>
     <string name="insight_streak">連続記録</string>
     <string name="insight_average_session">平均セッション</string>
@@ -68,45 +66,6 @@
     <string name="appearance_theme_title">テーマ</string>
     <string name="appearance_reduce_transparency">透明度を下げる</string>
     <string name="settings_appearance">外観</string>
-    <string name="settings_sync">同期</string>
-    <string name="sync_title">同期</string>
-    <string name="sync_scan_title">デスクトップのコードをスキャン</string>
-    <string name="sync_add_device">デバイスを追加</string>
-    <string name="sync_empty_title">接続されたデバイスはありません</string>
-    <string name="sync_empty_description">リスニングを同期するにはデバイスを接続してください。</string>
-    <string name="sync_device_type_desktop">デスクトップ</string>
-    <string name="sync_status_connected">接続済み</string>
-    <string name="sync_status_online">オンライン</string>
-    <string name="sync_status_offline">オフライン</string>
-    <string name="sync_last_synced">最終同期: %1$s</string>
-    <string name="sync_never_synced">まだ同期されていません</string>
-    <string name="sync_paired_device_description">このスマートフォンは一度に1台のデスクトップと接続できます。新しいデスクトップとペアリングする前に接続を解除してください。</string>
-    <string name="sync_ready_to_connect_description">接続準備完了。デスクトップのAirmedyでブロードキャストを開始すると、この画面が自動的に接続されます。</string>
-    <string name="sync_revoke">ペアリング解除</string>
-    <string name="sync_help">接続方法を確認</string>
-    <string name="sync_waiting_title">デスクトップでの承認を待機中</string>
-    <string name="sync_waiting_description">デスクトップのAirmedyアプリでこのスマートフォンを承認してください。</string>
-    <string name="sync_camera_required">デスクトップのQRコードをスキャンするにはカメラへのアクセス許可が必要です。</string>
-    <string name="sync_scan_description">Airmedy Desktopに表示されているペアリング用QRコードにカメラを向けてください。</string>
-    <string name="sync_scan_hint">枠内にQRコードを収めてください。</string>
-    <string name="sync_select_qr_image">QR画像を選択</string>
-    <string name="sync_revoke_confirm_title">このデスクトップを切断しますか？</string>
-    <string name="sync_revoke_confirm_description">これによりスマートフォン側の接続が解除されます。デスクトップ側で解除されるまで権限は維持されます。</string>
-    <string name="sync_error_already_paired">別のデスクトップとペアリングする前に現在の接続を切断してください。</string>
-    <string name="sync_error_invalid_qr">そのQRコードはAirmedy Desktopのペアリング用コードではありません。</string>
-    <string name="sync_error_transport">デスクトップに接続できません。両方のデバイスが同じネットワークに接続されていることを確認してください。</string>
-    <string name="sync_error_timeout">デスクトップの応答時間がタイムアウトしました。QRコードをもう一度スキャンしてください。</string>
-    <string name="sync_error_rejected">デスクトップでペアリング要求が拒否されました。</string>
-    <string name="sync_error_expired">ペアリング要求の有効期限が切れました。QRコードをもう一度スキャンしてください。</string>
-    <string name="sync_error_invalid_response">デスクトップからの応答を検証できませんでした。</string>
-    <string name="sync_notification_channel">ライブラリの同期</string>
-    <string name="sync_notification_title">Airmedyライブラリを同期中</string>
-    <string name="sync_notification_connecting">デスクトップに接続中…</string>
-    <string name="sync_notification_progress">同期中 %1$d%%</string>
-    <string name="sync_notification_complete">ライブラリの同期が完了しました</string>
-    <string name="sync_notification_failed">ライブラリの同期で確認が必要です</string>
-    <string name="sync_insufficient_storage_title">空き容量が不足しています</string>
-    <string name="sync_insufficient_storage_description">同期するための空き容量が不足しています。%1$s 必要ですが、現在 %2$s 使用できます。</string>
     <string name="close">閉じる</string>
     <string name="ok">OK</string>
     <string name="playback_notification_channel">音楽再生</string>
@@ -135,9 +94,6 @@
     <string name="playlist_reorder_done">並べ替えを完了</string>
     <string name="player_queue_current">再生中</string>
     <string name="player_queue_unknown_track">利用できないトラック</string>
-    <string name="sync_error_background_timeout">Androidのバックグラウンド時間制限に達したため同期を一時停止しました。</string>
-    <string name="sync_progress_connecting">ライブラリ同期の準備中…</string>
-    <string name="sync_progress_syncing">同期中</string>
     <string name="library_artists">アーティスト</string>
     <string name="library_albums">アルバム</string>
     <string name="library_tracks">トラック</string>
@@ -155,7 +111,7 @@
     <string name="library_playlists">プレイリスト</string>
     <string name="library_favorites">お気に入り</string>
     <string name="playlists_empty_title">ライブラリにプレイリストがありません</string>
-    <string name="playlists_empty_description">接続中のデスクトップからプレイリストを同期するとここに表示されます。</string>
+    <string name="playlists_empty_description">プレイリストを作成して、音楽を整理しましょう。</string>
     <string name="playlist_row_open">プレイリストを開く</string>
     <string name="playlist_create">プレイリストを作成</string>
     <string name="playlist_create_title">プレイリストを作成</string>
@@ -163,7 +119,7 @@
     <string name="playlist_edit_title">プレイリストを編集</string>
     <string name="playlist_delete">プレイリストを削除</string>
     <string name="playlist_delete_confirm_title">プレイリストを削除しますか？</string>
-    <string name="playlist_delete_confirm_description">このプレイリストは次回の同期時にデスクトップからも削除されます。</string>
+    <string name="playlist_delete_confirm_description">このプレイリストは完全に削除されます。</string>
     <string name="playlist_name">プレイリスト名</string>
     <string name="playlist_choose_artwork">アートワークを選択</string>
     <string name="playlist_clear_artwork">アートワークを消去</string>
@@ -171,10 +127,10 @@
     <string name="bottom_sheet_back">戻る</string>
     <string name="create">作成</string>
     <string name="save">保存</string>
-    <string name="playlist_sync_failed">このプレイリストをデスクトップと同期できませんでした</string>
+    <string name="playlist_sync_failed">このプレイリストの変更を保存できませんでした</string>
     <string name="playlist_details_title">プレイリスト</string>
     <string name="playlist_details_empty_title">プレイリストを利用できません</string>
-    <string name="playlist_details_empty_description">このプレイリストは同期済みライブラリ内に存在しません。</string>
+    <string name="playlist_details_empty_description">このプレイリストの曲がライブラリにありません。</string>
     <string name="playlist_details_metadata">%1$s · %2$s</string>
     <string name="playlist_duration_day">%1$d日</string>
     <string name="playlist_duration_hour">%1$d時間</string>
@@ -184,8 +140,8 @@
         <item quantity="other">%d曲</item>
     </plurals>
     <string name="library_recently_added">最近追加された項目</string>
-    <string name="library_empty_title">同期された音楽がありません</string>
-    <string name="library_empty_description">接続中のデスクトップで同期を開始してライブラリを取り込んでください。</string>
+    <string name="library_empty_title">まだ音楽がありません</string>
+    <string name="library_empty_description">この端末の音楽をスキャンして、ここにライブラリを作成します。</string>
     <string name="cancel">キャンセル</string>
     <string name="settings_playback">再生</string>
     <string name="playback_settings_title">再生</string>
@@ -333,7 +289,7 @@
     <string name="albums_no_match_title">一致するアルバムがありません</string>
     <string name="album_details_title">アルバム</string>
     <string name="album_details_empty_title">アルバムを利用できません</string>
-    <string name="album_details_empty_description">このアルバムは同期済みライブラリ内に存在しません。</string>
+    <string name="album_details_empty_description">このアルバムはライブラリにありません。</string>
     <string name="album_details_metadata">%1$s · %2$s</string>
     <string name="album_details_metadata_with_year">%1$d · %2$s · %3$s</string>
     <plurals name="album_details_track_count">
@@ -341,7 +297,7 @@
     </plurals>
     <string name="artist_details_title">アーティスト</string>
     <string name="artist_details_empty_title">アーティストを利用できません</string>
-    <string name="artist_details_empty_description">このアーティストは同期済みライブラリ内に存在しません。</string>
+    <string name="artist_details_empty_description">このアーティストはライブラリにありません。</string>
     <string name="artist_details_summary">%1$s · %2$s</string>
     <plurals name="artist_details_album_count">
         <item quantity="other">%d枚のアルバム</item>
@@ -354,7 +310,7 @@
     <string name="genre_row_open">ジャンルを開く</string>
     <string name="genre_details_title">ジャンル</string>
     <string name="genre_details_empty_title">ジャンルを利用できません</string>
-    <string name="genre_details_empty_description">このジャンルは同期済みライブラリ内に存在しません。</string>
+    <string name="genre_details_empty_description">このジャンルはライブラリにありません。</string>
     <string name="genre_details_summary">%1$s · %2$s</string>
     <plurals name="genre_details_album_count">
         <item quantity="other">%d枚のアルバム</item>
@@ -369,7 +325,7 @@
     <string name="composer_row_open">作曲者を開く</string>
     <string name="composer_details_title">作曲者</string>
     <string name="composer_details_empty_title">作曲者を利用できません</string>
-    <string name="composer_details_empty_description">この作曲者は同期済みライブラリ内に存在しません。</string>
+    <string name="composer_details_empty_description">この作曲家はライブラリにありません。</string>
     <string name="composer_details_summary">%1$s · %2$s</string>
     <plurals name="composer_details_album_count">
         <item quantity="other">%d枚のアルバム</item>
@@ -382,10 +338,7 @@
     <string name="composers_no_match_title">一致する作曲者がいません</string>
     <string name="lyrics_title">歌詞</string>
     <string name="lyrics_data_sources">データソース</string>
-    <string name="lyrics_preferred_source">優先するソース</string>
-    <string name="lyrics_source_desktop">デスクトップ同期</string>
-    <string name="lyrics_source_auto_fetch">自動取得</string>
     <string name="lyrics_info_action">歌詞情報</string>
     <string name="lyrics_info_title">歌詞のデータソース</string>
-    <string name="lyrics_info_description">デスクトップの歌詞を優先するか、自動取得するかを選択できます。モバイルで自動取得した歌詞はデスクトップに同期されません。</string>
+    <string name="lyrics_info_description">歌詞は有効なプロバイダー（LRCLIB、KuGou）から自動取得され、端末に保存されます。</string>
 </resources>

@@ -18,8 +18,7 @@
     <string name="insight_range_all">全部</string>
     <string name="insight_all_devices">所有设备</string>
     <string name="insight_this_phone">此手机</string>
-    <string name="insight_desktop">桌面端</string>
-    <string name="insight_other_devices">其他已同步设备</string>
+    <string name="insight_other_devices">其他设备</string>
     <string name="insight_library_growth">媒体库增长</string>
     <string name="insight_audio_quality">音质分布</string>
     <string name="insight_library_size">媒体库大小</string>
@@ -27,7 +26,6 @@
     <string name="insight_total_albums">专辑</string>
     <string name="insight_total_artists">艺术家</string>
     <string name="insight_total_playlists">播放列表</string>
-    <string name="sync_library_analysis">媒体库分析</string>
     <string name="insight_total_time">总时长</string>
     <string name="insight_streak">连续听歌</string>
     <string name="insight_average_session">平均播放会话</string>
@@ -68,45 +66,6 @@
     <string name="appearance_theme_title">主题</string>
     <string name="appearance_reduce_transparency">减少透明度</string>
     <string name="settings_appearance">外观</string>
-    <string name="settings_sync">同步</string>
-    <string name="sync_title">同步</string>
-    <string name="sync_scan_title">扫描桌面端二维码</string>
-    <string name="sync_add_device">添加设备</string>
-    <string name="sync_empty_title">未连接任何设备</string>
-    <string name="sync_empty_description">连接设备以同步您的播放进度。</string>
-    <string name="sync_device_type_desktop">桌面端</string>
-    <string name="sync_status_connected">已连接</string>
-    <string name="sync_status_online">在线</string>
-    <string name="sync_status_offline">离线</string>
-    <string name="sync_last_synced">上次同步：%1$s</string>
-    <string name="sync_never_synced">从未同步过</string>
-    <string name="sync_paired_device_description">此手机一次只能连接一台电脑。在配对新电脑之前，请先解除绑定。</string>
-    <string name="sync_ready_to_connect_description">准备连接。在电脑上的 Airmedy 中启动广播，此界面将自动连接。</string>
-    <string name="sync_revoke">解除绑定</string>
-    <string name="sync_help">了解如何连接</string>
-    <string name="sync_waiting_title">等待桌面端确认</string>
-    <string name="sync_waiting_description">请在电脑端的 Airmedy 应用中同意连接请求。</string>
-    <string name="sync_camera_required">扫描桌面端二维码需要相机权限。</string>
-    <string name="sync_scan_description">请将镜头对准 Airmedy 桌面端显示的配对二维码。</string>
-    <string name="sync_scan_hint">请将二维码置于取景框内。</string>
-    <string name="sync_select_qr_image">选择二维码图片</string>
-    <string name="sync_revoke_confirm_title">断开与此电脑的连接？</string>
-    <string name="sync_revoke_confirm_description">此操作将移除该手机上的连接。在桌面端解除之前，电脑将保持授权状态。</string>
-    <string name="sync_error_already_paired">在配对新设备前，请先断开与当前电脑的连接。</string>
-    <string name="sync_error_invalid_qr">该二维码不是有效的 Airmedy 桌面端配对码。</string>
-    <string name="sync_error_transport">无法访问桌面端。请确保两台设备处于同一局域网中。</string>
-    <string name="sync_error_timeout">桌面端响应超时，请重新扫描二维码。</string>
-    <string name="sync_error_rejected">桌面端已拒绝此配对请求。</string>
-    <string name="sync_error_expired">配对请求已过期，请重新扫描二维码。</string>
-    <string name="sync_error_invalid_response">无法验证桌面端的响应。</string>
-    <string name="sync_notification_channel">媒体库同步</string>
-    <string name="sync_notification_title">正在同步 Airmedy 媒体库</string>
-    <string name="sync_notification_connecting">正在连接桌面端…</string>
-    <string name="sync_notification_progress">正在同步 %1$d%%</string>
-    <string name="sync_notification_complete">媒体库同步完成</string>
-    <string name="sync_notification_failed">媒体库同步需要注意</string>
-    <string name="sync_insufficient_storage_title">存储空间不足</string>
-    <string name="sync_insufficient_storage_description">没有足够空间进行同步。需要 %1$s，当前可用 %2$s。</string>
     <string name="close">关闭</string>
     <string name="ok">确定</string>
     <string name="playback_notification_channel">音乐播放</string>
@@ -135,9 +94,6 @@
     <string name="playlist_reorder_done">完成排序</string>
     <string name="player_queue_current">正在播放</string>
     <string name="player_queue_unknown_track">不可用曲目</string>
-    <string name="sync_error_background_timeout">因达到 Android 后台运行时间限制，同步已暂停。</string>
-    <string name="sync_progress_connecting">正在准备媒体库同步…</string>
-    <string name="sync_progress_syncing">同步中</string>
     <string name="library_artists">艺术家</string>
     <string name="library_albums">专辑</string>
     <string name="library_tracks">曲目</string>
@@ -155,7 +111,7 @@
     <string name="library_playlists">播放列表</string>
     <string name="library_favorites">收藏</string>
     <string name="playlists_empty_title">媒体库中暂无播放列表</string>
-    <string name="playlists_empty_description">从已连接的电脑同步播放列表以在此处查看。</string>
+    <string name="playlists_empty_description">创建播放列表，开始整理您的音乐。</string>
     <string name="playlist_row_open">打开播放列表</string>
     <string name="playlist_create">创建播放列表</string>
     <string name="playlist_create_title">创建播放列表</string>
@@ -163,7 +119,7 @@
     <string name="playlist_edit_title">编辑播放列表</string>
     <string name="playlist_delete">删除播放列表</string>
     <string name="playlist_delete_confirm_title">删除此播放列表？</string>
-    <string name="playlist_delete_confirm_description">此播放列表将在下次同步时从电脑端删除。</string>
+    <string name="playlist_delete_confirm_description">此播放列表将被永久删除。</string>
     <string name="playlist_name">播放列表名称</string>
     <string name="playlist_choose_artwork">选择播放列表封面</string>
     <string name="playlist_clear_artwork">清除播放列表封面</string>
@@ -171,10 +127,10 @@
     <string name="bottom_sheet_back">返回</string>
     <string name="create">创建</string>
     <string name="save">保存</string>
-    <string name="playlist_sync_failed">无法将此播放列表同步到电脑端</string>
+    <string name="playlist_sync_failed">无法保存此播放列表的更改</string>
     <string name="playlist_details_title">播放列表</string>
     <string name="playlist_details_empty_title">播放列表不可用</string>
-    <string name="playlist_details_empty_description">该播放列表已不在已同步的媒体库中。</string>
+    <string name="playlist_details_empty_description">此播放列表中没有任何歌曲存在于您的音乐库中。</string>
     <string name="playlist_details_metadata">%1$s · %2$s</string>
     <string name="playlist_duration_day">%1$d 天</string>
     <string name="playlist_duration_hour">%1$d 小时</string>
@@ -184,8 +140,8 @@
         <item quantity="other">%d 首曲目</item>
     </plurals>
     <string name="library_recently_added">最近添加</string>
-    <string name="library_empty_title">暂无已同步的音乐</string>
-    <string name="library_empty_description">在已连接的电脑端启动同步，将媒体库传输至此手机。</string>
+    <string name="library_empty_title">还没有音乐</string>
+    <string name="library_empty_description">扫描此设备上的音乐，在此建立您的音乐库。</string>
     <string name="cancel">取消</string>
     <string name="settings_playback">播放</string>
     <string name="playback_settings_title">播放</string>
@@ -333,7 +289,7 @@
     <string name="albums_no_match_title">无匹配的专辑</string>
     <string name="album_details_title">专辑</string>
     <string name="album_details_empty_title">专辑不可用</string>
-    <string name="album_details_empty_description">该专辑已不在已同步的媒体库中。</string>
+    <string name="album_details_empty_description">此专辑已不在您的音乐库中。</string>
     <string name="album_details_metadata">%1$s · %2$s</string>
     <string name="album_details_metadata_with_year">%1$d · %2$s · %3$s</string>
     <plurals name="album_details_track_count">
@@ -341,7 +297,7 @@
     </plurals>
     <string name="artist_details_title">艺术家</string>
     <string name="artist_details_empty_title">艺术家不可用</string>
-    <string name="artist_details_empty_description">该艺术家已不在已同步的媒体库中。</string>
+    <string name="artist_details_empty_description">此艺术家已不在您的音乐库中。</string>
     <string name="artist_details_summary">%1$s · %2$s</string>
     <plurals name="artist_details_album_count">
         <item quantity="other">%d 张专辑</item>
@@ -354,7 +310,7 @@
     <string name="genre_row_open">打开流派</string>
     <string name="genre_details_title">流派</string>
     <string name="genre_details_empty_title">流派不可用</string>
-    <string name="genre_details_empty_description">该流派已不在已同步的媒体库中。</string>
+    <string name="genre_details_empty_description">此流派已不在您的音乐库中。</string>
     <string name="genre_details_summary">%1$s · %2$s</string>
     <plurals name="genre_details_album_count">
         <item quantity="other">%d 张专辑</item>
@@ -369,7 +325,7 @@
     <string name="composer_row_open">打开作曲家</string>
     <string name="composer_details_title">作曲家</string>
     <string name="composer_details_empty_title">作曲家不可用</string>
-    <string name="composer_details_empty_description">该作曲家已不在已同步的媒体库中。</string>
+    <string name="composer_details_empty_description">此作曲家已不在您的音乐库中。</string>
     <string name="composer_details_summary">%1$s · %2$s</string>
     <plurals name="composer_details_album_count">
         <item quantity="other">%d 张专辑</item>
@@ -382,10 +338,7 @@
     <string name="composers_no_match_title">无匹配的作曲家</string>
     <string name="lyrics_title">歌词</string>
     <string name="lyrics_data_sources">数据源</string>
-    <string name="lyrics_preferred_source">首选来源</string>
-    <string name="lyrics_source_desktop">桌面同步</string>
-    <string name="lyrics_source_auto_fetch">自动获取</string>
     <string name="lyrics_info_action">歌词信息</string>
     <string name="lyrics_info_title">歌词数据源</string>
-    <string name="lyrics_info_description">你可以选择优先使用桌面端的歌词，或自动获取歌词。在移动端自动获取的歌词不会同步回桌面端。</string>
+    <string name="lyrics_info_description">歌词会从已启用的来源（LRCLIB、KuGou）自动获取并保存在设备上。</string>
 </resources>
