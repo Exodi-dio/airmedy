@@ -246,7 +246,7 @@ internal object EmbeddedTagReader {
         val major = this[3].toInt() and 0xFF
         if (major != 2 && major != 3 && major != 4) return null
         val flags = this[5].toInt() and 0xFF
-        val tagLength = syncsafeInt(this, 6)
+        val tagLength = this.syncsafeInt(6)
         if (tagLength <= 0) return null
         var body = copyOfRange(10, (10 + tagLength).coerceAtMost(size))
         if (major == 3 && flags and 0x80 != 0) body = body.unsync()
