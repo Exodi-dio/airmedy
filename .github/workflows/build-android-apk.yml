@@ -112,5 +112,6 @@ jobs:
           name: android-prod-release
           generate_release_notes: true
           files: ${{ steps.locate.outputs.apk_path }}
+          overwrite: true
           draft: false
           prerelease: false
