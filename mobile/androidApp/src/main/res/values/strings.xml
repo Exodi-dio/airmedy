@@ -203,9 +203,10 @@
     <string name="lyrics_data_sources">Data sources</string>
     <string name="lyrics_info_action">Lyrics information</string>
     <string name="lyrics_info_title">Lyrics sources</string>
-    <string name="lyrics_info_description">Lyrics are fetched automatically from the enabled providers (LRCLIB, KuGou) and cached on the device.</string>
+    <string name="lyrics_info_description">Lyrics are fetched automatically from the enabled providers (embedded audio tags, LRCLIB, KuGou) and cached on the device.</string>
     <string name="lyrics_lrclib">LRCLIB</string>
     <string name="lyrics_kugou">KuGou</string>
+    <string name="lyrics_embedded">Embedded (in audio files)</string>
     <string name="settings_about">About</string>
     <string name="about_title">About</string>
     <string name="about_description">A modern local music player</string>

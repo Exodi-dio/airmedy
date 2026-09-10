@@ -9,10 +9,12 @@ import kotlinx.coroutines.flow.map
 private val Context.lyricsDataStore by preferencesDataStore("lyrics")
 private val LrclibKey = booleanPreferencesKey("enable_lrclib")
 private val KugouKey = booleanPreferencesKey("enable_kugou")
+private val EmbeddedKey = booleanPreferencesKey("enable_embedded")
 
 internal data class LyricsSettings(
     val lrclib: Boolean = true,
     val kugou: Boolean = true,
+    val embedded: Boolean = true,
 )
 
 internal class LyricsPreferences(private val context: Context) {
@@ -20,8 +22,10 @@ internal class LyricsPreferences(private val context: Context) {
         LyricsSettings(
             lrclib = it[LrclibKey] ?: true,
             kugou = it[KugouKey] ?: true,
+            embedded = it[EmbeddedKey] ?: true,
         )
     }
     suspend fun setLrclib(enabled: Boolean) = context.lyricsDataStore.edit { it[LrclibKey] = enabled }
     suspend fun setKugou(enabled: Boolean) = context.lyricsDataStore.edit { it[KugouKey] = enabled }
+    suspend fun setEmbedded(enabled: Boolean) = context.lyricsDataStore.edit { it[EmbeddedKey] = enabled }
 }

@@ -24,6 +24,7 @@ import me.misa198.airmedy.lyrics.bestLyricsCandidate
 import me.misa198.airmedy.lyrics.normalizeLyricsText
 import me.misa198.airmedy.lyrics.removeFeaturedLyricsTitle
 import me.misa198.airmedy.sync.AndroidLibrarySyncStore
+import me.misa198.airmedy.sync.EmbeddedTagReader
 
 internal data class FetchedLyric(val content: String, val source: String)
 
@@ -45,6 +46,7 @@ internal abstract class LyricsProvider {
 internal class AndroidLyricsService(
     private val library: AndroidLibrarySyncStore,
     private val providers: List<LyricsProvider> = listOf(
+        EmbeddedLyricsProvider(),
         LrclibLyricsProvider(),
         KugouLyricsProvider()
     ),
@@ -91,6 +93,21 @@ internal class AndroidLyricsService(
         }
     }
 
+}
+
+/**
+ * Reads lyrics embedded in the audio file itself (FLAC/OGG `LYRICS`/`UNSYNCEDLYRICS`,
+ * MP3 ID3v2 `USLT`/`ULT`). Always local, so it is tried first and wins the fetch race.
+ */
+internal class EmbeddedLyricsProvider : LyricsProvider() {
+    override fun enabled(settings: LyricsSettings) = settings.embedded
+    override suspend fun fetch(track: LyricsTrack): FetchedLyric? = withContext(Dispatchers.IO) {
+        if (track.audioPath.isBlank()) return@withContext null
+        val content = EmbeddedTagReader.embeddedLyricsText(track.audioPath)?.trim()
+            ?.takeIf(String::isNotEmpty) ?: return@withContext null
+        FetchedLyric(content, if (SyncedLrc.containsMatchIn(content)) "embedded-synced" else "embedded-plain")
+    }
+    override suspend fun search(title: String, artist: String, duration: Int): List<LyricsSearchResult> = emptyList()
 }
 
 internal class LrclibLyricsProvider : LyricsProvider() {
@@ -301,7 +318,8 @@ internal data class LyricsTrack(
     val title: String,
     val artist: String,
     val album: String,
-    val duration: Int
+    val duration: Int,
+    val audioPath: String = "",
 )
 
 @Serializable
