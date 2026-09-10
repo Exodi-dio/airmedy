@@ -120,8 +120,8 @@ internal fun trackInfoValues(track: LibraryTrack): List<TrackInfoValue> {
     val fileSize = number("file_size")
     // Manifest-embedded fallbacks: the composer/genre tags MediaStore tracked may be a
     // combined string or absent entirely; the per-track arrays are always present.
-    val composer = text("raw_composer_names").ifBlank { joinedNames("composers") }
-    val genre = text("raw_genre_names").ifBlank { joinedNames("genres") }
+    val composer = text("raw_composer_names").ifBlank { metadata.joinedNames("composers") }
+    val genre = text("raw_genre_names").ifBlank { metadata.joinedNames("genres") }
 
     return listOf(
         TrackInfoValue(R.string.track_info_artist, text("raw_artist_names").ifBlank { track.artists }),

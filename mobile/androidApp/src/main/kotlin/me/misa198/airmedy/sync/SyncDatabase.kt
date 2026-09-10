@@ -1246,9 +1246,13 @@ internal fun libraryArtistsFrom(
     }
     // Manually staged artist artwork (set locally by the user) wins as a fallback
     // when no per-track artwork key resolved; it is keyed by the artist id.
-    return artists.map { artist ->
-        artist.artworkPath?.let { artist } ?: artworkPaths[artist.id]?.let { artist.copy(artworkPath = it) } ?: artist
-    }.toList()
+    return artists.map { (_, artist) ->
+        if (artist.artworkPath == null) {
+            artworkPaths[artist.id]?.let { path -> artist.copy(artworkPath = path) } ?: artist
+        } else {
+            artist
+        }
+    }
 }
 
 internal fun libraryAlbumsFrom(
