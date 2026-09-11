@@ -115,6 +115,7 @@ internal fun ArtistDetailsContent(
                 title = album.title,
                 artist = album.artist.ifBlank { stringResource(R.string.album_unknown_artist) },
                 artworkPath = album.artworkPath,
+                audioPath = album.audioPath,
                 onClick = { onAlbumClick(album) },
             )
             InsetListDivider(Modifier.testTag(ArtistAlbumDividerTag))

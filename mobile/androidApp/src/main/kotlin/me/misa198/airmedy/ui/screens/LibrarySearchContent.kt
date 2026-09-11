@@ -91,7 +91,7 @@ internal fun LibrarySearchContent(
                         onFavoriteChange = onTrackFavoriteToggle, onBottomSheetRequested = onTrackContextBottomSheet,
                     ) {
                         Column {
-                            TrackRow(track.title, track.artists, artworkPath = track.artworkPath, contentPadding = PaddingValues(vertical = 6.dp), onClick = { onTrackClick(track.id) }, onMoreClick = { contextTrack = track }, onLongClick = { contextTrack = track })
+                            TrackRow(track.title, track.artists, artworkPath = track.artworkPath, audioPath = track.audioPath, contentPadding = PaddingValues(vertical = 6.dp), onClick = { onTrackClick(track.id) }, onMoreClick = { contextTrack = track }, onLongClick = { contextTrack = track })
                             val trackIndex = uiState.tracks.indexOfFirst { it.id == track.id }
                             if (trackHasDivider(trackIndex, uiState.tracks.lastIndex)) {
                                 HorizontalDivider(
@@ -113,6 +113,7 @@ internal fun LibrarySearchContent(
                             title = album.title,
                             subtitle = album.artist,
                             artworkPath = album.artworkPath,
+                            audioPath = album.audioPath,
                             fallbackSymbol = MaterialSymbols.Album,
                             onClick = { onAlbumClick(album.id) },
                             onLongClick = { contextAlbumId = album.id },
@@ -127,6 +128,7 @@ internal fun LibrarySearchContent(
                         title = playlist.name,
                         subtitle = "",
                         artworkPath = uiState.allTracks.firstOrNull { it.id in playlist.trackIds }?.artworkPath,
+                        audioPath = uiState.allTracks.firstOrNull { it.id in playlist.trackIds }?.audioPath,
                         fallbackSymbol = MaterialSymbols.QueueMusic,
                         onClick = { onPlaylistClick(playlist.id) },
                     )

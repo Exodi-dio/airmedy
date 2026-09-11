@@ -32,13 +32,14 @@ fun DiscCard(
     subtitle: String,
     modifier: Modifier = Modifier,
     artworkPath: String? = null,
+    audioPath: String? = null,
     fallbackSymbol: String = MaterialSymbols.MusicNote,
     artworkShape: Shape = RoundedCornerShape(10.dp),
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
 ) {
     val colors = LocalAirmedyColors.current
-    val bitmap = rememberArtworkThumbnail(artworkPath, targetPx = 250)
+    val bitmap = rememberArtworkThumbnail(artworkPath, audioPath, targetPx = 250)
     val clickModifier = remember(onClick, onLongClick) {
         if (onClick != null || onLongClick != null) {
             Modifier.combinedClickable(

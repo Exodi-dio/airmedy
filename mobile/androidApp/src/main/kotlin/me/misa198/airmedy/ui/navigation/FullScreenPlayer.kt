@@ -150,7 +150,7 @@ internal fun FullScreenPlayer(
     }
 
     if (expansionProgress.value <= 0f) return
-    val artwork = rememberFullscreenArtwork(item.artworkPath)
+    val artwork = rememberFullscreenArtwork(item.artworkPath, item.audioPath)
     val activeArtworkCrossfade = artworkCrossfade.takeIf { blendArtworkDuringCrossfade }
     val incomingArtwork = rememberFullscreenArtwork(activeArtworkCrossfade?.toArtworkPath, keepPrevious = false)
     val crossfadeProgress = rememberArtworkCrossfadeProgress(artworkCrossfade)

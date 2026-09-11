@@ -149,6 +149,7 @@ internal fun InsightContent(
                             title = item.track.title,
                             artist = item.track.artists,
                             artworkPath = item.track.artworkPath,
+                            audioPath = item.track.audioPath,
                             contentPadding = PaddingValues(vertical = 6.dp),
                             onClick = { onTrackClick(item.track.id) },
                             trailingContent = {

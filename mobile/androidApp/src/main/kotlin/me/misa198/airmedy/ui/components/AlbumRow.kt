@@ -34,11 +34,12 @@ fun AlbumRow(
     artist: String,
     modifier: Modifier = Modifier,
     artworkPath: String? = null,
+    audioPath: String? = null,
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null,
 ) {
     val colors = LocalAirmedyColors.current
-    val bitmap = rememberArtworkThumbnail(artworkPath)
+    val bitmap = rememberArtworkThumbnail(artworkPath, audioPath)
     val clickModifier = remember(onClick, onLongClick) {
         if (onClick != null || onLongClick != null) Modifier.combinedClickable(
             onClick = { onClick?.invoke() },

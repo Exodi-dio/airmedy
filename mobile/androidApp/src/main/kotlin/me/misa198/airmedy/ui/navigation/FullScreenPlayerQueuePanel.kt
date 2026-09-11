@@ -327,7 +327,7 @@ private fun FullScreenQueueTrackRow(
     onLongClick: (() -> Unit)? = null,
 ) {
     val colors = LocalAirmedyColors.current
-    val artwork = rememberArtworkThumbnail(track?.artworkPath)
+    val artwork = rememberArtworkThumbnail(track?.artworkPath, track?.audioPath)
     val title = track?.title ?: stringResource(R.string.player_queue_unknown_track)
     val artist = track?.artists.orEmpty()
     val dragHandleLabel = stringResource(R.string.player_queue_drag_handle)

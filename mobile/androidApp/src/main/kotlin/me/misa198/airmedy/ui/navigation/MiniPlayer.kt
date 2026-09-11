@@ -116,7 +116,7 @@ internal fun MiniPlayer(
     val latestCanNavigateNext by rememberUpdatedState(canNavigateNext)
     val latestOnPreviousClick by rememberUpdatedState(onPreviousClick)
     val latestOnNextClick by rememberUpdatedState(onNextClick)
-    val artwork = rememberArtworkThumbnail(item.artworkPath)
+    val artwork = rememberArtworkThumbnail(item.artworkPath, item.audioPath)
     val density = LocalDensity.current
     val hapticFeedback = LocalHapticFeedback.current
     val configuration = LocalConfiguration.current
