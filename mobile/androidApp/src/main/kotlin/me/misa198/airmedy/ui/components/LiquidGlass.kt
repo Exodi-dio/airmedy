@@ -17,7 +17,7 @@ fun Modifier.liquidGlassBackground(
     hazeState: HazeState?,
     colors: AirmedyColors,
     hazeInputScale: HazeInputScale = HazeInputScale.Fixed(0.20f),
-    hazeBlurRadius: Dp = 16.dp,
+    hazeBlurRadius: Dp = 12.dp,
     glassTint: Color? = null,
 ): Modifier = if (hazeState == null) {
     background(colors.glassOpaque)
