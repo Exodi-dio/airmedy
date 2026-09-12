@@ -363,6 +363,12 @@ from source.
 - `agents/WAILS_V3.md` — Wails v3 alpha-specific patterns.
 - `catalog/` — Living feature documentation (section 8).
 
+## Repository Visibility
+
+- All current and future projects are **public** by default. Do not assume
+  private repos; keep Actions on the public-repo free tier and do not add
+  billing/payment-dependent jobs.
+
 ## Command reference
 
 - `pnpm` for frontend task
