@@ -175,6 +175,7 @@ private fun HomeTrackSection(
                     title = track.title,
                     subtitle = track.artists,
                     artworkPath = track.artworkPath,
+                    audioPath = track.audioPath,
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { onTrackClick(tracks, track.id) },
                     onLongClick = { contextTrack = track },

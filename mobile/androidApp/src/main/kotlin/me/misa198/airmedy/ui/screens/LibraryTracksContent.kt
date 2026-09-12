@@ -127,6 +127,7 @@ internal fun LibraryTracksContent(
                 title = track.title,
                 artist = track.artists,
                 artworkPath = track.artworkPath,
+                audioPath = track.audioPath,
                 onClick = onItemClick,
                 onMoreClick = onItemMoreClick,
                 onLongClick = { contextTrack = track },

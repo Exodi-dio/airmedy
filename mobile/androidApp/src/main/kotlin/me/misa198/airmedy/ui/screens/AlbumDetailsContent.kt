@@ -92,7 +92,7 @@ internal fun AlbumDetailsContent(
     )
     LazyColumn(modifier.fillMaxSize(), contentPadding = listPadding) {
         item("hero") {
-            ArtworkHeroBackdrop(album.artworkPath, Modifier.fillMaxWidth(), onHeroColorChanged) {
+            ArtworkHeroBackdrop(album.artworkPath, Modifier.fillMaxWidth(), onHeroColorChanged, audioPath = album.audioPath) {
                 DetailHero(
                     album.title,
                     album.artist.ifBlank { stringResource(R.string.album_unknown_artist) },
@@ -107,6 +107,7 @@ internal fun AlbumDetailsContent(
                         bottom = 20.dp,
                     ),
                     album.artworkPath,
+                    audioPath = album.audioPath,
                     artworkSize = trackInfoArtworkSize,
                     onPlayClick = onPlay,
                     onShuffleClick = onShuffle,

@@ -498,6 +498,7 @@ data class LibraryAlbum(
     val year: Int = 0,
     val sortTitle: String = "",
     val sortArtist: String = "",
+    val audioPath: String? = null,
 )
 
 data class LibraryGenre(
@@ -1276,6 +1277,7 @@ internal fun libraryAlbumsFrom(
             createdAt = album.string("created_at").orEmpty().ifBlank { track.createdAt },
             artworkPath = album.string("artwork_key")?.takeIf(String::isNotBlank)?.let(artworkPaths::get),
             year = album.int("year"),
+            audioPath = track.audioPath,
         )
         albums[id] = albums[id]?.let { existing ->
             existing.copy(
@@ -1284,6 +1286,7 @@ internal fun libraryAlbumsFrom(
                 copyright = existing.copyright.ifBlank { candidate.copyright },
                 sortArtist = existing.sortArtist.ifBlank { candidate.sortArtist },
                 artworkPath = existing.artworkPath ?: candidate.artworkPath,
+                audioPath = existing.audioPath ?: candidate.audioPath,
                 createdAt = listOf(existing.createdAt, candidate.createdAt)
                     .filter(String::isNotBlank)
                     .minOrNull()

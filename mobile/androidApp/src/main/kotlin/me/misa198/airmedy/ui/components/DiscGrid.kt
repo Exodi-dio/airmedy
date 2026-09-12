@@ -17,6 +17,7 @@ data class DiscGridItem(
     val title: String,
     val subtitle: String,
     val artworkPath: String? = null,
+    val audioPath: String? = null,
     val fallbackSymbol: String = MaterialSymbols.MusicNote,
 )
 
@@ -46,6 +47,7 @@ fun LazyListScope.discGridItems(
                         title = item.title,
                         subtitle = item.subtitle,
                         artworkPath = item.artworkPath,
+                        audioPath = item.audioPath,
                         fallbackSymbol = item.fallbackSymbol,
                         onClick = onClick?.let { { it(item.id) } },
                         onLongClick = onLongClick?.let { { it(item.id) } },

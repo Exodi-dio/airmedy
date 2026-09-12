@@ -39,6 +39,21 @@ class EmbeddedTagReaderTest {
         assertEquals(image.toList(), bytes.toList())
     }
 
+    @Test fun `flac prefers a later front cover over an earlier back cover`() {
+        val back = byteArrayOf(0x01, 0x02, 0x03, 0x04)
+        val file = flac(picture = back, pictureType = 4, secondPicture = image, comments = emptyList())
+        val bytes = EmbeddedTagReader.embeddedArtworkBytes(file.path)
+        assertNotNull(bytes)
+        assertEquals(image.toList(), bytes.toList())
+    }
+
+    @Test fun `flac falls back to a non-front picture when no front cover exists`() {
+        val file = flac(picture = image, pictureType = 4, comments = emptyList())
+        val bytes = EmbeddedTagReader.embeddedArtworkBytes(file.path)
+        assertNotNull(bytes)
+        assertEquals(image.toList(), bytes.toList())
+    }
+
     @Test fun `flac without picture returns null artwork`() {
         val file = flac(picture = null, comments = listOf("LYRICS=$lrc"))
         assertNull(EmbeddedTagReader.embeddedArtworkBytes(file.path))
@@ -84,9 +99,10 @@ class EmbeddedTagReaderTest {
     private fun temp(name: String, bytes: ByteArray): File =
         File.createTempFile(name, ".test").apply { writeBytes(bytes) }
 
-    private fun flac(picture: ByteArray?, comments: List<String>): File {
+    private fun flac(picture: ByteArray?, comments: List<String>, pictureType: Int = 3, secondPicture: ByteArray? = null): File {
         val blocks = mutableListOf<Pair<Int, ByteArray>>()
-        picture?.let { blocks += FLAC_PICTURE to pictureBlock(it) }
+        picture?.let { blocks += FLAC_PICTURE to pictureBlock(it, pictureType) }
+        secondPicture?.let { blocks += FLAC_PICTURE to pictureBlock(it, 3) }
         blocks += FLAC_VORBIS_COMMENT to vorbisComment(comments)
         val out = ByteArrayOutputStream()
         out.write("fLaC".toByteArray(Charsets.ISO_8859_1))
@@ -98,10 +114,10 @@ class EmbeddedTagReaderTest {
         return temp("flac", out.toByteArray())
     }
 
-    private fun pictureBlock(imageBytes: ByteArray): ByteArray {
+    private fun pictureBlock(imageBytes: ByteArray, pictureType: Int = 3): ByteArray {
         val mime = "image/png".toByteArray(Charsets.ISO_8859_1)
         val out = ByteArrayOutputStream()
-        out.writeIntBE(3)
+        out.writeIntBE(pictureType)
         out.writeIntBE(mime.size); out.write(mime)
         out.writeIntBE(0)
         out.writeIntBE(0); out.writeIntBE(0); out.writeIntBE(24); out.writeIntBE(0)

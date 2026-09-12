@@ -135,6 +135,16 @@ system. Reuse the existing primitive before making another component:
 flow reports failures in place on the Scan page rather than through a
 system-wide dialog; the failure is never persisted.
 
+Artwork on `DiscCard`, `AlbumRow`, `DetailHero`, `TrackRow`, the queue panel, and
+both players is resolved by `rememberArtworkThumbnail(artworkPath, audioPath)` /
+`rememberFullscreenArtwork`: the persisted scan-time artwork file wins, and when
+that file is absent the loader falls back to decoding the track's embedded
+picture (via `EmbeddedTagReader`) from the audio file's absolute path, so cover
+art renders immediately even before the user triggers a library re-scan.
+`audioPath` is carried on `LibraryTrack` and on `LibraryAlbum` (the first
+matching track) for album grid/row/hero surfaces. Playlist rows and artist
+surfaces keep resolving pre-extracted artwork paths only.
+
 Settings card groups use a consistent 12dp gap between adjacent cards.
 
 Extract a component only when it has no domain state and already has at least

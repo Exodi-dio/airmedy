@@ -177,6 +177,7 @@ internal fun PlaylistDetailsContent(
                         title = track.title,
                         artist = track.artists,
                         artworkPath = track.artworkPath,
+                        audioPath = track.audioPath,
                         modifier = Modifier.fillMaxWidth().then(
                             if (isDragging) Modifier.liquidGlassBackground(
                                 hazeState, colors, hazeBlurRadius = 30.dp, glassTint = colors.glassElevated,
@@ -221,7 +222,7 @@ internal fun PlaylistDetailsContent(
                     onBottomSheetRequested = onTrackContextBottomSheet,
                 ) {
                     TrackRow(
-                        title = track.title, artist = track.artists, artworkPath = track.artworkPath,
+                        title = track.title, artist = track.artists, artworkPath = track.artworkPath, audioPath = track.audioPath,
                         modifier = Modifier.fillMaxWidth(), onClick = { onTrackClick(track.id) },
                         onMoreClick = { contextTrack = track.id }, onLongClick = { contextTrack = track.id },
                     )

@@ -189,7 +189,7 @@ internal fun TrackInfoContent(track: LibraryTrack, modifier: Modifier = Modifier
     val colors = LocalAirmedyColors.current
     val details = remember(track) { trackInfoValues(track) }
     val quality = remember(track) { trackAudioQuality(track) }
-    val artwork = rememberArtworkThumbnail(track.artworkPath, targetPx = 480)
+    val artwork = rememberArtworkThumbnail(track.artworkPath, track.audioPath, targetPx = 480)
     val metadata = track.metadataObject()
     val albumArtist = metadata.string("raw_album_artist_names")
         .ifBlank { metadata.joinedNames("album_artists") }

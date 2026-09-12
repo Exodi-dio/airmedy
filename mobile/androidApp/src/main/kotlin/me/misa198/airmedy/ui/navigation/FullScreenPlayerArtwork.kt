@@ -1,7 +1,6 @@
 package me.misa198.airmedy.ui.navigation
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -34,6 +33,7 @@ import kotlinx.coroutines.withContext
 import me.misa198.airmedy.player.ArtworkCrossfadeTransition
 import me.misa198.airmedy.ui.components.MaterialSymbol
 import me.misa198.airmedy.ui.components.MaterialSymbols
+import me.misa198.airmedy.ui.components.decodeArtworkBitmaps
 import me.misa198.airmedy.ui.theme.LocalAirmedyColors
 import java.io.File
 
@@ -127,28 +127,24 @@ internal fun equalPowerOutgoing(progress: Float): Float = kotlin.math.cos(progre
 internal fun equalPowerIncoming(progress: Float): Float = kotlin.math.sin(progress.coerceIn(0f, 1f) * Math.PI.toFloat() / 2f)
 
 @Composable
-internal fun rememberFullscreenArtwork(artworkPath: String?, keepPrevious: Boolean = true): FullScreenArtwork? {
+internal fun rememberFullscreenArtwork(
+    artworkPath: String?,
+    audioPath: String? = null,
+    keepPrevious: Boolean = true,
+): FullScreenArtwork? {
     val context = LocalContext.current
     var artwork by remember(fullscreenArtworkMemoryKey(artworkPath, keepPrevious)) { mutableStateOf<FullScreenArtwork?>(null) }
-    LaunchedEffect(artworkPath) {
-        if (artworkPath.isNullOrBlank()) {
+    LaunchedEffect(artworkPath, audioPath) {
+        if (artworkPath.isNullOrBlank() && audioPath.isNullOrBlank()) {
             artwork = null
             return@LaunchedEffect
         }
         artwork = withContext(Dispatchers.IO) {
-            val file = File(if (File(artworkPath).isAbsolute) artworkPath else File(context.filesDir, artworkPath).path)
-            if (!file.isFile) return@withContext null
-            runCatching {
-                val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-                BitmapFactory.decodeFile(file.path, bounds)
-                var sample = 1
-                while (bounds.outWidth / (sample * 2) >= 1080 && bounds.outHeight / (sample * 2) >= 1080) sample *= 2
-                val bitmap = BitmapFactory.decodeFile(file.path, BitmapFactory.Options().apply {
-                    inSampleSize = sample
-                    inPreferredConfig = Bitmap.Config.ARGB_8888
-                }) ?: return@runCatching null
-                FullScreenArtwork(bitmap.asImageBitmap(), dominantColor(bitmap))
-            }.getOrNull()
+            val absolutePath = artworkPath?.takeIf(String::isNotBlank)?.let { path ->
+                if (File(path).isAbsolute) path else File(context.filesDir, path).path
+            }
+            decodeArtworkBitmaps(absolutePath, audioPath, targetPx = 1080, config = Bitmap.Config.ARGB_8888)
+                ?.let { bitmap -> FullScreenArtwork(bitmap.asImageBitmap(), dominantColor(bitmap)) }
         }
     }
     return artwork

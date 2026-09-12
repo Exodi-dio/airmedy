@@ -130,6 +130,7 @@ internal fun LibraryContent(
                         title = track.title,
                         subtitle = track.artists,
                         artworkPath = track.artworkPath,
+                        audioPath = track.audioPath,
                         fallbackSymbol = MaterialSymbols.MusicNote,
                     )
                 },

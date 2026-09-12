@@ -42,47 +42,42 @@ import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import me.misa198.airmedy.R
+import me.misa198.airmedy.sync.EmbeddedTagReader
 import me.misa198.airmedy.ui.theme.LocalAirmedyColors
 
 private val artworkCache = LruCache<String, ImageBitmap>(250)
 
+/**
+ * Resolves artwork for display. The persisted file (written only during a Library
+ * scan) is the fast path; when it is missing the embedded picture is decoded
+ * directly from the audio file so artwork renders immediately after an update
+ * even before the user re-scans, matching how embedded lyrics are read lazily.
+ */
 @Composable
 internal fun rememberArtworkThumbnail(
     artworkPath: String?,
+    audioPath: String? = null,
     targetPx: Int = 120,
 ): ImageBitmap? {
-    if (artworkPath.isNullOrBlank()) return null
     val context = LocalContext.current
     val absolutePath = remember(artworkPath, context) {
-        val file = File(artworkPath)
-        if (file.isAbsolute) file.absolutePath else File(context.filesDir, artworkPath).absolutePath
+        val path = artworkPath
+        if (path.isNullOrBlank()) {
+            null
+        } else {
+            val file = File(path)
+            if (file.isAbsolute) file.absolutePath else File(context.filesDir, path).absolutePath
+        }
     }
-    val cacheKey = "$absolutePath:$targetPx"
+    val audioSource = audioPath?.takeIf(String::isNotBlank)
+    val cacheKey = if (absolutePath != null) "file:$absolutePath:$targetPx" else "embed:${audioSource.orEmpty()}:$targetPx"
 
     var bitmap by remember(cacheKey) { mutableStateOf(artworkCache.get(cacheKey)) }
 
     LaunchedEffect(cacheKey) {
         if (bitmap == null) {
             val loaded = withContext(Dispatchers.IO) {
-                val file = File(absolutePath)
-                if (!file.isFile) return@withContext null
-                runCatching {
-                    val boundsOptions = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-                    BitmapFactory.decodeFile(file.absolutePath, boundsOptions)
-
-                    var sampleSize = 1
-                    while (boundsOptions.outWidth / (sampleSize * 2) >= targetPx &&
-                        boundsOptions.outHeight / (sampleSize * 2) >= targetPx
-                    ) {
-                        sampleSize *= 2
-                    }
-
-                    val decodeOptions = BitmapFactory.Options().apply {
-                        inSampleSize = sampleSize
-                        inPreferredConfig = Bitmap.Config.RGB_565
-                    }
-                    BitmapFactory.decodeFile(file.absolutePath, decodeOptions)?.asImageBitmap()
-                }.getOrNull()
+                decodeArtworkBitmaps(absolutePath, audioSource, targetPx, Bitmap.Config.RGB_565)?.asImageBitmap()
             }
             if (loaded != null) {
                 artworkCache.put(cacheKey, loaded)
@@ -93,12 +88,53 @@ internal fun rememberArtworkThumbnail(
     return bitmap
 }
 
+/** Decodes the persisted artwork file, falling back to the audio file's embedded picture. */
+internal fun decodeArtworkBitmaps(
+    absolutePath: String?,
+    audioPath: String?,
+    targetPx: Int,
+    config: Bitmap.Config,
+): Bitmap? {
+    absolutePath?.takeIf { File(it).isFile }?.let { path ->
+        decodeBitmapFile(path, targetPx, config)?.let { return it }
+    }
+    audioPath?.takeIf { File(it).isFile }?.let { audio ->
+        EmbeddedTagReader.embeddedArtworkBytes(audio)?.let { bytes ->
+            decodeBitmapBytes(bytes, targetPx, config)?.let { return it }
+        }
+    }
+    return null
+}
+
+private fun decodeBitmapFile(path: String, targetPx: Int, config: Bitmap.Config): Bitmap? = runCatching {
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    BitmapFactory.decodeFile(path, bounds)
+    BitmapFactory.decodeFile(path, bitmapOptionsFor(bounds.outWidth, bounds.outHeight, targetPx, config))
+}.getOrNull()
+
+private fun decodeBitmapBytes(bytes: ByteArray, targetPx: Int, config: Bitmap.Config): Bitmap? = runCatching {
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bounds)
+    BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bitmapOptionsFor(bounds.outWidth, bounds.outHeight, targetPx, config))
+}.getOrNull()
+
+private fun bitmapOptionsFor(width: Int, height: Int, targetPx: Int, config: Bitmap.Config) =
+    BitmapFactory.Options().apply {
+        var sampleSize = 1
+        while (width / (sampleSize * 2) >= targetPx && height / (sampleSize * 2) >= targetPx) {
+            sampleSize *= 2
+        }
+        inSampleSize = sampleSize
+        inPreferredConfig = config
+    }
+
 @Composable
 fun TrackRow(
     title: String,
     artist: String,
     modifier: Modifier = Modifier,
     artworkPath: String? = null,
+    audioPath: String? = null,
     contentPadding: PaddingValues = PaddingValues(start = 24.dp, top = 6.dp, end = 8.dp, bottom = 6.dp),
     onClick: (() -> Unit)? = null,
     onMoreClick: (() -> Unit)? = null,
@@ -106,7 +142,7 @@ fun TrackRow(
     trailingContent: (@Composable RowScope.() -> Unit)? = null,
 ) {
     val colors = LocalAirmedyColors.current
-    val bitmap = rememberArtworkThumbnail(artworkPath)
+    val bitmap = rememberArtworkThumbnail(artworkPath, audioPath)
     val clickModifier = remember(onClick, onLongClick) {
         if (onClick != null || onLongClick != null) {
             Modifier.combinedClickable(

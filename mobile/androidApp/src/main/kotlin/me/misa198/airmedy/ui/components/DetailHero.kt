@@ -51,11 +51,12 @@ fun ArtworkHeroBackdrop(
     artworkPath: String?,
     modifier: Modifier = Modifier,
     onDominantColorChanged: (Color) -> Unit = {},
+    audioPath: String? = null,
     content: @Composable () -> Unit,
 ) {
     val colors = LocalAirmedyColors.current
-    val bitmap = rememberArtworkThumbnail(artworkPath, targetPx = 240)
-    var dominant by remember(artworkPath) { mutableStateOf(colors.background) }
+    val bitmap = rememberArtworkThumbnail(artworkPath, audioPath, targetPx = 240)
+    var dominant by remember(artworkPath, audioPath) { mutableStateOf(colors.background) }
     LaunchedEffect(bitmap, colors.background) {
         dominant = bitmap?.let { image -> withContext(Dispatchers.Default) { artworkDominantColor(image) } } ?: colors.background
         onDominantColorChanged(dominant)
@@ -100,6 +101,7 @@ fun DetailHero(
     moreLabel: String,
     modifier: Modifier = Modifier,
     artworkPath: String? = null,
+    audioPath: String? = null,
     artworkShape: DetailHeroArtworkShape = DetailHeroArtworkShape.Square,
     artworkSize: Dp = 248.dp,
     fallbackSymbol: String = MaterialSymbols.Album,
@@ -112,7 +114,7 @@ fun DetailHero(
     moreAction: @Composable (@Composable () -> Unit) -> Unit = { it() },
 ) {
     val colors = LocalAirmedyColors.current
-    val bitmap = rememberArtworkThumbnail(artworkPath, targetPx = 480)
+    val bitmap = rememberArtworkThumbnail(artworkPath, audioPath, targetPx = 480)
     val artworkClip = if (artworkShape == DetailHeroArtworkShape.Circle) CircleShape else RoundedCornerShape(16.dp)
     Column(
         modifier = modifier,
