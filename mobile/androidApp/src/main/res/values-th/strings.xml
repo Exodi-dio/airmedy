@@ -194,13 +194,8 @@
     <string name="about_title">เกี่ยวกับ</string>
     <string name="about_description">เครื่องเล่นเพลงในเครื่องที่ทันสมัย</string>
     <string name="about_version">เวอร์ชัน</string>
-    <string name="about_github">GitHub</string>
-    <string name="about_license">สัญญาอนุญาต</string>
-    <string name="about_sponsor">สนับสนุน Airmedy</string>
-    <string name="about_sponsor_github">GitHub Sponsors</string>
-    <string name="about_sponsor_kofi">Ko-fi</string>
-    <string name="about_sponsor_bmac">Buy Me a Coffee</string>
-    <string name="about_sponsor_patreon">Patreon</string>
+    <string name="about_reworked_by">เรียบเรียงใหม่โดย</string>
+    <string name="about_reworked_by_handle">exodi_dio</string>
     <string name="theme_system">ระบบ</string>
     <string name="theme_light">สว่าง</string>
     <string name="theme_dark">มืด</string>

@@ -194,13 +194,8 @@
     <string name="about_title">Giới thiệu</string>
     <string name="about_description">Trình phát nhạc cục bộ hiện đại</string>
     <string name="about_version">Phiên bản</string>
-    <string name="about_github">GitHub</string>
-    <string name="about_license">Giấy phép</string>
-    <string name="about_sponsor">Tài trợ cho Airmedy</string>
-    <string name="about_sponsor_github">GitHub Sponsors</string>
-    <string name="about_sponsor_kofi">Ko-fi</string>
-    <string name="about_sponsor_bmac">Buy Me a Coffee</string>
-    <string name="about_sponsor_patreon">Patreon</string>
+    <string name="about_reworked_by">Được làm lại bởi</string>
+    <string name="about_reworked_by_handle">exodi_dio</string>
     <string name="theme_system">Hệ thống</string>
     <string name="theme_light">Sáng</string>
     <string name="theme_dark">Tối</string>

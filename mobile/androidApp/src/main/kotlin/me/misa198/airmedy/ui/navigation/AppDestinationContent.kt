@@ -458,9 +458,6 @@ internal fun AppDestinationContent(
                             AppStackPage.SettingsLyrics -> LyricsContent(lyricsSettings, onLrclibChanged, onKugouChanged, onEmbeddedChanged, settingsPageModifier)
                             AppStackPage.SettingsAbout -> AboutContent(
                                 modifier = settingsPageModifier,
-                                onOpenExternalUrl = { url ->
-                                    onIntent(AppIntent.OpenExternalUrl(url))
-                                },
                             )
                             else -> SettingsContent(
                                 modifier = settingsPageModifier,

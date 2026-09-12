@@ -194,13 +194,8 @@
     <string name="about_title">정보</string>
     <string name="about_description">현대적인 로컬 음악 플레이어</string>
     <string name="about_version">버전</string>
-    <string name="about_github">GitHub</string>
-    <string name="about_license">라이선스</string>
-    <string name="about_sponsor">Airmedy 후원하기</string>
-    <string name="about_sponsor_github">GitHub Sponsors</string>
-    <string name="about_sponsor_kofi">Ko-fi</string>
-    <string name="about_sponsor_bmac">Buy Me a Coffee</string>
-    <string name="about_sponsor_patreon">Patreon</string>
+    <string name="about_reworked_by">리메이크:</string>
+    <string name="about_reworked_by_handle">exodi_dio</string>
     <string name="theme_system">시스템</string>
     <string name="theme_light">라이트</string>
     <string name="theme_dark">다크</string>

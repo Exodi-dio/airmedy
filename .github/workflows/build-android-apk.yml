@@ -52,9 +52,9 @@ jobs:
           sudo apt-get install -y python3 python3-pip
           python3 -m pip install --quiet --break-system-packages fonttools brotli
 
-      - name: Build FFmpeg for Android (arm64-v8a)
+      - name: Build FFmpeg for Android (arm64-v8a + armeabi-v7a)
         working-directory: mobile
-        run: bash ../scripts/build-ffmpeg-android.sh arm64-v8a
+        run: bash ../scripts/build-ffmpeg-android.sh all
 
       - name: Generate release keystore
         working-directory: mobile
@@ -71,46 +71,107 @@ jobs:
             -dname "CN=Airmedy CI, OU=Mobile, O=Exodi-dio, L=NA, S=NA, C=US"
           echo "Keystore generated."
 
-      - name: Build prod release APK
+      - name: Build prod release APK (arm64-v8a / 64-bit)
         working-directory: mobile
         env:
           MOBILE_KEYSTORE_FILE: ${{ runner.temp }}/keystore/release.jks
           MOBILE_KEYSTORE_PASSWORD: changeit
           MOBILE_KEY_ALIAS: airmedy
           MOBILE_KEY_PASSWORD: changeit
-        run: ./gradlew :androidApp:assembleProdRelease --no-daemon --stacktrace
-
-      - name: Locate APK
-        id: locate
-        working-directory: mobile
         run: |
           set -euo pipefail
+          ./gradlew :androidApp:assembleProdRelease --no-daemon --stacktrace -Pabi=arm64-v8a
           APK_REL=$(find androidApp/build/outputs/apk -type f -name 'androidApp-prod-release.apk' | head -n1)
           if [[ -z "$APK_REL" ]]; then
-            echo "APK not found under androidApp/build/outputs/apk"
+            echo "arm64-v8a APK not found under androidApp/build/outputs/apk"
             find androidApp/build -type f -name '*.apk' || true
             exit 1
           fi
-          APK_ABS="$PWD/${APK_REL}"
-          cp "$APK_REL" "$RUNNER_TEMP/androidApp-prod-release.apk"
-          echo "apk_path=$RUNNER_TEMP/androidApp-prod-release.apk" >> "$GITHUB_OUTPUT"
-          echo "APK: $APK_REL -> $RUNNER_TEMP/androidApp-prod-release.apk"
-          ls -la "$RUNNER_TEMP/androidApp-prod-release.apk"
+          cp "$APK_REL" "$RUNNER_TEMP/androidApp-1.1.1-arm64-v8a.apk"
+          echo "Staged: $RUNNER_TEMP/androidApp-1.1.1-arm64-v8a.apk from $APK_REL"
 
-      - name: Upload APK to workflow artifact
+      - name: Build prod release APK (armeabi-v7a / 32-bit)
+        working-directory: mobile
+        env:
+          MOBILE_KEYSTORE_FILE: ${{ runner.temp }}/keystore/release.jks
+          MOBILE_KEYSTORE_PASSWORD: changeit
+          MOBILE_KEY_ALIAS: airmedy
+          MOBILE_KEY_PASSWORD: changeit
+        run: |
+          set -euo pipefail
+          ./gradlew :androidApp:assembleProdRelease --no-daemon --stacktrace -Pabi=armeabi-v7a
+          APK_REL=$(find androidApp/build/outputs/apk -type f -name 'androidApp-prod-release.apk' | head -n1)
+          if [[ -z "$APK_REL" ]]; then
+            echo "armeabi-v7a APK not found under androidApp/build/outputs/apk"
+            find androidApp/build -type f -name '*.apk' || true
+            exit 1
+          fi
+          cp "$APK_REL" "$RUNNER_TEMP/androidApp-1.1.1-armeabi-v7a.apk"
+          echo "Staged: $RUNNER_TEMP/androidApp-1.1.1-armeabi-v7a.apk from $APK_REL"
+
+      - name: Build prod release APK (universal)
+        working-directory: mobile
+        env:
+          MOBILE_KEYSTORE_FILE: ${{ runner.temp }}/keystore/release.jks
+          MOBILE_KEYSTORE_PASSWORD: changeit
+          MOBILE_KEY_ALIAS: airmedy
+          MOBILE_KEY_PASSWORD: changeit
+        run: |
+          set -euo pipefail
+          ./gradlew :androidApp:assembleProdRelease --no-daemon --stacktrace -Pabi=universal
+          APK_REL=$(find androidApp/build/outputs/apk -type f -name 'androidApp-prod-release.apk' | head -n1)
+          if [[ -z "$APK_REL" ]]; then
+            echo "universal APK not found under androidApp/build/outputs/apk"
+            find androidApp/build -type f -name '*.apk' || true
+            exit 1
+          fi
+          cp "$APK_REL" "$RUNNER_TEMP/androidApp-1.1.1-universal.apk"
+          echo "Staged: $RUNNER_TEMP/androidApp-1.1.1-universal.apk from $APK_REL"
+
+      - name: Verify staged release APKs
+        run: |
+          set -euo pipefail
+          for file in \
+            "$RUNNER_TEMP/androidApp-1.1.1-arm64-v8a.apk" \
+            "$RUNNER_TEMP/androidApp-1.1.1-armeabi-v7a.apk" \
+            "$RUNNER_TEMP/androidApp-1.1.1-universal.apk"; do
+            test -s "$file"
+          done
+          ls -la "$RUNNER_TEMP"/*.apk
+
+      - name: Upload APKs to workflow artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-prod-release
-          path: ${{ steps.locate.outputs.apk_path }}
+          name: android-rework-1.1.1
+          path: |
+            ${{ runner.temp }}/androidApp-1.1.1-arm64-v8a.apk
+            ${{ runner.temp }}/androidApp-1.1.1-armeabi-v7a.apk
+            ${{ runner.temp }}/androidApp-1.1.1-universal.apk
           if-no-files-found: error
           retention-days: 14
 
-      - name: Create / update release
+      - name: Create / update release (v1.1.1)
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: android-prod-release-latest
-          name: android-prod-release
-          generate_release_notes: true
-          files: ${{ steps.locate.outputs.apk_path }}
+          tag_name: v1.1.1
+          name: Airmedy Mobile — Android Rework v1.1.1
+          body: |
+            ## Airmedy Mobile — Android Rework v1.1.1
+
+            - This is a **local mobile app rework** made by **exodi_dio**.
+            - The original Airmedy build is **not mine**; the original app was **PC-only** and never shipped for Android.
+            - Rebuilt as a native Android app (Kotlin Multiplatform + Compose), performance-tuned for low-end devices.
+
+            ### Downloads
+
+            | APK | ABI | For |
+            |---|---|---|
+            | `androidApp-1.1.1-arm64-v8a.apk` | arm64-v8a | 64-bit devices (recommended) |
+            | `androidApp-1.1.1-armeabi-v7a.apk` | armeabi-v7a | 32-bit devices |
+            | `androidApp-1.1.1-universal.apk` | arm64 + armv7 | any device (largest file) |
+          files: |
+            ${{ runner.temp }}/androidApp-1.1.1-arm64-v8a.apk
+            ${{ runner.temp }}/androidApp-1.1.1-armeabi-v7a.apk
+            ${{ runner.temp }}/androidApp-1.1.1-universal.apk
           draft: false
           prerelease: false

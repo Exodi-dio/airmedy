@@ -195,13 +195,8 @@
     <string name="about_title">Über</string>
     <string name="about_description">Ein moderner lokaler Musikplayer</string>
     <string name="about_version">Version</string>
-    <string name="about_github">GitHub</string>
-    <string name="about_license">Lizenz</string>
-    <string name="about_sponsor">Airmedy unterstützen</string>
-    <string name="about_sponsor_github">GitHub Sponsors</string>
-    <string name="about_sponsor_kofi">Ko-fi</string>
-    <string name="about_sponsor_bmac">Buy Me a Coffee</string>
-    <string name="about_sponsor_patreon">Patreon</string>
+    <string name="about_reworked_by">Überarbeitet von</string>
+    <string name="about_reworked_by_handle">exodi_dio</string>
     <string name="theme_system">System</string>
     <string name="theme_light">Hell</string>
     <string name="theme_dark">Dunkel</string>

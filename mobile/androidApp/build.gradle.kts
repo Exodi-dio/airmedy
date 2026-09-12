@@ -56,6 +56,15 @@ val hasReleaseSigning = listOf(
     releaseKeyPassword,
 ).all { !it.isNullOrBlank() }
 
+val buildAbi =
+    providers.gradleProperty("abi").orNull?.takeIf { it.isNotBlank() } ?: "arm64-v8a"
+val releaseAbiFilters = when (buildAbi) {
+    "arm64-v8a" -> setOf("arm64-v8a")
+    "armeabi-v7a" -> setOf("armeabi-v7a")
+    "universal" -> setOf("arm64-v8a", "armeabi-v7a")
+    else -> setOf("arm64-v8a")
+}
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeCompiler)
@@ -140,7 +149,7 @@ android {
             }
         }
         ndk {
-            abiFilters += setOf("arm64-v8a")
+            abiFilters += releaseAbiFilters
         }
     }
     flavorDimensions += "environment"

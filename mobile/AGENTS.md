@@ -41,7 +41,9 @@ androidApp (Android Compose UI, ViewModels, navigation, Android adapters)
 - Android audio playback is an `androidApp` native adapter: FFmpeg performs
   demux/decode and AAudio receives float PCM. Do not add a Media3/MediaCodec
   decoder fallback unless a task explicitly changes that policy. Build its
-  generated Android libraries first with `bash ../scripts/build-ffmpeg-android.sh arm64-v8a`.
+  generated Android libraries first with `bash ../scripts/build-ffmpeg-android.sh arm64-v8a`
+  (use `armeabi-v7a` or `all` for 32-bit/multi-ABI). Release APKs are assembled per ABI with
+  `./gradlew :androidApp:assembleProdRelease -Pabi=arm64-v8a|armeabi-v7a|universal`.
 
 ## Mobile UI philosophy
 
