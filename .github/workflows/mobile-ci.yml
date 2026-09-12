@@ -82,6 +82,10 @@ jobs:
         working-directory: mobile
         run: ./gradlew :sharedLogic:testAndroidHostTest
 
+      - name: Test Android host unit tests
+        working-directory: mobile
+        run: ./gradlew :androidApp:testDevDebugUnitTest
+
       - name: Build Android app
         working-directory: mobile
         run: ./gradlew :androidApp:assembleDevDebug -Pabi=universal
