@@ -63,7 +63,7 @@ jobs:
           path: |
             mobile/androidApp/build/ffmpeg
             mobile/androidApp/src/main/jniLibs
-          key: ffmpeg-android-v1-${{ hashFiles('scripts/build-ffmpeg-android.sh') }}
+          key: ffmpeg-android-v2-${{ hashFiles('scripts/build-ffmpeg-android.sh') }}
 
       - name: Build Android FFmpeg
         if: steps.cache-ffmpeg.outputs.cache-hit != 'true'
@@ -76,7 +76,7 @@ jobs:
           path: |
             mobile/androidApp/build/ffmpeg
             mobile/androidApp/src/main/jniLibs
-          key: ffmpeg-android-v1-${{ hashFiles('scripts/build-ffmpeg-android.sh') }}
+          key: ffmpeg-android-v2-${{ hashFiles('scripts/build-ffmpeg-android.sh') }}
 
       - name: Test shared logic
         working-directory: mobile
