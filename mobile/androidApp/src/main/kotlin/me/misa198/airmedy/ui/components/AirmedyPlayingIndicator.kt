@@ -33,11 +33,12 @@ fun AirmedyPlayingIndicator(
     modifier: Modifier = Modifier,
 ) {
     val colors = LocalAirmedyColors.current
-    val transition = rememberInfiniteTransition(label = "playing-indicator")
+    val transition =
+        if (isPlaying) rememberInfiniteTransition(label = "playing-indicator") else null
     val scales = listOf(
-        transition.animateScale(0.3f, 0.8f, 800, "playing-indicator-first"),
-        transition.animateScale(1f, 0.4f, 600, "playing-indicator-second"),
-        transition.animateScale(0.6f, 0.9f, 700, "playing-indicator-third"),
+        transition?.animateScale(0.3f, 0.8f, 800, "playing-indicator-first"),
+        transition?.animateScale(1f, 0.4f, 600, "playing-indicator-second"),
+        transition?.animateScale(0.6f, 0.9f, 700, "playing-indicator-third"),
     )
     val playbackProgress by animateFloatAsState(
         targetValue = if (isPlaying) 1f else 0f,
@@ -56,7 +57,8 @@ fun AirmedyPlayingIndicator(
                     .width(3.dp)
                     .fillMaxHeight()
                     .graphicsLayer {
-                        scaleY = 0.3f + (scale.value - 0.3f) * playbackProgress
+                        val active = scale?.value ?: 0.3f
+                        scaleY = 0.3f + (active - 0.3f) * playbackProgress
                         transformOrigin = TransformOrigin(0.5f, 1f)
                     }
                     .background(colors.onPrimary, RoundedCornerShape(2.dp)),
