@@ -57,11 +57,12 @@ val hasReleaseSigning = listOf(
 ).all { !it.isNullOrBlank() }
 
 val buildAbi =
-    providers.gradleProperty("abi").orNull?.takeIf { it.isNotBlank() } ?: "universal"
+    providers.gradleProperty("abi").orNull?.takeIf { it.isNotBlank() } ?: "arm64-v8a"
 val releaseAbiFilters = when (buildAbi) {
     "arm64-v8a" -> setOf("arm64-v8a")
     "armeabi-v7a" -> setOf("armeabi-v7a")
-    else -> setOf("arm64-v8a", "armeabi-v7a")
+    "universal" -> setOf("arm64-v8a", "armeabi-v7a")
+    else -> setOf("arm64-v8a")
 }
 
 plugins {
