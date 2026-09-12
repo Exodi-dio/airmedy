@@ -115,8 +115,9 @@ internal fun FullScreenPlayer(
     // The fullscreen panel moves independently from the persistent chrome. Its
     // blur source must therefore be isolated: sharing the shell source lets its
     // dark backdrop be sampled by the mini player while this panel is closing.
-    val fullScreenHazeState = rememberHazeState()
-    val glassHazeState = fullScreenHazeState.takeIf { hazeState != null }
+    // In reduce-motion mode no blur source is ever created.
+    val fullScreenHazeState = if (hazeState == null) null else rememberHazeState()
+    val glassHazeState = fullScreenHazeState?.takeIf { hazeState != null }
     val coroutineScope = rememberCoroutineScope()
     val dragOffset = remember { Animatable(0f) }
     val expansionProgress = remember { Animatable(0f) }

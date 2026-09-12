@@ -98,7 +98,11 @@ intent using native Android Compose.
 - Use the Gradle version catalog in `gradle/libs.versions.toml`; do not hardcode
   dependency or plugin versions in module build files.
 - Keep the existing Android SDK policy unless a task explicitly changes it:
-  `minSdk 31`, `compileSdk 36`, and `targetSdk 36`.
+  `minSdk 26`, `compileSdk 36`, and `targetSdk 36`. True backdrop blur and the
+  `RenderEffect` path require API 31; on API 26–30 and in reduced-transparency
+  mode the shell supplies no Haze state, so glass surfaces must stay legible
+  with their opaque fallback and decorative motion is suppressed via
+  `LocalReduceMotion`.
 - Expose asynchronous shared work as `suspend` functions and `Flow` where state
   updates are needed. Use structured concurrency and propagate cancellation;
   common code must not rely on `Dispatchers.Main`.

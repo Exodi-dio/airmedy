@@ -71,9 +71,12 @@ and Dark. Primary remains rose; inactive controls use themed foreground rather
 than an unrelated accent.
 
 Glass uses `liquidGlassBackground` or existing glass primitives and applies Haze
-only with a `hazeSource`. With `reduceTransparency`, the shell creates no Haze
-state; a new feature must remain legible on that path. Strong blur belongs only
-to persistent navigation, never each row or card.
+only with a `hazeSource`. With `reduceTransparency`, or on API 26–30 where true
+backdrop blur is unavailable, the shell creates no Haze state and provides
+`LocalReduceMotion = true`; a new feature must remain legible on that path
+(`LiquidGlass` falls back to an opaque tint) and must not rely on continuous or
+looping animation. Strong blur belongs only to persistent navigation, never
+each row or card.
 
 Icons use `MaterialSymbol` and the Material Symbols Rounded font. Display text
 and content descriptions come from Android resources. Interactions retain a

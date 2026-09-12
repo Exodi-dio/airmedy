@@ -18,7 +18,7 @@ TOOLCHAIN="$(find "${NDK}/toolchains/llvm/prebuilt" -maxdepth 1 -type d \( -name
 BUILD_DIR="${TMPDIR:-/tmp}/ffmpeg-build-airmedy-android-${FFMPEG_VERSION}"
 JNI_OUT="${ANDROID_DIR}/src/main/jniLibs"
 INCLUDE_OUT="${ANDROID_DIR}/build/ffmpeg/include"
-API=31
+API=26
 
 [[ -x "${TOOLCHAIN}/bin/clang" ]] || { echo "Android NDK ${NDK_VERSION} is required at ${NDK}" >&2; exit 1; }
 

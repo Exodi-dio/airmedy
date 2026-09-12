@@ -812,7 +812,13 @@ class PlaybackService : Service() {
 
     private fun showForeground(item: PlaybackItem) {
         createChannel()
-        startForeground(NotificationId, notification(item), ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
+        val notification = notification(item)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(NotificationId, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
+        } else {
+            @Suppress("DEPRECATION")
+            startForeground(NotificationId, notification)
+        }
     }
 
     private fun updateNotification() {

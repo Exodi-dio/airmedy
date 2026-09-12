@@ -7,8 +7,10 @@ database, Wails bindings, or Remote API.
 ## Status
 
 - Android development is active and uses native Jetpack Compose UI.
-- Android supports API 31 (Android 12) and newer; this baseline allows the
-  floating navigation to use true backdrop blur.
+- Android supports API 26 (Android 8.0) and newer. On Android 12+ the
+  floating navigation uses true backdrop blur; on older devices and in the
+  reduced-transparency mode it falls back to the opaque glass path with
+  reduced motion, so the UI stays smooth on low-end hardware.
 - `sharedLogic` is the future cross-platform business-logic module.
 - iOS is intentionally frozen. Do not modify `iosApp` or iOS targets unless a
   task explicitly enables iOS work.

@@ -34,7 +34,7 @@ fun AirmedyPlayingIndicator(
 ) {
     val colors = LocalAirmedyColors.current
     val transition =
-        if (isPlaying) rememberInfiniteTransition(label = "playing-indicator") else null
+        if (isPlaying && !LocalReduceMotion.current) rememberInfiniteTransition(label = "playing-indicator") else null
     val scales = listOf(
         transition?.animateScale(0.3f, 0.8f, 800, "playing-indicator-first"),
         transition?.animateScale(1f, 0.4f, 600, "playing-indicator-second"),

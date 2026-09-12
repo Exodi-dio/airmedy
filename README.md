@@ -94,7 +94,7 @@
 
 ## Mobile
 
-Airmedy Mobile is an Android-first companion app, built with native Jetpack Compose for Android 12 and newer. It is independently usable and pairs with Airmedy Desktop when you want your library on the go.
+Airmedy Mobile is an Android-first companion app, built with native Jetpack Compose for Android 8.0 (API 26) and newer. It is independently usable and pairs with Airmedy Desktop when you want your library on the go.
 
 - **Pair and sync your library** — scan a QR code to securely sync tracks, artwork, playlists, favorites, and listening history from a paired desktop.
 - **Offline playback** — play synced local music through the native FFmpeg + AAudio player, with a persistent mini player, playback queue, seek controls, shuffle, and repeat.
@@ -189,7 +189,7 @@ The FFmpeg libraries are statically compiled and bundled inside `internal/infra/
 
 | Layer         | Technology                               |
 | ------------- | ---------------------------------------- |
-| Platform      | Kotlin Multiplatform, Android 12+        |
+| Platform      | Kotlin Multiplatform, Android 8.0+ (API 26) |
 | UI            | Jetpack Compose                          |
 | Local storage | Room + DataStore                         |
 | Audio         | FFmpeg + AAudio                          |
@@ -297,7 +297,7 @@ bash scripts/build-ffmpeg-android.sh arm64-v8a
 ./mobile/gradlew :androidApp:assembleProdDebug
 ```
 
-`dev` and `prod` use separate application IDs, so both can be installed on one device. Android requires API 31 (Android 12) or newer.
+`dev` and `prod` use separate application IDs, so both can be installed on one device. Android requires API 26 (Android 8.0) or newer.
 
 ---
 

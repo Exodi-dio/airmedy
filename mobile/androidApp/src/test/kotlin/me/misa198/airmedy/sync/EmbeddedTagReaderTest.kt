@@ -96,6 +96,74 @@ class EmbeddedTagReaderTest {
         assertEquals(lrc, EmbeddedTagReader.embeddedLyricsText(file.path))
     }
 
+    @Test fun `ogg metadata block picture artwork`() {
+        val b64 = java.util.Base64.getEncoder().encodeToString(pictureBlock(image))
+        val comment = vorbisComment(comments = listOf("METADATA_BLOCK_PICTURE=$b64"))
+        val bytes = ByteArrayOutputStream().apply {
+            write("OggS".toByteArray(Charsets.ISO_8859_1))
+            write(byteArrayOf(0x00, 0x00, 0x00))
+            write(0x03)
+            write("vorbis".toByteArray(Charsets.ISO_8859_1))
+            write(comment)
+        }.toByteArray()
+        val file = temp("ogg-picture", bytes)
+        assertEquals(image.toList(), EmbeddedTagReader.embeddedArtworkBytes(file.path)!!.toList())
+    }
+
+    @Test fun `m4a covr artwork`() {
+        val file = m4a(ilst = covr(image).toByteArray())
+        val bytes = EmbeddedTagReader.embeddedArtworkBytes(file.path)
+        assertNotNull(bytes)
+        assertEquals(image.toList(), bytes.toList())
+    }
+
+    @Test fun `m4a copyright lyric atom lyrics`() {
+        val file = m4a(ilst = lyricAtom(lrc).toByteArray())
+        assertEquals(lrc, EmbeddedTagReader.embeddedLyricsText(file.path))
+    }
+
+    @Test fun `m4a itunes freeform lyrics`() {
+        val file = m4a(ilst = itunesLyrics(lrc).toByteArray())
+        assertEquals(lrc, EmbeddedTagReader.embeddedLyricsText(file.path))
+    }
+
+    @Test fun `m4a prefers copyright lyric over itunes freeform`() {
+        val file = m4a(ilst = (lyricAtom("plain lyrics") + itunesLyrics(lrc)).toByteArray())
+        assertEquals("plain lyrics", EmbeddedTagReader.embeddedLyricsText(file.path))
+    }
+
+    @Test fun `m4a without ilst returns null`() {
+        val file = m4a(ilst = byteArrayOf())
+        assertNull(EmbeddedTagReader.embeddedLyricsText(file.path))
+        assertNull(EmbeddedTagReader.embeddedArtworkBytes(file.path))
+    }
+
+    @Test fun `wav id3 chunk artwork and lyrics`() {
+        val file = wav(id3v23(frames = listOf(uslt("eng", lrc), apic(image))))
+        assertContains(EmbeddedTagReader.embeddedLyricsText(file.path)!!, "Hello world")
+        assertEquals(image.toList(), EmbeddedTagReader.embeddedArtworkBytes(file.path)!!.toList())
+    }
+
+    @Test fun `aiff id3 chunk artwork`() {
+        val file = aiff(id3v23(frames = listOf(apic(image))))
+        assertEquals(image.toList(), EmbeddedTagReader.embeddedArtworkBytes(file.path)!!.toList())
+    }
+
+    @Test fun `wav without id3 chunk returns null`() {
+        val fmt = riffChunk("fmt ", byteArrayOf(0x01, 0x00), bigEndian = false)
+        val body = ByteArrayOutputStream().apply {
+            write("WAVE".toByteArray(Charsets.ISO_8859_1))
+            write(fmt)
+        }.toByteArray()
+        val out = ByteArrayOutputStream()
+        out.write("RIFF".toByteArray(Charsets.ISO_8859_1))
+        out.writeIntLE(4 + body.size)
+        out.write(body)
+        val file = temp("wav-no-id3", out.toByteArray())
+        assertNull(EmbeddedTagReader.embeddedLyricsText(file.path))
+        assertNull(EmbeddedTagReader.embeddedArtworkBytes(file.path))
+    }
+
     private fun temp(name: String, bytes: ByteArray): File =
         File.createTempFile(name, ".test").apply { writeBytes(bytes) }
 
@@ -216,6 +284,89 @@ class EmbeddedTagReaderTest {
         write(value shr 14 and 0x7F)
         write(value shr 7 and 0x7F)
         write(value and 0x7F)
+    }
+
+    // --------------------------------------------------- MP4 / RIFF / AIFF fixtures
+
+    /** Builds an MP4 container: 4-byte big-endian size + type + payload. */
+    private fun box(type: String, payload: ByteArray): ByteArray {
+        val out = ByteArrayOutputStream()
+        out.writeIntBE(8 + payload.size)
+        out.write(type.toByteArray(Charsets.ISO_8859_1))
+        out.write(payload)
+        return out.toByteArray()
+    }
+
+    private fun m4a(ilst: ByteArray): File {
+        val ilstBox = box("ilst", ilst)
+        val meta = box("meta", (ByteArray(4) + box("hdlr", ByteArray(8))).let { it + ilstBox })
+        val udta = box("udta", meta)
+        val moov = box("moov", udta)
+        val ftyp = box("ftyp", ("M4A ".toByteArray(Charsets.ISO_8859_1) + ByteArray(8)))
+        return temp("m4a", ftyp + moov)
+    }
+
+    private fun covr(imageBytes: ByteArray): ByteArray {
+        val dataPayload = ByteArrayOutputStream()
+        dataPayload.write(ByteArray(8))
+        dataPayload.write(imageBytes)
+        return box("covr", box("data", dataPayload.toByteArray()))
+    }
+
+    private fun lyricAtom(text: String): ByteArray {
+        val dataPayload = ByteArrayOutputStream()
+        dataPayload.write(ByteArray(8))
+        dataPayload.write(text.toByteArray(Charsets.UTF_8))
+        return box("\u00A9lyr", box("data", dataPayload.toByteArray()))
+    }
+
+    private fun itunesLyrics(text: String): ByteArray {
+        val mean = box("mean", "com.apple.iTunes".toByteArray(Charsets.UTF_8))
+        val name = box("name", "LYRICS".toByteArray(Charsets.UTF_8))
+        val dataPayload = ByteArrayOutputStream()
+        dataPayload.write(ByteArray(8))
+        dataPayload.write(text.toByteArray(Charsets.UTF_8))
+        return box("----", mean + name + box("data", dataPayload.toByteArray()))
+    }
+
+    /** RIFF/AIFF chunk: id + size (chosen endianness) + payload + pad to even bounds. */
+    private fun riffChunk(id: String, payload: ByteArray, bigEndian: Boolean): ByteArray {
+        val out = ByteArrayOutputStream()
+        out.write(id.toByteArray(Charsets.ISO_8859_1))
+        if (bigEndian) out.writeIntBE(payload.size) else out.writeIntLE(payload.size)
+        out.write(payload)
+        if (payload.size and 1 != 0) out.write(0)
+        return out.toByteArray()
+    }
+
+    private fun wav(id3Tag: ByteArray): File {
+        val fmt = riffChunk("fmt ", byteArrayOf(0x01, 0x00), bigEndian = false)
+        val id3 = riffChunk("id3 ", id3Tag, bigEndian = false)
+        val body = ByteArrayOutputStream().apply {
+            write("WAVE".toByteArray(Charsets.ISO_8859_1))
+            write(fmt)
+            write(id3)
+        }.toByteArray()
+        val out = ByteArrayOutputStream()
+        out.write("RIFF".toByteArray(Charsets.ISO_8859_1))
+        out.writeIntLE(4 + body.size)
+        out.write(body)
+        return temp("wav", out.toByteArray())
+    }
+
+    private fun aiff(id3Tag: ByteArray): File {
+        val comm = riffChunk("COMM", ByteArray(18), bigEndian = true)
+        val id3 = riffChunk("ID3 ", id3Tag, bigEndian = true)
+        val body = ByteArrayOutputStream().apply {
+            write("AIFF".toByteArray(Charsets.ISO_8859_1))
+            write(comm)
+            write(id3)
+        }.toByteArray()
+        val out = ByteArrayOutputStream()
+        out.write("FORM".toByteArray(Charsets.ISO_8859_1))
+        out.writeIntBE(4 + body.size)
+        out.write(body)
+        return temp("aiff", out.toByteArray())
     }
 
     private companion object {

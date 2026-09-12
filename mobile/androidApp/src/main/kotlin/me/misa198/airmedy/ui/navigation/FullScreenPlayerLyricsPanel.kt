@@ -60,6 +60,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import me.misa198.airmedy.R
+import me.misa198.airmedy.ui.components.LocalReduceMotion
 import me.misa198.airmedy.ui.theme.LocalAirmedyColors
 import kotlinx.coroutines.flow.first
 import kotlin.math.roundToInt
@@ -431,7 +432,9 @@ private fun SyncedLyricRow(
         2 -> 0.15f
         else -> 0.10f
     }
-    val targetBlur = when (distance) {
+    val targetBlur = if (LocalReduceMotion.current) {
+        0.dp
+    } else when (distance) {
         0 -> 0.dp
         1 -> 0.35.dp
         2 -> 1.25.dp

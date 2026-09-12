@@ -87,8 +87,8 @@ jobs:
             find androidApp/build -type f -name '*.apk' || true
             exit 1
           fi
-          cp "$APK_REL" "$RUNNER_TEMP/androidApp-1.1.1-arm64-v8a.apk"
-          echo "Staged: $RUNNER_TEMP/androidApp-1.1.1-arm64-v8a.apk from $APK_REL"
+          cp "$APK_REL" "$RUNNER_TEMP/androidApp-1.2.0-arm64-v8a.apk"
+          echo "Staged: $RUNNER_TEMP/androidApp-1.2.0-arm64-v8a.apk from $APK_REL"
 
       - name: Build prod release APK (armeabi-v7a / 32-bit)
         working-directory: mobile
@@ -106,8 +106,8 @@ jobs:
             find androidApp/build -type f -name '*.apk' || true
             exit 1
           fi
-          cp "$APK_REL" "$RUNNER_TEMP/androidApp-1.1.1-armeabi-v7a.apk"
-          echo "Staged: $RUNNER_TEMP/androidApp-1.1.1-armeabi-v7a.apk from $APK_REL"
+          cp "$APK_REL" "$RUNNER_TEMP/androidApp-1.2.0-armeabi-v7a.apk"
+          echo "Staged: $RUNNER_TEMP/androidApp-1.2.0-armeabi-v7a.apk from $APK_REL"
 
       - name: Build prod release APK (universal)
         working-directory: mobile
@@ -125,16 +125,16 @@ jobs:
             find androidApp/build -type f -name '*.apk' || true
             exit 1
           fi
-          cp "$APK_REL" "$RUNNER_TEMP/androidApp-1.1.1-universal.apk"
-          echo "Staged: $RUNNER_TEMP/androidApp-1.1.1-universal.apk from $APK_REL"
+          cp "$APK_REL" "$RUNNER_TEMP/androidApp-1.2.0-universal.apk"
+          echo "Staged: $RUNNER_TEMP/androidApp-1.2.0-universal.apk from $APK_REL"
 
       - name: Verify staged release APKs
         run: |
           set -euo pipefail
           for file in \
-            "$RUNNER_TEMP/androidApp-1.1.1-arm64-v8a.apk" \
-            "$RUNNER_TEMP/androidApp-1.1.1-armeabi-v7a.apk" \
-            "$RUNNER_TEMP/androidApp-1.1.1-universal.apk"; do
+            "$RUNNER_TEMP/androidApp-1.2.0-arm64-v8a.apk" \
+            "$RUNNER_TEMP/androidApp-1.2.0-armeabi-v7a.apk" \
+            "$RUNNER_TEMP/androidApp-1.2.0-universal.apk"; do
             test -s "$file"
           done
           ls -la "$RUNNER_TEMP"/*.apk
@@ -142,36 +142,37 @@ jobs:
       - name: Upload APKs to workflow artifact
         uses: actions/upload-artifact@v4
         with:
-          name: android-rework-1.1.1
+          name: android-rework-1.2.0
           path: |
-            ${{ runner.temp }}/androidApp-1.1.1-arm64-v8a.apk
-            ${{ runner.temp }}/androidApp-1.1.1-armeabi-v7a.apk
-            ${{ runner.temp }}/androidApp-1.1.1-universal.apk
+            ${{ runner.temp }}/androidApp-1.2.0-arm64-v8a.apk
+            ${{ runner.temp }}/androidApp-1.2.0-armeabi-v7a.apk
+            ${{ runner.temp }}/androidApp-1.2.0-universal.apk
           if-no-files-found: error
           retention-days: 14
 
-      - name: Create / update release (v1.1.1)
+      - name: Create / update release (v1.2.0)
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.1.1
-          name: Airmedy Mobile — Android Rework v1.1.1
+          tag_name: v1.2.0
+          name: Airmedy Mobile — Android Rework v1.2.0
           body: |
-            ## Airmedy Mobile — Android Rework v1.1.1
+            ## Airmedy Mobile — Android Rework v1.2.0
 
             - This is a **local mobile app rework** made by **exodi_dio**.
             - The original Airmedy build is **not mine**; the original app was **PC-only** and never shipped for Android.
             - Rebuilt as a native Android app (Kotlin Multiplatform + Compose), performance-tuned for low-end devices.
+            - **v1.2.0**: supports Android 8.0 (API 26) and newer; reads embedded album art and lyrics from FLAC, OGG/Opus, M4A/MP4, MP3, WAV and AIFF; adds an optional reduced-motion + reduced-transparency mode for weaker hardware.
 
             ### Downloads
 
             | APK | ABI | For |
             |---|---|---|
-            | `androidApp-1.1.1-arm64-v8a.apk` | arm64-v8a | 64-bit devices (recommended) |
-            | `androidApp-1.1.1-armeabi-v7a.apk` | armeabi-v7a | 32-bit devices |
-            | `androidApp-1.1.1-universal.apk` | arm64 + armv7 | any device (largest file) |
+            | `androidApp-1.2.0-arm64-v8a.apk` | arm64-v8a | 64-bit devices (recommended) |
+            | `androidApp-1.2.0-armeabi-v7a.apk` | armeabi-v7a | 32-bit devices |
+            | `androidApp-1.2.0-universal.apk` | arm64 + armv7 | any device (largest file) |
           files: |
-            ${{ runner.temp }}/androidApp-1.1.1-arm64-v8a.apk
-            ${{ runner.temp }}/androidApp-1.1.1-armeabi-v7a.apk
-            ${{ runner.temp }}/androidApp-1.1.1-universal.apk
+            ${{ runner.temp }}/androidApp-1.2.0-arm64-v8a.apk
+            ${{ runner.temp }}/androidApp-1.2.0-armeabi-v7a.apk
+            ${{ runner.temp }}/androidApp-1.2.0-universal.apk
           draft: false
           prerelease: false

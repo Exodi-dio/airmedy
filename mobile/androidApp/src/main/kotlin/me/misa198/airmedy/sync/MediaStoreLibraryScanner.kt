@@ -5,6 +5,7 @@ import android.content.ContentUris
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import android.util.Size
 import java.io.File
@@ -210,9 +211,12 @@ internal class MediaStoreLibraryScanner(
     }
 
     /** A 1x1 request returns the file's embedded artwork without scaling, or fails when absent. */
-    private fun embeddedArtwork(mediaUri: Uri): Bitmap? = runCatching {
-        contentResolver.loadThumbnail(mediaUri, EmbeddedThumbnailRequestSize, null)
-    }.getOrNull()?.takeIf { it.width > 1 && it.height > 1 }
+    private fun embeddedArtwork(mediaUri: Uri): Bitmap? {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return null
+        return runCatching {
+            contentResolver.loadThumbnail(mediaUri, EmbeddedThumbnailRequestSize, null)
+        }.getOrNull()?.takeIf { it.width > 1 && it.height > 1 }
+    }
 
     /** Reads FLAC METADATA_BLOCK_PICTURE / ID3 APIC bytes directly from the audio file. */
     private fun embeddedArtworkFromFile(path: String): Bitmap? =
@@ -227,9 +231,12 @@ internal class MediaStoreLibraryScanner(
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.size, BitmapFactory.Options().apply { inSampleSize = sample })
     }
 
-    private fun generatedArtwork(mediaUri: Uri): Bitmap? = runCatching {
-        contentResolver.loadThumbnail(mediaUri, ArtworkTargetSize, null)
-    }.getOrNull()
+    private fun generatedArtwork(mediaUri: Uri): Bitmap? {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return null
+        return runCatching {
+            contentResolver.loadThumbnail(mediaUri, ArtworkTargetSize, null)
+        }.getOrNull()
+    }
 
     companion object {
         const val ColumnId = MediaStore.Audio.Media._ID

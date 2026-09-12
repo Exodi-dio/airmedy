@@ -43,6 +43,7 @@ import dev.chrisbanes.haze.hazeSource
 import me.misa198.airmedy.AppDestination
 import me.misa198.airmedy.AppDestinationModels
 import me.misa198.airmedy.AppIntent
+import me.misa198.airmedy.ui.components.LocalReduceMotion
 import me.misa198.airmedy.AppStackPage
 import me.misa198.airmedy.StackPageEntry
 import me.misa198.airmedy.settings.ThemeMode
@@ -310,11 +311,14 @@ internal fun AppDestinationContent(
             },
             showHeader = false,
         ) { modifier, contentPadding ->
+            val reduceMotion = LocalReduceMotion.current
             AnimatedContent(
                 targetState = stackPage,
                 modifier = modifier,
                 transitionSpec = {
-                    if (targetState.destination != initialState.destination) {
+                    if (reduceMotion) {
+                        fadeIn(animationSpec = tween(120)) togetherWith fadeOut(animationSpec = tween(120))
+                    } else if (targetState.destination != initialState.destination) {
                         fadeIn(animationSpec = tween(durationMillis = 200)) togetherWith
                             fadeOut(animationSpec = tween(durationMillis = 200))
                     } else if (isForwardTransition(targetState, initialState)) {

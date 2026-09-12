@@ -1,6 +1,7 @@
 package me.misa198.airmedy
 
 import androidx.activity.compose.BackHandler
+import android.os.Build
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.WindowInsets
@@ -38,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
 import java.time.LocalTime
+import me.misa198.airmedy.ui.components.LocalReduceMotion
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 import dev.chrisbanes.haze.HazeInputScale
@@ -97,9 +99,10 @@ internal fun homeGreetingTitleRes(hour: Int): Int = when (hour) {
 
 @Composable
 private fun AlbumHeroHeaderGradient(color: Color?, visible: Boolean) {
+    val reduceMotion = LocalReduceMotion.current
     val fade by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
-        animationSpec = tween(1500, easing = FastOutSlowInEasing),
+        animationSpec = tween(if (reduceMotion) 0 else 1500, easing = FastOutSlowInEasing),
         label = "album-header-glass-colour-fade",
     )
     color?.takeIf { fade > 0.01f }?.let {
@@ -143,12 +146,14 @@ internal fun App(
     val playbackState = playback.state
     val playbackQueue = playback.queue
     AirmedyTheme(themeMode = uiState.themeMode) {
+        val reduceMotion = uiState.reduceTransparency || Build.VERSION.SDK_INT < Build.VERSION_CODES.S
+        val hazeState = if (reduceMotion) null else rememberHazeState()
         CompositionLocalProvider(
             me.misa198.airmedy.ui.components.LocalMoodRadioMenuActions provides me.misa198.airmedy.ui.components.MoodRadioMenuActions(
                 playback.moodRadioEligibleTrackIds, playback.onStartMoodRadio,
             ),
+            me.misa198.airmedy.ui.components.LocalReduceMotion provides reduceMotion,
         ) {
-        val hazeState = if (uiState.reduceTransparency) null else rememberHazeState()
         val currentStackPage = uiState.stackFor(uiState.selectedDestination).currentStackPage(uiState.selectedDestination)
         val homeListState = remember(uiState.pageStateGenerationFor(AppDestination.Home, AppStackPage.Root)) { LazyListState() }
         val insightListState = remember(uiState.pageStateGenerationFor(AppDestination.Insight, AppStackPage.Root)) { LazyListState() }
@@ -188,7 +193,7 @@ internal fun App(
         var previousDestination by remember { mutableStateOf(uiState.selectedDestination) }
         var previousHeaderWasBlurred by remember { mutableStateOf(false) }
         val destinationChanged = previousDestination != uiState.selectedDestination
-        val animateHeaderChanges = !destinationChanged
+        val animateHeaderChanges = !destinationChanged && !reduceMotion
         val currentPage = currentStackPage.page
         var settingsContentScrolled by remember { mutableStateOf(false) }
         var previousStackPage by remember { mutableStateOf(currentStackPage) }
@@ -532,15 +537,15 @@ internal fun App(
                     if (destination == uiState.selectedDestination) {
                         if (destination == AppDestination.Home) {
                             coroutineScope.launch {
-                                homeListState.animateScrollToItem(0)
+                                if (reduceMotion) homeListState.scrollToItem(0) else homeListState.animateScrollToItem(0)
                             }
                         } else if (destination == AppDestination.Insight) {
                             coroutineScope.launch {
-                                insightListState.animateScrollToItem(0)
+                                if (reduceMotion) insightListState.scrollToItem(0) else insightListState.animateScrollToItem(0)
                             }
                         } else if (destination == AppDestination.Library && currentPage == AppStackPage.Root) {
                             coroutineScope.launch {
-                                libraryListState.animateScrollToItem(0)
+                                if (reduceMotion) libraryListState.scrollToItem(0) else libraryListState.animateScrollToItem(0)
                             }
                         }
                     }

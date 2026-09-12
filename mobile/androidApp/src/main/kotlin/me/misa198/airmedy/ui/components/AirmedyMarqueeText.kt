@@ -33,7 +33,19 @@ fun AirmedyMarqueeText(
     style: TextStyle,
     modifier: Modifier = Modifier,
 ) {
+    val reduceMotion = LocalReduceMotion.current
     BoxWithConstraints(modifier = modifier.fillMaxWidth().clipToBounds()) {
+        if (reduceMotion) {
+            Text(
+                text = text,
+                modifier = Modifier.fillMaxWidth(),
+                color = color,
+                style = style,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            return@BoxWithConstraints
+        }
         val density = LocalDensity.current
         val textMeasurer = rememberTextMeasurer()
         val availableWidthPx = with(density) { maxWidth.roundToPx() }
