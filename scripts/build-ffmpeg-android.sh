@@ -3,7 +3,7 @@
 # Source is downloaded to a temporary cache exactly like the desktop scripts;
 # no FFmpeg source or generated library is committed to this repository.
 #
-# Usage: bash scripts/build-ffmpeg-android.sh [arm64-v8a]
+# Usage: bash scripts/build-ffmpeg-android.sh [arm64-v8a|armeabi-v7a|all]
 set -euo pipefail
 
 FFMPEG_VERSION="8.1"
@@ -36,9 +36,10 @@ download_source() {
 }
 
 build_arch() {
-    local ABI="$1" ARCH TRIPLE
+    local ABI="$1" ARCH TRIPLE CPU
     case "${ABI}" in
-        arm64-v8a) ARCH="aarch64"; TRIPLE="aarch64-linux-android" ;;
+        arm64-v8a) ARCH="aarch64"; TRIPLE="aarch64-linux-android"; CPU="" ;;
+        armeabi-v7a) ARCH="arm"; TRIPLE="armv7a-linux-androideabi"; CPU="--cpu=armv7-a" ;;
         *) echo "Unsupported ABI: ${ABI}" >&2; exit 1 ;;
     esac
     local SRC="${BUILD_DIR}/src-${ABI}" INSTALL="${BUILD_DIR}/install-${ABI}"
@@ -59,7 +60,8 @@ build_arch() {
         --enable-protocol=file --enable-decoders --enable-demuxers --enable-parsers \
         --disable-avdevice --disable-avfilter --disable-swscale \
         --extra-cflags="-Oz -ffunction-sections -fdata-sections" \
-        --extra-ldflags="-Wl,--gc-sections -Wl,-z,max-page-size=16384"
+        --extra-ldflags="-Wl,--gc-sections -Wl,-z,max-page-size=16384" \
+        ${CPU}
     make -j"$(nproc)"
     make install
     popd >/dev/null
@@ -75,6 +77,11 @@ build_arch() {
 download_source
 case "${1:-arm64-v8a}" in
     arm64-v8a) build_arch arm64-v8a ;;
-    *) echo "Usage: $0 [arm64-v8a]" >&2; exit 1 ;;
+    armeabi-v7a) build_arch armeabi-v7a ;;
+    all)
+        build_arch arm64-v8a
+        build_arch armeabi-v7a
+        ;;
+    *) echo "Usage: $0 [arm64-v8a|armeabi-v7a|all]" >&2; exit 1 ;;
 esac
 echo "==> Done. Generated FFmpeg libraries are in ${JNI_OUT}."

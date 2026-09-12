@@ -195,13 +195,8 @@
     <string name="about_title">Informazioni</string>
     <string name="about_description">Un moderno lettore musicale locale</string>
     <string name="about_version">Versione</string>
-    <string name="about_github">GitHub</string>
-    <string name="about_license">Licenza</string>
-    <string name="about_sponsor">Sostieni Airmedy</string>
-    <string name="about_sponsor_github">GitHub Sponsors</string>
-    <string name="about_sponsor_kofi">Ko-fi</string>
-    <string name="about_sponsor_bmac">Buy Me a Coffee</string>
-    <string name="about_sponsor_patreon">Patreon</string>
+    <string name="about_reworked_by">Rifatto da</string>
+    <string name="about_reworked_by_handle">exodi_dio</string>
     <string name="theme_system">Sistema</string>
     <string name="theme_light">Chiaro</string>
     <string name="theme_dark">Scuro</string>
