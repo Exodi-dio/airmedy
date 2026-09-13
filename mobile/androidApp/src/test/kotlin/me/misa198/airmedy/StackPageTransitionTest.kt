@@ -20,7 +20,7 @@ class StackPageTransitionTest {
         val rootKey = PageKey(AppDestination.Settings, AppStackPage.Root, index = 0)
         val scanKey = PageKey(AppDestination.Settings, AppStackPage.SettingsScan, index = 1)
 
-        assertFalse(isForwardTransition(target = scanKey, initial = rootKey))
+        assertFalse(isForwardTransition(target = rootKey, initial = scanKey))
     }
 
     @Test

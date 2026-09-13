@@ -243,7 +243,7 @@ class EmbeddedTagReaderTest {
         content.write(lang.toByteArray(Charsets.ISO_8859_1))
         content.write(0)
         content.write(text.toByteArray(Charsets.UTF_8))
-        return frame32(code = "ULT", content.toByteArray(), syncsafe = false)
+        return frame22(code = "ULT", content.toByteArray())
     }
 
     private fun pic(imageBytes: ByteArray): ByteArray {
@@ -253,7 +253,18 @@ class EmbeddedTagReaderTest {
         content.write(3)
         content.write(0)
         content.write(imageBytes)
-        return frame32(code = "PIC", content.toByteArray(), syncsafe = false)
+        return frame22(code = "PIC", content.toByteArray())
+    }
+
+    /** ID3v2.2 frames carry a 3-byte code and a 24-bit big-endian size (no flags). */
+    private fun frame22(code: String, data: ByteArray): ByteArray {
+        val out = ByteArrayOutputStream()
+        out.write(code.toByteArray(Charsets.ISO_8859_1))
+        out.write(data.size shr 16 and 0xFF)
+        out.write(data.size shr 8 and 0xFF)
+        out.write(data.size and 0xFF)
+        out.write(data)
+        return out.toByteArray()
     }
 
     private fun frame32(code: String, data: ByteArray, syncsafe: Boolean): ByteArray {
