@@ -111,24 +111,24 @@ class EmbeddedTagReaderTest {
     }
 
     @Test fun `m4a covr artwork`() {
-        val file = m4a(ilst = covr(image).toByteArray())
+        val file = m4a(ilst = covr(image))
         val bytes = EmbeddedTagReader.embeddedArtworkBytes(file.path)
         assertNotNull(bytes)
         assertEquals(image.toList(), bytes.toList())
     }
 
     @Test fun `m4a copyright lyric atom lyrics`() {
-        val file = m4a(ilst = lyricAtom(lrc).toByteArray())
+        val file = m4a(ilst = lyricAtom(lrc))
         assertEquals(lrc, EmbeddedTagReader.embeddedLyricsText(file.path))
     }
 
     @Test fun `m4a itunes freeform lyrics`() {
-        val file = m4a(ilst = itunesLyrics(lrc).toByteArray())
+        val file = m4a(ilst = itunesLyrics(lrc))
         assertEquals(lrc, EmbeddedTagReader.embeddedLyricsText(file.path))
     }
 
     @Test fun `m4a prefers copyright lyric over itunes freeform`() {
-        val file = m4a(ilst = (lyricAtom("plain lyrics") + itunesLyrics(lrc)).toByteArray())
+        val file = m4a(ilst = lyricAtom("plain lyrics") + itunesLyrics(lrc))
         assertEquals("plain lyrics", EmbeddedTagReader.embeddedLyricsText(file.path))
     }
 
