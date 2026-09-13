@@ -112,7 +112,7 @@ dependencies {
     ksp(libs.room.compiler)
 
     testImplementation(libs.junit)
-    testImplementation(libs.kotlin.test)
+    testImplementation(kotlin("test-junit"))
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.room.testing)
     androidTestImplementation(libs.androidx.testExt.junit)
